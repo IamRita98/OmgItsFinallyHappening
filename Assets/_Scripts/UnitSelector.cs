@@ -18,6 +18,8 @@ public class UnitSelector : MonoBehaviour
 {
     Vector3 gridSize;
     public GameObject GOHovered;
+    public GameObject EnemyGO;
+    public GameObject PlayerGO;
     public GameObject GOSelected;
     Vector2 selectedGOPickupPos;
     //public UnitSelectorIsHovering unitHovered;
@@ -28,7 +30,6 @@ public class UnitSelector : MonoBehaviour
     }
     private void Update()
     {
-        Move();
         CheckForInputs();
     }
 
@@ -40,8 +41,13 @@ public class UnitSelector : MonoBehaviour
 
     void ConfirmKey()
     {
+        if (GOHovered != null)
+        {
+            if (GOHovered.CompareTag("Player")) PlayerGO = GOHovered;
+            else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
+        }
         //Pickup unit hovered
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null)
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO!=null&&GOHovered.CompareTag("Player"))
         {
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
             GOSelected.transform.parent = this.gameObject.transform;
@@ -52,11 +58,38 @@ public class UnitSelector : MonoBehaviour
         //Confirm selected units placement
         if (Input.GetKeyDown(KeyCode.Z) && GOSelected != null)
         {
-            DropSelected(GOSelected);
-            GOHovered = GOSelected;
+            bool valid=CheckIfValid();
+            if (valid)
+            {
+                DropSelected(GOSelected);
+                GOHovered = GOSelected;
+            }
+            else
+            {
+                Debug.Log("Can't drop here");
+            }
+            
+        }
+        //if(GOHovered!=null && EnemyGO != null)
+        //{
+        //    SpriteRenderer eSprite = EnemyGO.GetComponent<SpriteRenderer>();
+        //    eSprite.color = new Color(0.4f, 0.7f, 0.1f, .2f);
+        //}
+        if(Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
+        {
+            Debug.Log("Selected Enemy");
+            //diplay more info on Selection?
+            SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
+            eSprite.color = new Color(0.2f, 0.7f, 0.9f,.9f);
         }
     }
 
+    private bool CheckIfValid()
+    {
+        if (GOHovered==null) return true;
+        else return false;
+        
+    }
     void CancelKey()
     {
         //Return selected unit to its starting pos
@@ -74,17 +107,7 @@ public class UnitSelector : MonoBehaviour
         GOSelected = null;
     }
 
-    void Move()
-    {
-        Vector2 currentPos = transform.position;
-        Vector2 newPos = transform.position;
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) newPos = currentPos + Vector2.up * gridSize;
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) newPos = currentPos + Vector2.down * gridSize;
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) newPos = currentPos + Vector2.right * gridSize;
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) newPos = currentPos + Vector2.left * gridSize;
-
-        gameObject.transform.position = newPos;
-    }
+    
 
     /*    void Select()
         {
