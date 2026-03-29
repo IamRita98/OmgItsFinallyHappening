@@ -17,7 +17,9 @@ using UnityEngine.InputSystem;
 public class UnitSelector : MonoBehaviour
 {
     Vector3 gridSize;
-    
+    public GameObject GOHovered;
+    public GameObject GOSelected;
+    Vector2 selectedGOPickupPos;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -27,13 +29,50 @@ public class UnitSelector : MonoBehaviour
     private void Update()
     {
         Move();
-        //CheckForInputs();
+        CheckForInputs();
     }
 
-/*    void CheckForInputs()
+    void CheckForInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Mouse0)) Select();
-    }*/
+        ConfirmKey();
+        CancelKey();
+    }
+
+    void ConfirmKey()
+    {
+        //Pickup unit hovered
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null)
+        {
+            GOSelected = GOHovered.GetComponent<ISelectable>().Select();
+            GOSelected.transform.parent = this.gameObject.transform;
+            selectedGOPickupPos = GOSelected.transform.position;
+            GOHovered = null;
+            return;
+        }
+        //Confirm selected units placement
+        if (Input.GetKeyDown(KeyCode.Z) && GOSelected != null)
+        {
+            DropSelected(GOSelected);
+            GOHovered = GOSelected;
+        }
+    }
+
+    void CancelKey()
+    {
+        //Return selected unit to its starting pos
+        if (GOSelected != null && Input.GetKeyDown(KeyCode.X))
+        {
+            GOSelected.transform.position = selectedGOPickupPos;
+            DropSelected(GOSelected);
+        }
+    }
+
+    void DropSelected(GameObject goSelected)
+    {
+        GOHovered = null;
+        goSelected.transform.parent = null;
+        GOSelected = null;
+    }
 
     void Move()
     {
@@ -47,22 +86,26 @@ public class UnitSelector : MonoBehaviour
         gameObject.transform.position = newPos;
     }
 
-/*    void Select()
-    {
-        switch (unitHovered)
+    /*    void Select()
         {
-            case UnitSelectorIsHovering.Player:
-                PickUpUnit();
-                break;
-            case UnitSelectorIsHovering.Enemy:
-                break;
-        }
-    }*/
+            switch (unitHovered)
+            {
+                case UnitSelectorIsHovering.Player:
+                    PickUpUnit();
+                    break;
+                case UnitSelectorIsHovering.Enemy:
+                    break;
+            }
+        }*/
 
     //void PickUpUnit()
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        //if (collision.collider.tag == "Player") unitHovered = UnitSelectorIsHovering.Player;
+        GOHovered = collision.gameObject;
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        GOHovered = null;
     }
 }
