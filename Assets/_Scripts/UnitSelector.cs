@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,6 +23,11 @@ public class UnitSelector : MonoBehaviour
     public GameObject EnemyGO;
     public GameObject PlayerGO;
     public GameObject GOSelected;
+    public int movementRange;
+    List<Vector2> moveableTiles=new List<Vector2>();
+    float maxMovement;
+    public float startingX;
+    public float startingY;
     Vector2 selectedGOPickupPos;
     //public UnitSelectorIsHovering unitHovered;
 
@@ -50,8 +57,10 @@ public class UnitSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO!=null&&GOHovered.CompareTag("Player"))
         {
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
+            movementRange = GOSelected.GetComponent<FriendlySelectable>().tempStat;
             GOSelected.transform.parent = this.gameObject.transform;
             selectedGOPickupPos = GOSelected.transform.position;
+            GetMaxMovementDistance();
             GOHovered = null;
             return;
         }
@@ -97,6 +106,7 @@ public class UnitSelector : MonoBehaviour
         {
             GOSelected.transform.position = selectedGOPickupPos;
             DropSelected(GOSelected);
+            maxMovement = 0;
         }
     }
 
@@ -122,7 +132,42 @@ public class UnitSelector : MonoBehaviour
         }*/
 
     //void PickUpUnit()
+    private void GetMaxMovementDistance()
+    {
+        maxMovement = Vector2.Distance(this.gameObject.transform.position, this.gameObject.transform.position * movementRange);
+        GetValidMovementTiles();
+    }
+    private void GetValidMovementTiles()
+    {
+        Debug.Log("Trying to get tiles to move to");
+        for (int i = 0; i <= movementRange; i++)
+        {
+            for (int j = 0; j <= movementRange-i; j++)
+            {
+                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x+i, this.gameObject.transform.position.y+j));
+                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x-i, this.gameObject.transform.position.y-j));
+            }
 
+        }
+        foreach (var tile in moveableTiles)
+        {
+            print(tile);
+        }
+        //for(int i = (int)this.gameObject.transform.position.x;i<this.gameObject.transform.position.x+maxMovement; i++)
+        //{
+        //    for(int j = (int)this.gameObject.transform.position.y; j < this.gameObject.transform.position.y-i; j ++)
+        //    {
+        //        moveableTiles.Add(new Vector2(i, j));
+        //        moveableTiles.Add(new Vector2(-1*i, -1*j));
+        //    }
+
+        //}
+    }
+   public bool CheckForMovement()
+    {
+       
+        return false;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GOHovered = collision.gameObject;
