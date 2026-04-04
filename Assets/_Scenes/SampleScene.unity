@@ -680,7 +680,7 @@ Transform:
   m_GameObject: {fileID: 1996287700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -749,6 +749,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitSelector
       objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: moveableTileMarker
+      value: 
+      objectReference: {fileID: 3707126651705642032, guid: b84600712e79f7a418fff45e758e2570, type: 3}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1

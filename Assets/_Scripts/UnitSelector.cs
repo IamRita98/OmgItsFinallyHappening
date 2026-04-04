@@ -25,10 +25,12 @@ public class UnitSelector : MonoBehaviour
     public GameObject GOSelected;
     public int movementRange;
     List<Vector2> moveableTiles=new List<Vector2>();
+    List<GameObject> moveableTilePlacements = new List<GameObject>();
     float maxMovement;
     public float startingX;
     public float startingY;
     Vector2 selectedGOPickupPos;
+    public GameObject moveableTileMarker;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -54,7 +56,7 @@ public class UnitSelector : MonoBehaviour
             else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
         }
         //Pickup unit hovered
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO!=null&&GOHovered.CompareTag("Player"))
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player"))
         {
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
             movementRange = GOSelected.GetComponent<FriendlySelectable>().tempStat;
@@ -64,6 +66,7 @@ public class UnitSelector : MonoBehaviour
             GOHovered = null;
             return;
         }
+
         //Confirm selected units placement
         if (Input.GetKeyDown(KeyCode.Z) && GOSelected != null)
         {
@@ -95,7 +98,7 @@ public class UnitSelector : MonoBehaviour
 
     private bool CheckIfValid()
     {
-        if (GOHovered==null) return true;
+        if (GOHovered == null && moveableTiles.Contains(new Vector2(transform.position.x, transform.position.y))) return true;
         else return false;
         
     }
@@ -112,12 +115,19 @@ public class UnitSelector : MonoBehaviour
 
     void DropSelected(GameObject goSelected)
     {
+        ClearMoveableTiles();
+        
         GOHovered = null;
         goSelected.transform.parent = null;
         GOSelected = null;
     }
 
-    
+    void ClearMoveableTiles()
+    {
+        moveableTiles.Clear();
+        foreach (GameObject tile in moveableTilePlacements) Destroy(tile);
+        moveableTilePlacements.Clear();
+    }
 
     /*    void Select()
         {
@@ -145,13 +155,16 @@ public class UnitSelector : MonoBehaviour
             for (int j = 0; j <= movementRange-i; j++)
             {
                 moveableTiles.Add(new Vector2(this.gameObject.transform.position.x+i, this.gameObject.transform.position.y+j));
+                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j));
                 moveableTiles.Add(new Vector2(this.gameObject.transform.position.x-i, this.gameObject.transform.position.y-j));
+                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
             }
 
         }
         foreach (var tile in moveableTiles)
         {
-            print(tile);
+            GameObject tileMarker = Instantiate(moveableTileMarker, tile, Quaternion.identity);
+            moveableTilePlacements.Add(tileMarker);
         }
         //for(int i = (int)this.gameObject.transform.position.x;i<this.gameObject.transform.position.x+maxMovement; i++)
         //{
