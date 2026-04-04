@@ -19,6 +19,7 @@ using UnityEngine.InputSystem;
 public class UnitSelector : MonoBehaviour
 {
     Vector3 gridSize;
+    UnitStatSheet unitStatSheet;
     public GameObject GOHovered;
     public GameObject EnemyGO;
     public GameObject PlayerGO;
@@ -26,7 +27,6 @@ public class UnitSelector : MonoBehaviour
     public int movementRange;
     List<Vector2> moveableTiles=new List<Vector2>();
     List<GameObject> moveableTilePlacements = new List<GameObject>();
-    float maxMovement;
     public float startingX;
     public float startingY;
     Vector2 selectedGOPickupPos;
@@ -52,17 +52,18 @@ public class UnitSelector : MonoBehaviour
     {
         if (GOHovered != null)
         {
+            unitStatSheet = GOHovered.GetComponent<UnitStatSheet>();
             if (GOHovered.CompareTag("Player")) PlayerGO = GOHovered;
             else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
         }
         //Pickup unit hovered
         if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player"))
         {
+            movementRange = ((int)unitStatSheet.Movement.Value);
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
-            movementRange = GOSelected.GetComponent<FriendlySelectable>().tempStat;
             GOSelected.transform.parent = this.gameObject.transform;
             selectedGOPickupPos = GOSelected.transform.position;
-            GetMaxMovementDistance();
+            GetValidMovementTiles();
             GOHovered = null;
             return;
         }
@@ -89,7 +90,7 @@ public class UnitSelector : MonoBehaviour
         //}
         if(Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
         {
-            Debug.Log("Selected Enemy");
+            Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
             //diplay more info on Selection?
             SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
             eSprite.color = new Color(0.2f, 0.7f, 0.9f,.9f);
@@ -109,7 +110,6 @@ public class UnitSelector : MonoBehaviour
         {
             GOSelected.transform.position = selectedGOPickupPos;
             DropSelected(GOSelected);
-            maxMovement = 0;
         }
     }
 
@@ -142,11 +142,7 @@ public class UnitSelector : MonoBehaviour
         }*/
 
     //void PickUpUnit()
-    private void GetMaxMovementDistance()
-    {
-        maxMovement = Vector2.Distance(this.gameObject.transform.position, this.gameObject.transform.position * movementRange);
-        GetValidMovementTiles();
-    }
+
     private void GetValidMovementTiles()
     {
         Debug.Log("Trying to get tiles to move to");
