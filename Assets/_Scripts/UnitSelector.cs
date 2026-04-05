@@ -32,10 +32,13 @@ public class UnitSelector : MonoBehaviour
     public float startingY;
     Vector2 selectedGOPickupPos;
     public GameObject moveableTileMarker;
+    public bool canMoveSelector = true;
+    GridMovement gridMovement;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
     {
+        gridMovement = GetComponent<GridMovement>();
         gridSize = EditorSnapSettings.gridSize;
         uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
     }
@@ -46,8 +49,9 @@ public class UnitSelector : MonoBehaviour
 
     void CheckForInputs()
     {
-        ConfirmKey();
         CancelKey();
+        if (!canMoveSelector) return;
+        ConfirmKey();
     }
 
     void ConfirmKey()
@@ -80,6 +84,7 @@ public class UnitSelector : MonoBehaviour
                 GOHovered = GOSelected;
                 unitStatSheet.GetAttackRange();
                 uiManager.EnableCombatUI();
+                StopSelectorControl();
             }
             else
             {
@@ -110,10 +115,19 @@ public class UnitSelector : MonoBehaviour
     void CancelKey()
     {
         //Return selected unit to its starting pos
-        if (GOSelected != null && Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            GOSelected.transform.position = selectedGOPickupPos;
-            DropSelected(GOSelected);
+            if(GOSelected != null)
+            {
+                GOSelected.transform.position = selectedGOPickupPos;
+                CancelSelection(GOSelected);
+            }
+            if (!canMoveSelector)
+            {
+                ResumeSelectorControl();
+                CancelSelection(PlayerGO);
+                uiManager.DisableCombatUI();
+            }
         }
     }
 
@@ -125,9 +139,18 @@ public class UnitSelector : MonoBehaviour
         goSelected.transform.parent = null;
         GOSelected = null;
     }
+    void CancelSelection(GameObject goSelected)
+    {
+        ClearMoveableTiles();
+        transform.position = selectedGOPickupPos;
+        goSelected.transform.position = selectedGOPickupPos;
+        goSelected.transform.parent = null;
+        GOHovered = PlayerGO;
+    }
 
     void ClearMoveableTiles()
     {
+
         moveableTiles.Clear();
         foreach (GameObject tile in moveableTilePlacements) Destroy(tile);
         moveableTilePlacements.Clear();
@@ -180,6 +203,17 @@ public class UnitSelector : MonoBehaviour
     {
        
         return false;
+    }
+
+    public void StopSelectorControl()
+    {
+        canMoveSelector = false;
+        gridMovement.canMove = false;
+    }
+    public void ResumeSelectorControl()
+    {
+        canMoveSelector = true;
+        gridMovement.canMove = true;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

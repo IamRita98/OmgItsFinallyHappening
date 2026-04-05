@@ -6,6 +6,9 @@ public class GridMovement : MonoBehaviour
     Vector3 gridSize;
     public bool inCombat = false;
     UnitSelector unitSelector;
+    public bool canMove = true;
+    public Vector2 currentPos;
+
     private void Awake()
     {
         gridSize = EditorSnapSettings.gridSize;
@@ -13,11 +16,12 @@ public class GridMovement : MonoBehaviour
 
     void Update()
     {
+        if (!canMove) return;
         Move();
     }
     void Move()
     {
-        Vector2 currentPos = transform.position;
+        currentPos = transform.position;
         Vector2 newPos = transform.position;
         if (!inCombat)
         {
