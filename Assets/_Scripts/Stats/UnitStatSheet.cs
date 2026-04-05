@@ -20,7 +20,7 @@ public class UnitStatSheet : MonoBehaviour
     {
         for(int i = 0; i <= 1; i++)
         {
-            for(int j = 0; j <= 1; j++)
+            for(int j = 0; j <= 1-i; j++)
             {
                 attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j));
                 attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
