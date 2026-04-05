@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Friendly
   - Enemy
+  - UIManager
+  - UnitSelector
   layers:
   - Default
   - TransparentFX

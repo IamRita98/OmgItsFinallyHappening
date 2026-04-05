@@ -18,6 +18,7 @@ using UnityEngine.InputSystem;
 }*/
 public class UnitSelector : MonoBehaviour
 {
+    UIManager uiManager;
     Vector3 gridSize;
     UnitStatSheet unitStatSheet;
     public GameObject GOHovered;
@@ -36,6 +37,7 @@ public class UnitSelector : MonoBehaviour
     private void Awake()
     {
         gridSize = EditorSnapSettings.gridSize;
+        uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
     }
     private void Update()
     {
@@ -76,6 +78,8 @@ public class UnitSelector : MonoBehaviour
             {
                 DropSelected(GOSelected);
                 GOHovered = GOSelected;
+                unitStatSheet.GetAttackRange();
+                uiManager.EnableCombatUI();
             }
             else
             {
