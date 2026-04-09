@@ -29,6 +29,7 @@ public class CombatHandler : MonoBehaviour
         //enemyObject = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>().GOHovered;
         DrawTiles drawTiles = gameObject.GetComponent<DrawTiles>();
         UnitStatSheet unitStats = playerObject.GetComponent<UnitStatSheet>();
+        unitStats.GetAttackRange();
         drawTiles.DrawTilesGO(AttackTiles, unitStats.attackTiles);
         attackRange = unitStats.attackTiles;
         foreach (var tile in attackRange)
@@ -40,8 +41,13 @@ public class CombatHandler : MonoBehaviour
             }
             
         }
-        inCombat = true;
-        unitSelector.transform.position = enemiesToAttack[index].transform.position;
+        if (enemiesToAttack.Count > 0)
+        {
+            inCombat = true;
+            Vector2 tempPos = enemiesToAttack[index].transform.position;
+            unitSelectorGO.transform.position = tempPos;
+        }//do something else if no enemies
+        
     }
     private void Update()
     {
@@ -49,27 +55,29 @@ public class CombatHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
             {
-                if (index > 0)
+                index--;
+                if (index < 0)
                 {
-                    unitSelector.transform.position = enemiesToAttack[index--].transform.position;
+                    index = enemiesToAttack.Count - 1;
                 }
                 else
                 {
-                    index = enemiesToAttack.Count();
-                    unitSelector.transform.position = enemiesToAttack[index--].transform.position;
+                    Vector2 tempPos = enemiesToAttack[index].transform.position;
+                    unitSelectorGO.transform.position = tempPos;
                 }
 
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
-                if (index < enemiesToAttack.Count() - 1)
+                index++;
+                if (index >= enemiesToAttack.Count())
                 {
-                    unitSelector.transform.position = enemiesToAttack[index++].transform.position;
+                    index = 0;
                 }
                 else
                 {
-                    index = 0;
-                    unitSelector.transform.position = enemiesToAttack[index++].transform.position;
+                    Vector2 tempPos = enemiesToAttack[index].transform.position;
+                    unitSelectorGO.transform.position = tempPos;
                 }
             }
             if (Input.GetKeyDown(KeyCode.Z))
@@ -79,6 +87,8 @@ public class CombatHandler : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.X))
             {
                 //Cancel Attack
+                inCombat = false;
+                enemiesToAttack.Clear();
             }
         }
     }
