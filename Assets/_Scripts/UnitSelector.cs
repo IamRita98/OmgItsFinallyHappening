@@ -34,6 +34,7 @@ public class UnitSelector : MonoBehaviour
     public GameObject moveableTileMarker;
     public bool canMoveSelector = true;
     GridMovement gridMovement;
+    public FMODUnity.EventReference selectSFXRef;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -71,6 +72,7 @@ public class UnitSelector : MonoBehaviour
             selectedGOPickupPos = GOSelected.transform.position;
             GetValidMovementTiles();
             GOHovered = null;
+            FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
             return;
         }
 
@@ -85,6 +87,7 @@ public class UnitSelector : MonoBehaviour
                 unitStatSheet.GetAttackRange();
                 uiManager.EnableCombatUI();
                 StopSelectorControl();
+                FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
             }
             else
             {
