@@ -841,8 +841,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d426cbe9c512cef489ddf013734b59f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridMovement
+  lerpTime: 0.15
   inCombat: 0
   canMove: 1
+  currentPos: {x: 0, y: 0}
 --- !u!114 &803586547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1890,6 +1892,10 @@ PrefabInstance:
     - target: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_TagString
       value: UnitSelector
+      objectReference: {fileID: 0}
+    - target: {fileID: 4009892350217847511, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: moveableTileMarker
