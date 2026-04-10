@@ -12,6 +12,7 @@ public class GridMovement : MonoBehaviour
     public bool canMove = true;
     public Vector2 currentPos;
     Vector2 newPos;
+    public FMODUnity.EventReference moveSFXRef;
 
     private void Awake()
     {
@@ -36,55 +37,58 @@ public class GridMovement : MonoBehaviour
                 newPos = currentPos + Vector2.up * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
-
+                FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
             }
             if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
                 newPos = currentPos + Vector2.down * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
+                FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
             }
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 newPos = currentPos + Vector2.right * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
+                FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
             }
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 newPos = currentPos + Vector2.left * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
+                FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
             }
         }
-       /* else checks for terrain and other things perhaps
-        {
-            bool valid = unitSelector.CheckForMovement();
-            if (valid)
-            {
-                if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
-                {
-                    newPos = currentPos + Vector2.up * gridSize;
-                    playerWantsToMove = true;
+        /* else checks for terrain and other things perhaps
+         {
+             bool valid = unitSelector.CheckForMovement();
+             if (valid)
+             {
+                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+                 {
+                     newPos = currentPos + Vector2.up * gridSize;
+                     playerWantsToMove = true;
 
-                }
-                if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
-                {
-                    newPos = currentPos + Vector2.down * gridSize;
-                    playerWantsToMove = true;
-                }
-                if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-                {
-                    newPos = currentPos + Vector2.right * gridSize;
-                    playerWantsToMove = true;
-                }
-                if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-                {
-                    newPos = currentPos + Vector2.left * gridSize;
-                    playerWantsToMove = true;
-                }
-            }
-        }*/
+                 }
+                 if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+                 {
+                     newPos = currentPos + Vector2.down * gridSize;
+                     playerWantsToMove = true;
+                 }
+                 if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+                 {
+                     newPos = currentPos + Vector2.right * gridSize;
+                     playerWantsToMove = true;
+                 }
+                 if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+                 {
+                     newPos = currentPos + Vector2.left * gridSize;
+                     playerWantsToMove = true;
+                 }
+             }
+         }*/
     }
     void RemoveGOHoveredOnMovement()
     {
