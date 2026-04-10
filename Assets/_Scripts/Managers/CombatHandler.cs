@@ -12,7 +12,7 @@ public class CombatHandler : MonoBehaviour
     GameObject playerObject;
     GameObject enemyObject;
     public GameObject AttackTiles;
-    List<GameObject> enemiesToAttack = new List<GameObject>();
+    public List<GameObject> enemiesToAttack = new List<GameObject>();
     List<Vector2> attackRange = new List<Vector2>();
     public List<GameObject> allEnemiesList = new List<GameObject>();
     bool inCombat = false;
@@ -60,12 +60,8 @@ public class CombatHandler : MonoBehaviour
                 {
                     index = enemiesToAttack.Count - 1;
                 }
-                else
-                {
                     Vector2 tempPos = enemiesToAttack[index].transform.position;
                     unitSelectorGO.transform.position = tempPos;
-                }
-
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
@@ -74,11 +70,8 @@ public class CombatHandler : MonoBehaviour
                 {
                     index = 0;
                 }
-                else
-                {
                     Vector2 tempPos = enemiesToAttack[index].transform.position;
                     unitSelectorGO.transform.position = tempPos;
-                }
             }
             if (Input.GetKeyDown(KeyCode.Z))
             {

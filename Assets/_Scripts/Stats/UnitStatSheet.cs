@@ -22,11 +22,22 @@ public class UnitStatSheet : MonoBehaviour
         {
             for(int j = 0; j <= 1-i; j++)
             {
-               
-                attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j));
-                attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
-                attackTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j));
-                attackTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y - j));
+                if (!attackTiles.Contains(new Vector2(this.gameObject.transform.position.x+i, this.gameObject.transform.position.y + j)))
+                {
+                    attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j));
+                }
+                if (!attackTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j)))
+                {
+                    attackTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
+                }
+                if (!attackTiles.Contains(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y - j)))
+                {
+                    attackTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y - j));
+                }
+                if (!attackTiles.Contains(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j)))
+                {
+                    attackTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j));
+                }
             }
         }
     }
