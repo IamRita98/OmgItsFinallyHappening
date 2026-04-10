@@ -92,15 +92,9 @@ public class UnitSelector : MonoBehaviour
             }
             
         }
-        //if(GOHovered!=null && EnemyGO != null)
-        //{
-        //    SpriteRenderer eSprite = EnemyGO.GetComponent<SpriteRenderer>();
-        //    eSprite.color = new Color(0.4f, 0.7f, 0.1f, .2f);
-        //}
         if(Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
         {
             Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
-            //diplay more info on Selection?
             SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
             eSprite.color = new Color(0.2f, 0.7f, 0.9f,.9f);
         }
@@ -156,19 +150,6 @@ public class UnitSelector : MonoBehaviour
         moveableTilePlacements.Clear();
     }
 
-    /*    void Select()
-        {
-            switch (unitHovered)
-            {
-                case UnitSelectorIsHovering.Player:
-                    PickUpUnit();
-                    break;
-                case UnitSelectorIsHovering.Enemy:
-                    break;
-            }
-        }*/
-
-    //void PickUpUnit()
 
     private void GetValidMovementTiles()
     {
@@ -177,10 +158,22 @@ public class UnitSelector : MonoBehaviour
         {
             for (int j = 0; j <= movementRange-i; j++)
             {
-                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x+i, this.gameObject.transform.position.y+j));
-                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j));
-                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x-i, this.gameObject.transform.position.y-j));
-                moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
+                if(!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j)))
+                {
+                    moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j));
+                }
+                if (!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j)))
+                {
+                    moveableTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y + j));
+                }
+                if (!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y - j)))
+                {
+                    moveableTiles.Add(new Vector2(this.gameObject.transform.position.x - i, this.gameObject.transform.position.y - j));
+                }
+                if (!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j)))
+                {
+                    moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
+                } 
             }
 
         }
@@ -189,15 +182,7 @@ public class UnitSelector : MonoBehaviour
             GameObject tileMarker = Instantiate(moveableTileMarker, tile, Quaternion.identity);
             moveableTilePlacements.Add(tileMarker);
         }
-        //for(int i = (int)this.gameObject.transform.position.x;i<this.gameObject.transform.position.x+maxMovement; i++)
-        //{
-        //    for(int j = (int)this.gameObject.transform.position.y; j < this.gameObject.transform.position.y-i; j ++)
-        //    {
-        //        moveableTiles.Add(new Vector2(i, j));
-        //        moveableTiles.Add(new Vector2(-1*i, -1*j));
-        //    }
-
-        //}
+     
     }
    public bool CheckForMovement()
     {
@@ -221,6 +206,7 @@ public class UnitSelector : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        GOHovered = null;
+        //if(GOSelected==null) GOHovered = null;
+
     }
 }

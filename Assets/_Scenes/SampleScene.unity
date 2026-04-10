@@ -357,6 +357,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2101217435}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: DisableCombatUI
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &588234901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,7 +812,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.0988867, y: 1.0827196}
+  m_Size: {x: 1.0078396, y: 1.0084257}
   m_EdgeRadius: 0
 --- !u!50 &803586545
 Rigidbody2D:
@@ -1625,6 +1637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CombatHandler
   AttackTiles: {fileID: 3707126651705642032, guid: 4cd66883b6a46d94db51d87111581b32, type: 3}
+  enemiesToAttack: []
   allEnemiesList: []
 --- !u!4 &1787229442
 Transform:

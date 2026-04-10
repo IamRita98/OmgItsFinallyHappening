@@ -16,11 +16,12 @@ public class GridMovement : MonoBehaviour
     private void Awake()
     {
         gridSize = EditorSnapSettings.gridSize;
+        unitSelector = this.gameObject.GetComponent<UnitSelector>();
     }
 
     void Update()
     {
-        if (!canMove) return;
+        if (!canMove) return;//just remember actual movement happens a frame later
         if (playerWantsToMove) LerpMovement();
         else Move();
     }
@@ -34,32 +35,38 @@ public class GridMovement : MonoBehaviour
             {
                 newPos = currentPos + Vector2.up * gridSize;
                 playerWantsToMove = true;
+                RemoveGOHoveredOnMovement();
+
             }
             if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
                 newPos = currentPos + Vector2.down * gridSize;
                 playerWantsToMove = true;
+                RemoveGOHoveredOnMovement();
             }
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 newPos = currentPos + Vector2.right * gridSize;
                 playerWantsToMove = true;
+                RemoveGOHoveredOnMovement();
             }
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 newPos = currentPos + Vector2.left * gridSize;
                 playerWantsToMove = true;
+                RemoveGOHoveredOnMovement();
             }
         }
-        else
+       /* else checks for terrain and other things perhaps
         {
-            bool valid=unitSelector.CheckForMovement();
+            bool valid = unitSelector.CheckForMovement();
             if (valid)
             {
                 if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
                 {
                     newPos = currentPos + Vector2.up * gridSize;
                     playerWantsToMove = true;
+
                 }
                 if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
                 {
@@ -77,13 +84,17 @@ public class GridMovement : MonoBehaviour
                     playerWantsToMove = true;
                 }
             }
-        }
+        }*/
+    }
+    void RemoveGOHoveredOnMovement()
+    {
+        unitSelector.GOHovered = null;
     }
 
     void LerpMovement()
     {
         lerpTimer += Time.deltaTime;
-
+        
         float percent = lerpTimer / lerpTime;
         if (lerpTimer > lerpTime)
         {
