@@ -857,6 +857,13 @@ MonoBehaviour:
   inCombat: 0
   canMove: 1
   currentPos: {x: 0, y: 0}
+  moveSFXRef:
+    Guid:
+      Data1: 1920752564
+      Data2: 1159279074
+      Data3: 325540528
+      Data4: 1182618046
+    Path: event:/SelectorMove
 --- !u!114 &803586547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1911,9 +1918,29 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: selectSFXRef.Path
+      value: event:/SelectorSelect
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: moveableTileMarker
       value: 
       objectReference: {fileID: 3707126651705642032, guid: b84600712e79f7a418fff45e758e2570, type: 3}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: selectSFXRef.Guid.Data1
+      value: 1849566358
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: selectSFXRef.Guid.Data2
+      value: 1335968335
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: selectSFXRef.Guid.Data3
+      value: -2124375143
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: selectSFXRef.Guid.Data4
+      value: -679808943
+      objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
