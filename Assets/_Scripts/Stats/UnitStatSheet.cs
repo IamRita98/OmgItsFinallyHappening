@@ -14,6 +14,7 @@ public class UnitStatSheet : MonoBehaviour
     public CharacterStat Skill;
     public CharacterStat Movement;
     public CharacterStat AttackRange;
+    public CharacterStat HitChance;
     public GameObject attackRangeTiles;
     public List<Vector2> attackTiles=new List<Vector2>();
 
