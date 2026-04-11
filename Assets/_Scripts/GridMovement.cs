@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GridMovement : MonoBehaviour
 {
+    float gridSizeSide = 1;
     Vector3 gridSize;
     public float lerpTime;
     float lerpTimer;
@@ -16,7 +17,7 @@ public class GridMovement : MonoBehaviour
 
     private void Awake()
     {
-        gridSize = EditorSnapSettings.gridSize;
+        gridSize = new Vector3(gridSizeSide, gridSizeSide, gridSizeSide);
         unitSelector = this.gameObject.GetComponent<UnitSelector>();
     }
 

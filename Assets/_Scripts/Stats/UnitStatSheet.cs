@@ -16,6 +16,29 @@ public class UnitStatSheet : MonoBehaviour
     public CharacterStat AttackRange;
     public GameObject attackRangeTiles;
     public List<Vector2> attackTiles=new List<Vector2>();
+
+    public bool hasActionThisTurn;
+
+    SpriteRenderer sRend;
+
+    private void Start()
+    {
+        hasActionThisTurn = true;
+        sRend = GetComponent<SpriteRenderer>();
+    }
+
+    public void UnitTookTurn()
+    {
+        hasActionThisTurn = false;
+        sRend.color = Color.gray;
+    }
+
+    public void NewTurn()
+    {
+        hasActionThisTurn = true;
+        sRend.color = Color.white;
+    }
+
     public void GetAttackRange()
     {
         for(int i = 0; i <= 1; i++)
@@ -44,6 +67,5 @@ public class UnitStatSheet : MonoBehaviour
     public void TryAttack()
     {
         if (attackTiles == null) GetAttackRange();
-
     }
 }

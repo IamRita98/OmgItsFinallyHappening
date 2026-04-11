@@ -85,8 +85,4 @@ public class CombatHandler : MonoBehaviour
             }
         }
     }
-    public void PassTurnSelected()
-    {
-        //End Units Turn
-    }
 }

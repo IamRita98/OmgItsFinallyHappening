@@ -40,7 +40,7 @@ public class UnitSelector : MonoBehaviour
     private void Awake()
     {
         gridMovement = GetComponent<GridMovement>();
-        gridSize = EditorSnapSettings.gridSize;
+        //gridSize = EditorSnapSettings.gridSize;
         uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
     }
     private void Update()
@@ -64,7 +64,7 @@ public class UnitSelector : MonoBehaviour
             else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
         }
         //Pickup unit hovered
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player"))
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player") && unitStatSheet.hasActionThisTurn)
         {
             movementRange = ((int)unitStatSheet.Movement.Value);
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
@@ -153,6 +153,12 @@ public class UnitSelector : MonoBehaviour
         moveableTilePlacements.Clear();
     }
 
+    public void PassTurn()
+    {
+        GOHovered = GOSelected;
+        unitStatSheet.UnitTookTurn();
+        ResumeSelectorControl();
+    }
 
     private void GetValidMovementTiles()
     {
