@@ -18,6 +18,7 @@ using UnityEngine.InputSystem;
 }*/
 public class UnitSelector : MonoBehaviour
 {
+    CommandManager commandManager;
     UIManager uiManager;
     Vector3 gridSize;
     UnitStatSheet unitStatSheet;
@@ -39,9 +40,14 @@ public class UnitSelector : MonoBehaviour
 
     private void Awake()
     {
+        
         gridMovement = GetComponent<GridMovement>();
         //gridSize = EditorSnapSettings.gridSize;
         uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
+    }
+    private void Start()
+    {
+        commandManager = CommandManager.Instance;
     }
     private void Update()
     {
@@ -68,8 +74,8 @@ public class UnitSelector : MonoBehaviour
         {
             movementRange = ((int)unitStatSheet.Movement.Value);
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
-            GOSelected.transform.parent = this.gameObject.transform;
             selectedGOPickupPos = GOSelected.transform.position;
+            GOSelected.transform.parent = this.gameObject.transform;
             GetValidMovementTiles();
             GOHovered = null;
             FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
@@ -82,6 +88,9 @@ public class UnitSelector : MonoBehaviour
             bool valid=CheckIfValid();
             if (valid)
             {
+                Vector2 endPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+                MoveCommand moveCommand = new MoveCommand(GOSelected,selectedGOPickupPos, endPos);
+                commandManager.Execute(moveCommand);
                 DropSelected(GOSelected);
                 GOHovered = GOSelected;
                 unitStatSheet.GetAttackRange();
@@ -97,6 +106,7 @@ public class UnitSelector : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
         {
+            //This is to see more detailed obj hovered stats(could be enemy, terrain, or something else)
             Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
             SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
             eSprite.color = new Color(0.2f, 0.7f, 0.9f,.9f);
@@ -114,6 +124,7 @@ public class UnitSelector : MonoBehaviour
         //Return selected unit to its starting pos
         if (Input.GetKeyDown(KeyCode.X))
         {
+            commandManager.Undo();
             if(GOSelected != null)
             {
                 GOSelected.transform.position = selectedGOPickupPos;
