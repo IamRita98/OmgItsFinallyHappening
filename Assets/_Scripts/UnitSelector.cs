@@ -61,7 +61,6 @@ public class UnitSelector : MonoBehaviour
     {
         CancelKey();
         ConfirmKey();
-        if (!canMoveSelector) return;
     }
 
     void ConfirmKey()
@@ -97,9 +96,10 @@ public class UnitSelector : MonoBehaviour
                 DropSelected(GOSelected);
                 GOHovered = GOSelected;
                 unitStatSheet.GetAttackRange();
-                uiManager.EnableCombatUI();
+                UIManager.Instance.EnableCombatUI();
                 StopSelectorControl();
                 FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
+                
             }
             else
             {
@@ -109,9 +109,14 @@ public class UnitSelector : MonoBehaviour
         //Attack hovered Enemy
         if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Enemy"))
         {
-            print("Cum");
             combatHandler.RunCombatCalc();
             wasDropped = false;
+            UIManager.Instance.EnableUndo();
+            PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
+            UIManager.Instance.HideCombatCalcs();
+            ResumeSelectorControl();
+            GameObject manager = GameObject.FindGameObjectWithTag("GameManager");
+            manager.GetComponent<DrawTiles>().ClearTiles();
         }
 
         if (Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
@@ -134,7 +139,6 @@ public class UnitSelector : MonoBehaviour
         //Return selected unit to its starting pos
         if (Input.GetKeyDown(KeyCode.X))
         {
-            commandManager.Undo();
             if(GOSelected != null)
             {
                 GOSelected.transform.position = selectedGOPickupPos;
@@ -182,6 +186,7 @@ public class UnitSelector : MonoBehaviour
         unitStatSheet.UnitTookTurn();
         ResumeSelectorControl();
         wasDropped = false;
+        UIManager.Instance.EnableUndo();
     }
 
     private void GetValidMovementTiles()

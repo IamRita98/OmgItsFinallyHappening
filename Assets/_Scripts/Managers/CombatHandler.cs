@@ -153,6 +153,6 @@ public class CombatHandler : MonoBehaviour
         // Only run attack command if player turn
         AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
         CommandManager.Instance.Execute(attackerAttack);
-        
+        inCombat = false;
     }
 }

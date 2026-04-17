@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject combatCalcUI;
     public Button attackButton;
     Selectable firstSelected;
+    public GameObject undoButton;
 
     public TMP_Text playerHPText;
     public TMP_Text playerDamageText;
@@ -56,5 +57,13 @@ public class UIManager : MonoBehaviour
     public void HideCombatCalcs()
     {
         combatCalcUI.SetActive(false);
+    }
+    public void EnableUndo()
+    {
+        undoButton.SetActive(true);
+    }
+    public void DisableUndo()
+    {
+        undoButton.SetActive(false);
     }
 }
