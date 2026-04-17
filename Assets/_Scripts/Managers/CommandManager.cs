@@ -29,4 +29,20 @@ public class CommandManager: MonoBehaviour
             lastCommand.Undo();
         }
     }
+    public void UndoAllUnitActions()
+    {
+        while (commandHistory.Count > 0) 
+        {
+            ICommand com=commandHistory.Pop();
+            com.Undo();
+        }
+    }
+    //it will empty the stack of all commands of previous units turn
+    public void PassToNextUnit()
+    {
+        while (commandHistory.Count > 0)
+        {
+            ICommand com = commandHistory.Pop();
+        }
+    }
 }
