@@ -19,14 +19,25 @@ public class CombatHandler : MonoBehaviour
     int index = 0;
     DrawTiles drawTiles;
     UnitStatSheet unitStats;
-    UIManager uiManager;
+    int critMulti = 2;
+
+    UnitStatSheet attackerStats;
+    UnitStatSheet defenderStats;
+    int attackerHp;
+    int attackerDamage;
+    int attackerHitChance;
+    int attackerCritChance;
+
+    int defenderHp;
+    int defenderDamage;
+    int defenderHitChance;
+    int defenderCritChance;
 
     private void Awake()
     {
         allEnemiesList = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
         drawTiles = gameObject.GetComponent<DrawTiles>();
-        uiManager = GameObject.FindWithTag("UIManager").GetComponent<UIManager>();
     }
     public void AttackSelected()
     {
@@ -92,23 +103,56 @@ public class CombatHandler : MonoBehaviour
                 inCombat = false;
                 enemiesToAttack.Clear();
                 drawTiles.ClearTiles();
-                uiManager.HideCombatCalcs();
+                UIManager.Instance.HideCombatCalcs();
             }
         }
     }
 
-    public void CombatCalc(UnitStatSheet attackerStats, UnitStatSheet defenderStats)
+    public void CombatCalc(UnitStatSheet attackerStatsP, UnitStatSheet defenderStatsP)
     {
-        int attackerHp = (int)(attackerStats.Health.Value);
-        int attackerDamage = (int)Mathf.Clamp((attackerStats.Strength.Value - defenderStats.Defense.Value), 1, Mathf.Infinity);
-        int attackerHitChance = (int)(attackerStats.HitChance.Value + attackerStats.Skill.Value - defenderStats.Speed.Value);
-        int attackerCritChance = (int)(attackerStats.Skill.Value);
+        attackerStats = attackerStatsP;
+        defenderStats = defenderStatsP;
 
-        int defenderHp = (int)(defenderStats.Health.Value);
-        int defenderDamage = (int)Mathf.Clamp((defenderStats.Strength.Value - attackerStats.Defense.Value), 1, Mathf.Infinity);
-        int defenderHitChance = (int)(defenderStats.HitChance.Value + defenderStats.Skill.Value - attackerStats.Speed.Value);
-        int defenderCritChance = (int)(defenderStats.Skill.Value);
+        attackerHp = (int)(attackerStats.Health.Value);
+        attackerDamage = (int)Mathf.Clamp((attackerStats.Strength.Value - defenderStats.Defense.Value), 1, Mathf.Infinity);
+        attackerHitChance = (int)(attackerStats.HitChance.Value + attackerStats.Skill.Value - defenderStats.Speed.Value);
+        attackerCritChance = (int)(attackerStats.Skill.Value);
+
+        defenderHp = (int)(defenderStats.Health.Value);
+        defenderDamage = (int)Mathf.Clamp((defenderStats.Strength.Value - attackerStats.Defense.Value), 1, Mathf.Infinity);
+        defenderHitChance = (int)(defenderStats.HitChance.Value + defenderStats.Skill.Value - attackerStats.Speed.Value);
+        defenderCritChance = (int)(defenderStats.Skill.Value);
         //if(isPlayersTurn)
-        uiManager.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
+        UIManager.Instance.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
+    }
+
+    public void RunCombatCalc()
+    {
+        //Attacker Hit
+        int hitRoll = Random.Range(1, 101);
+        if (hitRoll >= 100 - attackerHitChance)
+        {
+            hitRoll = Random.Range(1, 101);
+            if (hitRoll >= 100 - attackerCritChance)
+            {
+                attackerDamage *= critMulti;
+                print("BIG CRIT!!!!");
+            }
+        }
+
+        //Defender Counter attack
+        /*        if(EnemycanCounterAttack)
+         *        else defenderDamage = 0;
+                hitRoll = Random.Range(1, 101);
+                if (hitRoll >= 100 - defenderHitChance)
+                {
+
+                }
+         */
+
+        // Only run attack command if player turn
+        AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
+        CommandManager.Instance.Execute(attackerAttack);
+        
     }
 }
