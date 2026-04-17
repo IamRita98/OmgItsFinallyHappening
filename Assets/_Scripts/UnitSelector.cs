@@ -36,6 +36,8 @@ public class UnitSelector : MonoBehaviour
     public bool canMoveSelector = true;
     GridMovement gridMovement;
     public FMODUnity.EventReference selectSFXRef;
+    CombatHandler combatHandler;
+    bool wasDropped = false;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -43,7 +45,8 @@ public class UnitSelector : MonoBehaviour
         
         gridMovement = GetComponent<GridMovement>();
         //gridSize = EditorSnapSettings.gridSize;
-        uiManager = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
+        uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
+        combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
     }
     private void Start()
     {
@@ -57,8 +60,8 @@ public class UnitSelector : MonoBehaviour
     void CheckForInputs()
     {
         CancelKey();
-        if (!canMoveSelector) return;
         ConfirmKey();
+        if (!canMoveSelector) return;
     }
 
     void ConfirmKey()
@@ -70,7 +73,7 @@ public class UnitSelector : MonoBehaviour
             else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
         }
         //Pickup unit hovered
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player") && unitStatSheet.hasActionThisTurn)
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player") && unitStatSheet.hasActionThisTurn && wasDropped == false)
         {
             movementRange = ((int)unitStatSheet.Movement.Value);
             GOSelected = GOHovered.GetComponent<ISelectable>().Select();
@@ -102,9 +105,16 @@ public class UnitSelector : MonoBehaviour
             {
                 Debug.Log("Can't drop here");
             }
-            
         }
-        if(Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
+        //Attack hovered Enemy
+        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Enemy"))
+        {
+            print("Cum");
+            combatHandler.RunCombatCalc();
+            wasDropped = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
         {
             //This is to see more detailed obj hovered stats(could be enemy, terrain, or something else)
             Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
@@ -146,6 +156,7 @@ public class UnitSelector : MonoBehaviour
         GOHovered = null;
         goSelected.transform.parent = null;
         GOSelected = null;
+        wasDropped = true;
     }
     void CancelSelection(GameObject goSelected)
     {
@@ -154,6 +165,7 @@ public class UnitSelector : MonoBehaviour
         goSelected.transform.position = selectedGOPickupPos;
         goSelected.transform.parent = null;
         GOHovered = PlayerGO;
+        wasDropped = false;
     }
 
     void ClearMoveableTiles()
@@ -169,6 +181,7 @@ public class UnitSelector : MonoBehaviour
         GOHovered = GOSelected;
         unitStatSheet.UnitTookTurn();
         ResumeSelectorControl();
+        wasDropped = false;
     }
 
     private void GetValidMovementTiles()

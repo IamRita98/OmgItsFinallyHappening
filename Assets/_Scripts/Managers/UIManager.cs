@@ -5,7 +5,8 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static UIManager Instance;
+
     public GameObject combatOptions;
     public GameObject combatCalcUI;
     public Button attackButton;
@@ -19,6 +20,12 @@ public class UIManager : MonoBehaviour
     public TMP_Text enemyDamageText;
     public TMP_Text enemyHitChanceText;
     public TMP_Text enemyCritChanceText;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(this.gameObject);
+    }
 
     public void EnableCombatUI()
     {

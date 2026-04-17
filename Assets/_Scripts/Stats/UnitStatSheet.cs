@@ -5,6 +5,8 @@ using UnityEngine;
 public class UnitStatSheet : MonoBehaviour
 {
     public CharacterStat Health;
+    public int health;
+    private int maxHP;
     public CharacterStat Mana;
     public CharacterStat Strength;
     public CharacterStat Intelligence;
@@ -26,6 +28,12 @@ public class UnitStatSheet : MonoBehaviour
     {
         hasActionThisTurn = true;
         sRend = GetComponent<SpriteRenderer>();
+        SetStatsForCombat();
+    }
+
+    void SetStatsForCombat()
+    {
+        health = maxHP = (int)Health.Value;
     }
 
     public void UnitTookTurn()

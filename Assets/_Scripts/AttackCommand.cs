@@ -1,24 +1,28 @@
 using UnityEngine;
 
-public class AttackCommand : MonoBehaviour,ICommand
+public class AttackCommand : ICommand
 {
-    private float playerDamage;
-    private float playerHealth;
-    private float enemyDamage;
-    private float enemyHealth;
-    public AttackCommand(float pDam,float pHp,float eDam,float eHp)
+    private UnitStatSheet playerStats;
+    private UnitStatSheet enemyStats;
+    private int playerDamage;
+    private int enemyDamage;
+
+    public AttackCommand(UnitStatSheet playerStatsP, UnitStatSheet enemyStatsP, int pDam, int eDam)
     {
+        playerStats = playerStatsP;
+        enemyStats = enemyStatsP;
         playerDamage = pDam;
-        playerHealth = pHp;
         enemyDamage = eDam;
-        enemyHealth = eHp;
     }
     public void Execute()
     {
-        //To be implemented
+        enemyStats.health -= playerDamage;
+        playerStats.health -= enemyDamage;
+        Debug.Log("Damage Dealt: " + playerDamage + "\n" + "Enemy HP: " + enemyStats.health);
     }
     public void Undo()
     {
-        //To be implemented
+        enemyStats.health += playerDamage;
+        playerStats.health += enemyDamage;
     }
 }

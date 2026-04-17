@@ -9,6 +9,7 @@ TagManager:
   - UIManager
   - UnitSelector
   - CommandManager
+  - GameManager
   layers:
   - Default
   - TransparentFX
