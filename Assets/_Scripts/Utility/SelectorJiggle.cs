@@ -3,92 +3,74 @@ using UnityEngine;
 
 public class SelectorJiggle : MonoBehaviour
 {
-    private float waitTime = .5f;
-    private float lerpTimer=0f;
-    private float lerpTime = .50f;
-    private float lifeTime = 1 / 5;
-    Vector2 leftJiggle;
-    Vector2 rightJiggle;
-    Vector2 starPos;
-    bool lerp = false;
+    Vector2 startPos;
+    Vector2 leftJigglePos;
+    Vector2 rightJigglePos;
+    float jiggleDistance = .15f;
+    bool wantToJiggleLeft = false;
+    bool wantToJiggleRight = false;
+    bool wantToJiggleCenter = false;
+
+    float lerpTimer = 0f;
+    float lerpTime = .05f;
+    float longLerpTime = .1f;
+
     public void Jiggle()
     {
-        starPos = gameObject.transform.position;
-        leftJiggle = new Vector2((float)gameObject.transform.position.x - .3f,gameObject.transform.position.y);
-        rightJiggle = new Vector2(gameObject.transform.position.x + .3f, gameObject.transform.position.y);
-        this.gameObject.GetComponent<UnitSelector>().StopSelectorControl();
-        lerp = true;
-        Debug.Log("once");
-        StartCoroutine(JiggleRoutine());
-        this.gameObject.GetComponent<UnitSelector>().ResumeSelectorControl();
-    }
-    private IEnumerator JiggleRoutine()
-    {
-        while (lerpTimer < lerpTime&&lerp)
-        {
-            lerpTimer += Time.deltaTime;
-            float percent = lerpTimer / lerpTime;
-            transform.position = Vector2.Lerp(starPos, leftJiggle, .5f);
-            if (lerpTimer >= lerpTime)
-            {
-                lerp = false;
-            }
-            Debug.Log("left loop");
-           
-        }
-        yield return null;
-    }
-    private void Update()
-    {
-        
-        //lerp = true;
-    }
-    public void JiggleLeft()
-    {
-        lerpTimer += Time.deltaTime;
-        float percent = lerpTimer / lerpTime;
-        if (lerpTimer > lerpTime)
-        {
-            lerpTimer = 0;
-            lerp = false;
-        }
-        transform.position = Vector2.Lerp(starPos, leftJiggle, percent);
-        Debug.Log("left loop");
-        //JiggleRight();
-    }
-    public void JiggleRight()
-    {
-        lerp = true;
-        while (lerp)
-        {
-            lerpTimer += Time.deltaTime;
-            float percent = lerpTimer / lerpTime;
-            if (lerpTimer > lerpTime)
-            {
-                lerpTimer = 0;
-                lerp = false;
-            }
-            transform.position = Vector2.Lerp(leftJiggle, rightJiggle, percent);
-            Debug.Log("Right loop");
-        }
-        lerp = true;
-        //JiggleCenter();
-    }
-    public void JiggleCenter()
-    {
-        lerp = true;
-        while (lerp)
-        {
-            lerpTimer += Time.deltaTime;
-            float percent = lerpTimer / lerpTime;
-            if (lerpTimer > lerpTime)
-            {
-                lerpTimer = 0;
-                lerp = false;
-            }
-            transform.position = Vector2.Lerp(rightJiggle, starPos, percent);
-            Debug.Log("back to center");
-        }
+        gameObject.GetComponent<UnitSelector>().StopSelectorControl();
+        startPos = transform.position;
+        leftJigglePos = new Vector2(startPos.x - jiggleDistance, transform.position.y);
+        rightJigglePos = new Vector2(startPos.x + jiggleDistance, transform.position.y);
+        wantToJiggleLeft = true;
     }
 
+    private void Update()
+    {
+        if (!wantToJiggleLeft && !wantToJiggleRight && !wantToJiggleCenter) return;
+        else if (wantToJiggleLeft) StartJiggle();
+        else if (wantToJiggleRight) RightJiggle();
+        else if (wantToJiggleCenter) CenterJiggle();
+    }
+
+    void StartJiggle()
+    {
+        print("Move Left");
+        lerpTimer += Time.deltaTime;
+        float p = lerpTimer / lerpTime;
+        if (lerpTimer > lerpTime)
+        {
+            lerpTimer = 0f;
+            wantToJiggleLeft = false;
+            wantToJiggleRight = true;
+        }
+        transform.position = Vector2.Lerp(startPos, leftJigglePos, p);
+    }
+
+    void RightJiggle()
+    {
+        print("Move Right");
+        lerpTimer += Time.deltaTime;
+        float p = lerpTimer / longLerpTime;
+        if (lerpTimer > longLerpTime)
+        {
+            lerpTimer = 0f;
+            wantToJiggleRight = false;
+            wantToJiggleCenter = true;
+        }
+        transform.position = Vector2.Lerp(leftJigglePos, rightJigglePos, p);
+    }
+
+    void CenterJiggle()
+    {
+        print("Move Center");
+        lerpTimer += Time.deltaTime;
+        float p = lerpTimer / lerpTime;
+        if (lerpTimer > lerpTime)
+        {
+            lerpTimer = 0f;
+            wantToJiggleCenter = false;
+            gameObject.GetComponent<UnitSelector>().ResumeSelectorControl();
+        }
+        transform.position = Vector2.Lerp(rightJigglePos, startPos, p);
+    }
 }

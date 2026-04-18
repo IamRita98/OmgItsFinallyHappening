@@ -38,6 +38,7 @@ public class CombatHandler : MonoBehaviour
     {
         allEnemiesList = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
+        unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
     }
     public void AttackSelected()
@@ -74,6 +75,7 @@ public class CombatHandler : MonoBehaviour
         }
 
     }
+    bool skipOnce = false;
     private void Update()
     {
         if (inCombat)
@@ -113,22 +115,23 @@ public class CombatHandler : MonoBehaviour
                 ClearTiles();
             }
         }
+
         if (noEnemies)
         {
+
             /*
              aoe attack list to display while moving the selector around
-            When z is pressed add an fmod meep merp sound
              */
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.canMoveSelector)
             {
-                unitSelectorGO.GetComponent<SelectorJiggle>().Jiggle();
+                if(skipOnce) unitSelector.InvalidMove();
+                skipOnce = true;
             }
             if (Input.GetKeyDown(KeyCode.X))
             {
-                
+                skipOnce = false;
                 noEnemies = false;
                 ClearTiles();
-                
             }
         }
     }
