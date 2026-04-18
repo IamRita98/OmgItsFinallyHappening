@@ -20,6 +20,7 @@ public class CombatHandler : MonoBehaviour
     DrawTiles drawTiles;
     UnitStatSheet unitStats;
     int critMulti = 2;
+    bool noEnemies=false;
 
     UnitStatSheet attackerStats;
     UnitStatSheet defenderStats;
@@ -61,7 +62,16 @@ public class CombatHandler : MonoBehaviour
             inCombat = true;
             Vector2 tempPos = enemiesToAttack[index].transform.position;
             unitSelectorGO.transform.position = tempPos;
-        }//do something else if no enemies
+        }
+        else
+        {
+            //do something else if no enemies
+            //UIManager.Instance.DisableCombatUI();
+            //unitSelectorGO.GetComponent<UnitSelector>().EndUnitTurn();
+            noEnemies = true;
+            unitSelectorGO.GetComponent<UnitSelector>().ResumeSelectorControl();
+            //move freely
+        }
 
     }
     private void Update()
@@ -99,15 +109,36 @@ public class CombatHandler : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.X))
             {
-                //Cancel Attack
                 inCombat = false;
-                enemiesToAttack.Clear();
-                drawTiles.ClearTiles();
-                UIManager.Instance.HideCombatCalcs();
+                ClearTiles();
+            }
+        }
+        if (noEnemies)
+        {
+            /*
+             aoe attack list to display while moving the selector around
+            When z is pressed add an fmod meep merp sound
+             */
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                unitSelectorGO.GetComponent<SelectorJiggle>().Jiggle();
+            }
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                
+                noEnemies = false;
+                ClearTiles();
+                
             }
         }
     }
-
+public void ClearTiles()
+    {
+        enemiesToAttack.Clear();
+        attackRange.Clear();
+        drawTiles.ClearTiles();
+        UIManager.Instance.HideCombatCalcs();
+    }
     public void CombatCalc(UnitStatSheet attackerStatsP, UnitStatSheet defenderStatsP)
     {
         attackerStats = attackerStatsP;

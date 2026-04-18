@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DrawTiles : MonoBehaviour
 {
-    List<GameObject> tilesGOList = new List<GameObject>();
+    public List<GameObject> tilesGOList = new List<GameObject>();
     public void DrawTilesGO(GameObject tileGO, List<Vector2> listOfTiles)
     {
         foreach (var tile in listOfTiles)
