@@ -815,6 +815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe0fc8bc0dfc9144bb3c1140117612c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrawTiles
+  tilesGOList: []
 --- !u!114 &563748169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,7 +1448,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 803586549}
         m_TargetAssemblyTypeName: UnitSelector, Assembly-CSharp
-        m_MethodName: PassTurn
+        m_MethodName: EndUnitTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1759,6 +1760,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbe0fc8bc0dfc9144bb3c1140117612c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrawTiles
+  tilesGOList: []
 --- !u!114 &803586549 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
@@ -1770,6 +1772,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c4e658cd53dc9040953026833f9e64d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitSelector
+--- !u!114 &803586552
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803586540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e18f8c9c554dc94b9ca874aec3e0552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectorJiggle
 --- !u!1 &839982480
 GameObject:
   m_ObjectHideFlags: 0
@@ -3263,7 +3277,7 @@ Transform:
   m_GameObject: {fileID: 1448542300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 2, z: 0}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5023,6 +5037,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       insertIndex: -1
       addedObject: {fileID: 803586547}
+    - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 803586552}
   m_SourcePrefab: {fileID: 100100000, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

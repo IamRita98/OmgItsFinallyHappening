@@ -98,7 +98,6 @@ public class UnitSelector : MonoBehaviour
                 commandManager.Execute(moveCommand);
                 DropSelected(GOSelected);
                 GOHovered = GOSelected;
-                unitStatSheet.GetAttackRange();
                 UIManager.Instance.EnableCombatUI();
                 StopSelectorControl();
                 FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
@@ -151,6 +150,13 @@ public class UnitSelector : MonoBehaviour
                 CancelSelection(PlayerGO);
                 uiManager.DisableCombatUI();
             }
+            if (unitStatSheet.attackTiles.Count > 0)
+            {
+                unitStatSheet.attackTiles.Clear();
+                DrawTiles dt = combatHandler.GetComponent<DrawTiles>();
+                dt.ClearTiles();
+
+            }
         }
     }
 
@@ -181,12 +187,6 @@ public class UnitSelector : MonoBehaviour
         moveableTilePlacements.Clear();
     }
 
-    public void PassTurn()
-    {
-        GOHovered = GOSelected;
-        EndUnitTurn();
-        //end turn
-    }
     public void EndUnitTurn()
     {
         wasDropped = false;
