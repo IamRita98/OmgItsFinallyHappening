@@ -244,6 +244,13 @@ public class UnitSelector : MonoBehaviour
         canMoveSelector = true;
         gridMovement.canMove = true;
     }
+
+    public void InvalidMove()
+    {
+        GetComponent<SelectorJiggle>().Jiggle();
+        //fModMEEPMERP
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GOHovered = collision.gameObject;
@@ -251,6 +258,5 @@ public class UnitSelector : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         //if(GOSelected==null) GOHovered = null;
-
     }
 }
