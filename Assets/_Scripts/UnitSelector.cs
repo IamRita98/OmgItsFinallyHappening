@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,6 +19,7 @@ using UnityEngine.InputSystem;
 }*/
 public class UnitSelector : MonoBehaviour
 {
+    int unitsTakenTurn = 0;
     CommandManager commandManager;
     UIManager uiManager;
     Vector3 gridSize;
@@ -51,6 +53,7 @@ public class UnitSelector : MonoBehaviour
     private void Start()
     {
         commandManager = CommandManager.Instance;
+        unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
     }
     private void Update()
     {
@@ -110,13 +113,11 @@ public class UnitSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Enemy"))
         {
             combatHandler.RunCombatCalc();
-            wasDropped = false;
-            UIManager.Instance.EnableUndo();
-            PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
             UIManager.Instance.HideCombatCalcs();
-            ResumeSelectorControl();
             GameObject manager = GameObject.FindGameObjectWithTag("GameManager");
             manager.GetComponent<DrawTiles>().ClearTiles();
+            EndUnitTurn();
+            //end turn after
         }
 
         if (Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
@@ -183,10 +184,15 @@ public class UnitSelector : MonoBehaviour
     public void PassTurn()
     {
         GOHovered = GOSelected;
-        unitStatSheet.UnitTookTurn();
-        ResumeSelectorControl();
+        EndUnitTurn();
+        //end turn
+    }
+    public void EndUnitTurn()
+    {
         wasDropped = false;
         UIManager.Instance.EnableUndo();
+        PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
+        ResumeSelectorControl();
     }
 
     private void GetValidMovementTiles()
