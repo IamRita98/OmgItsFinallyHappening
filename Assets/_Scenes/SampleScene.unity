@@ -4966,6 +4966,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3707126651705642032, guid: b84600712e79f7a418fff45e758e2570, type: 3}
     - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: invalidMoveSFXRef.Path
+      value: event:/InvalidMove
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: selectSFXRef.Guid.Data1
       value: 1849566358
       objectReference: {fileID: 0}
@@ -4980,6 +4984,22 @@ PrefabInstance:
     - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: selectSFXRef.Guid.Data4
       value: -679808943
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: invalidMoveSFXRef.Guid.Data1
+      value: 1515045588
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: invalidMoveSFXRef.Guid.Data2
+      value: 1153984771
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: invalidMoveSFXRef.Guid.Data3
+      value: 772349352
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: invalidMoveSFXRef.Guid.Data4
+      value: -625454922
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.x
