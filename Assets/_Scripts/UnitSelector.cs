@@ -38,23 +38,26 @@ public class UnitSelector : MonoBehaviour
     public bool canMoveSelector = true;
     GridMovement gridMovement;
     public FMODUnity.EventReference selectSFXRef;
+    public FMODUnity.EventReference invalidMoveSFXRef;
     CombatHandler combatHandler;
     bool wasDropped = false;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
     {
-        
+
         gridMovement = GetComponent<GridMovement>();
         //gridSize = EditorSnapSettings.gridSize;
         uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
         combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
     }
+
     private void Start()
     {
         commandManager = CommandManager.Instance;
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
     }
+
     private void Update()
     {
         CheckForInputs();
@@ -132,8 +135,8 @@ public class UnitSelector : MonoBehaviour
     {
         if (GOHovered == null && moveableTiles.Contains(new Vector2(transform.position.x, transform.position.y))) return true;
         else return false;
-        
     }
+
     void CancelKey()
     {
         //Return selected unit to its starting pos
@@ -163,12 +166,13 @@ public class UnitSelector : MonoBehaviour
     void DropSelected(GameObject goSelected)
     {
         ClearMoveableTiles();
-        
+
         GOHovered = null;
         goSelected.transform.parent = null;
         GOSelected = null;
         wasDropped = true;
     }
+
     void CancelSelection(GameObject goSelected)
     {
         ClearMoveableTiles();
@@ -200,9 +204,9 @@ public class UnitSelector : MonoBehaviour
         Debug.Log("Trying to get tiles to move to");
         for (int i = 0; i <= movementRange; i++)
         {
-            for (int j = 0; j <= movementRange-i; j++)
+            for (int j = 0; j <= movementRange - i; j++)
             {
-                if(!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j)))
+                if (!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j)))
                 {
                     moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y + j));
                 }
@@ -217,18 +221,18 @@ public class UnitSelector : MonoBehaviour
                 if (!moveableTiles.Contains(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j)))
                 {
                     moveableTiles.Add(new Vector2(this.gameObject.transform.position.x + i, this.gameObject.transform.position.y - j));
-                } 
+                }
             }
-
         }
         foreach (var tile in moveableTiles)
         {
             GameObject tileMarker = Instantiate(moveableTileMarker, tile, Quaternion.identity);
             moveableTilePlacements.Add(tileMarker);
         }
-     
+
     }
-   public bool CheckForMovement()
+
+    public bool CheckForMovement()
     {
        
         return false;
@@ -239,6 +243,7 @@ public class UnitSelector : MonoBehaviour
         canMoveSelector = false;
         gridMovement.canMove = false;
     }
+
     public void ResumeSelectorControl()
     {
         canMoveSelector = true;
@@ -248,13 +253,14 @@ public class UnitSelector : MonoBehaviour
     public void InvalidMove()
     {
         GetComponent<SelectorJiggle>().Jiggle();
-        //fModMEEPMERP
+        FMODUnity.RuntimeManager.PlayOneShotAttached(invalidMoveSFXRef, gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GOHovered = collision.gameObject;
     }
+     
     private void OnTriggerExit2D(Collider2D collision)
     {
         //if(GOSelected==null) GOHovered = null;
