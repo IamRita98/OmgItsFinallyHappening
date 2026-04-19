@@ -59,10 +59,18 @@ public class UnitSelector : MonoBehaviour
 
     private void Update()
     {
+        CheckForTurnPhase();
         CheckForInputs();
         CheckHoveredUnit();
     }
-
+    public void CheckForTurnPhase()
+    {
+        if (unitsTakenTurn <= 0)
+        {
+            //end player phase
+            //start enemy phase
+        }
+    }
     void CheckForInputs()
     {
         CancelKey();
@@ -194,7 +202,9 @@ public class UnitSelector : MonoBehaviour
         selectorCanSelect = true;
         UIManager.Instance.EnableUndo();
         PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
+        playerUnitSelected = null;
         ResumeSelectorControl();
+        unitsTakenTurn--;
     }
 
     private void GetValidMovementTiles()
