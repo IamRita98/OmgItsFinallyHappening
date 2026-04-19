@@ -27,7 +27,7 @@ public class UnitSelector : MonoBehaviour
     public GameObject GOHovered;
     public GameObject EnemyGO;
     public GameObject PlayerGO;
-    public GameObject GOSelected;
+    public GameObject playerUnitSelected;
     public int movementRange;
     List<Vector2> moveableTiles=new List<Vector2>();
     List<GameObject> moveableTilePlacements = new List<GameObject>();
@@ -40,14 +40,13 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference selectSFXRef;
     public FMODUnity.EventReference invalidMoveSFXRef;
     CombatHandler combatHandler;
-    bool wasDropped = false;
+    public bool selectorCanSelect = true;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
     {
 
         gridMovement = GetComponent<GridMovement>();
-        //gridSize = EditorSnapSettings.gridSize;
         uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
         combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
     }
@@ -61,6 +60,7 @@ public class UnitSelector : MonoBehaviour
     private void Update()
     {
         CheckForInputs();
+        CheckHoveredUnit();
     }
 
     void CheckForInputs()
@@ -68,8 +68,49 @@ public class UnitSelector : MonoBehaviour
         CancelKey();
         ConfirmKey();
     }
-
+    
     void ConfirmKey()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            //Pickup unit hovered
+            if(HoveringReadyToActUnit()) PickupPlayerUnit();
+            else if (playerUnitSelected != null) //Confirm Selected Units Movement
+            {
+                if (CheckIfValidMove()) MoveUnit();
+                else Debug.Log("Can't drop here");
+            }
+
+            if (HoveringEnemyUnit()) ViewEnemyDetails();
+        }
+    }
+
+    void CancelKey()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            //Press X w/ unit held
+            if (playerUnitSelected != null) ReturnToPickLocationAndCancel();
+
+            //Press X while in Menu
+            if (!canMoveSelector)
+            {
+                ResumeSelectorControl();
+                CancelSelection();
+                uiManager.DisableCombatUI();
+            }
+
+            //Press X while enemies are in attack range to clear tiles
+            if (unitStatSheet.attackTiles.Count > 0)
+            {
+                unitStatSheet.attackTiles.Clear();
+                DrawTiles dt = combatHandler.GetComponent<DrawTiles>();
+                dt.ClearTiles();
+            }
+        }
+    }
+
+    void CheckHoveredUnit()
     {
         if (GOHovered != null)
         {
@@ -77,115 +118,72 @@ public class UnitSelector : MonoBehaviour
             if (GOHovered.CompareTag("Player")) PlayerGO = GOHovered;
             else if (GOHovered.CompareTag("Enemy")) EnemyGO = GOHovered;
         }
-        //Pickup unit hovered
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Player") && unitStatSheet.hasActionThisTurn && wasDropped == false)
-        {
-            movementRange = ((int)unitStatSheet.Movement.Value);
-            GOSelected = GOHovered.GetComponent<ISelectable>().Select();
-            selectedGOPickupPos = GOSelected.transform.position;
-            GOSelected.transform.parent = this.gameObject.transform;
-            GetValidMovementTiles();
-            GOHovered = null;
-            FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
-            return;
-        }
-
-        //Confirm selected units placement
-        if (Input.GetKeyDown(KeyCode.Z) && GOSelected != null)
-        {
-            bool valid=CheckIfValid();
-            if (valid)
-            {
-                Vector2 endPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
-                MoveCommand moveCommand = new MoveCommand(GOSelected,selectedGOPickupPos, endPos);
-                commandManager.Execute(moveCommand);
-                DropSelected(GOSelected);
-                GOHovered = GOSelected;
-                UIManager.Instance.EnableCombatUI();
-                StopSelectorControl();
-                FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
-                
-            }
-            else
-            {
-                Debug.Log("Can't drop here");
-            }
-        }
-        //Attack hovered Enemy
-        if (Input.GetKeyDown(KeyCode.Z) && GOHovered != null && PlayerGO != null && GOHovered.CompareTag("Enemy"))
-        {
-            combatHandler.RunCombatCalc();
-            UIManager.Instance.HideCombatCalcs();
-            GameObject manager = GameObject.FindGameObjectWithTag("GameManager");
-            manager.GetComponent<DrawTiles>().ClearTiles();
-            EndUnitTurn();
-            //end turn after
-        }
-
-        if (Input.GetKeyDown(KeyCode.Z)&&GOHovered!=null && EnemyGO != null&&GOHovered.CompareTag("Enemy"))
-        {
-            //This is to see more detailed obj hovered stats(could be enemy, terrain, or something else)
-            Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
-            SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
-            eSprite.color = new Color(0.2f, 0.7f, 0.9f,.9f);
-        }
     }
 
-    private bool CheckIfValid()
+    void PickupPlayerUnit()
+    {
+        movementRange = ((int)unitStatSheet.Movement.Value);
+        playerUnitSelected = GOHovered.GetComponent<ISelectable>().Select();
+        selectedGOPickupPos = playerUnitSelected.transform.position;
+        playerUnitSelected.transform.parent = this.gameObject.transform;
+        GetValidMovementTiles();
+        GOHovered = null;
+        FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
+        return;
+    }
+
+    void MoveUnit()
+    {
+        Vector2 endPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        MoveCommand moveCommand = new MoveCommand(playerUnitSelected, selectedGOPickupPos, endPos);
+        commandManager.Execute(moveCommand);
+        DropSelected();
+        GOHovered = playerUnitSelected;
+        UIManager.Instance.EnableCombatUI();
+        StopSelectorControl();
+        FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
+    }
+
+    void ViewEnemyDetails()
+    {
+        //This is to see more detailed obj hovered stats(could be enemy, terrain, or something else)
+        Debug.Log("Selected Enemy:\nStr: " + unitStatSheet.Strength.Value + "\n" + "Def: " + unitStatSheet.Defense.Value);
+        SpriteRenderer eSprite = GOHovered.GetComponent<SpriteRenderer>();
+        eSprite.color = new Color(0.2f, 0.7f, 0.9f, .9f);
+    }
+
+    private bool CheckIfValidMove()
     {
         if (GOHovered == null && moveableTiles.Contains(new Vector2(transform.position.x, transform.position.y))) return true;
         else return false;
     }
 
-    void CancelKey()
+    public void ReturnToPickLocationAndCancel()
     {
-        //Return selected unit to its starting pos
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if(GOSelected != null)
-            {
-                GOSelected.transform.position = selectedGOPickupPos;
-                CancelSelection(GOSelected);
-            }
-            if (!canMoveSelector)
-            {
-                ResumeSelectorControl();
-                CancelSelection(PlayerGO);
-                uiManager.DisableCombatUI();
-            }
-            if (unitStatSheet.attackTiles.Count > 0)
-            {
-                unitStatSheet.attackTiles.Clear();
-                DrawTiles dt = combatHandler.GetComponent<DrawTiles>();
-                dt.ClearTiles();
-
-            }
-        }
+        playerUnitSelected.transform.position = selectedGOPickupPos;
+        CancelSelection();
     }
 
-    void DropSelected(GameObject goSelected)
+    void DropSelected()
     {
         ClearMoveableTiles();
-
         GOHovered = null;
-        goSelected.transform.parent = null;
-        GOSelected = null;
-        wasDropped = true;
+        playerUnitSelected.transform.parent = null;
+        selectorCanSelect = false;
     }
 
-    void CancelSelection(GameObject goSelected)
+    public void CancelSelection()
     {
         ClearMoveableTiles();
         transform.position = selectedGOPickupPos;
-        goSelected.transform.position = selectedGOPickupPos;
-        goSelected.transform.parent = null;
+        playerUnitSelected.transform.position = selectedGOPickupPos;
+        playerUnitSelected.transform.parent = null;
         GOHovered = PlayerGO;
-        wasDropped = false;
+        selectorCanSelect = true;
     }
 
     void ClearMoveableTiles()
     {
-
         moveableTiles.Clear();
         foreach (GameObject tile in moveableTilePlacements) Destroy(tile);
         moveableTilePlacements.Clear();
@@ -193,7 +191,7 @@ public class UnitSelector : MonoBehaviour
 
     public void EndUnitTurn()
     {
-        wasDropped = false;
+        selectorCanSelect = true;
         UIManager.Instance.EnableUndo();
         PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
         ResumeSelectorControl();
@@ -232,12 +230,6 @@ public class UnitSelector : MonoBehaviour
 
     }
 
-    public bool CheckForMovement()
-    {
-       
-        return false;
-    }
-
     public void StopSelectorControl()
     {
         canMoveSelector = false;
@@ -263,6 +255,20 @@ public class UnitSelector : MonoBehaviour
      
     private void OnTriggerExit2D(Collider2D collision)
     {
-        //if(GOSelected==null) GOHovered = null;
+        //if(playerUnitSelected==null) GOHovered = null;
+    }
+
+
+    ///States
+    public bool HoveringReadyToActUnit()
+    {
+        if (GOHovered == true && GOHovered.CompareTag("Player") && GOHovered.GetComponent<UnitStatSheet>().hasActionThisTurn && selectorCanSelect) return true;
+        else return false;
+    }
+
+    bool HoveringEnemyUnit()
+    {
+        if (GOHovered != null && GOHovered.CompareTag("Enemy")) return true;
+        else return false;
     }
 }

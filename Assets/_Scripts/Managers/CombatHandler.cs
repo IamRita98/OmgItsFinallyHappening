@@ -105,9 +105,12 @@ public class CombatHandler : MonoBehaviour
             //CombatCalc()
             //UI.ShowCombatCalcs()
 
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Enemy"))
             {
-                //Confirm Attack
+                RunCombatCalc();
+                UIManager.Instance.HideCombatCalcs();
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<DrawTiles>().ClearTiles();
+                unitSelector.EndUnitTurn();
             }
             else if (Input.GetKeyDown(KeyCode.X))
             {
@@ -129,12 +132,20 @@ public class CombatHandler : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.X))
             {
-                skipOnce = false;
-                noEnemies = false;
-                ClearTiles();
+                CancelNoEnemiesAttack();
             }
         }
     }
+
+    void CancelNoEnemiesAttack()
+    {
+        unitSelector.ReturnToPickLocationAndCancel();
+        unitSelector.playerUnitSelected = null;
+        skipOnce = false;
+        noEnemies = false;
+        ClearTiles();
+    }
+
 public void ClearTiles()
     {
         enemiesToAttack.Clear();
@@ -188,5 +199,6 @@ public void ClearTiles()
         AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
         CommandManager.Instance.Execute(attackerAttack);
         inCombat = false;
+        enemiesToAttack.Clear();
     }
 }
