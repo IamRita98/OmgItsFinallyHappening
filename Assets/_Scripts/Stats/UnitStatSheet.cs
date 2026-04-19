@@ -40,12 +40,14 @@ public class UnitStatSheet : MonoBehaviour
     {
         hasActionThisTurn = false;
         sRend.color = Color.gray;
+        this.attackTiles.Clear();
     }
 
     public void NewTurn()
     {
         hasActionThisTurn = true;
         sRend.color = Color.white;
+        this.attackTiles.Clear();
     }
 
     public void GetAttackRange()
