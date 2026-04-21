@@ -19,8 +19,9 @@ public class MoveCommand : ICommand
     public void Undo()
     {
         objectMoved.transform.position = startPos;
-        UnitStatSheet unitStatSheet = objectMoved.GetComponent<UnitStatSheet>();
-        unitStatSheet.NewTurn();
-        unitStatSheet.attackTiles.Clear();
+        //These below functions should be called after this Undo command is called in their respective area
+        //UnitStatSheet unitStatSheet = objectMoved.GetComponent<UnitStatSheet>();
+        //unitStatSheet.NewTurn();
+        //unitStatSheet.attackTiles.Clear();
     }
 }

@@ -20,7 +20,6 @@ using UnityEngine.InputSystem;
 public class UnitSelector : MonoBehaviour
 {
     int unitsTakenTurn = 0;
-    CommandManager commandManager;
     UIManager uiManager;
     Vector3 gridSize;
     UnitStatSheet unitStatSheet;
@@ -53,7 +52,7 @@ public class UnitSelector : MonoBehaviour
 
     private void Start()
     {
-        commandManager = CommandManager.Instance;
+        
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
     }
 
@@ -129,7 +128,7 @@ public class UnitSelector : MonoBehaviour
     }
 
     void PickupPlayerUnit()
-    {
+    {//Should begin unit session here, will need to add logic for unit switching or just hardlock the player
         movementRange = ((int)unitStatSheet.Movement.Value);
         playerUnitSelected = GOHovered.GetComponent<ISelectable>().Select();
         selectedGOPickupPos = playerUnitSelected.transform.position;
@@ -143,8 +142,10 @@ public class UnitSelector : MonoBehaviour
     void MoveUnit()
     {
         Vector2 endPos = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        //for testing purposes I will leave this here, but this should be moved somewhere else so it is only called once
+        CommandManager.Instance.BeginUnitTurn(playerUnitSelected.GetInstanceID().ToString());
         MoveCommand moveCommand = new MoveCommand(playerUnitSelected, selectedGOPickupPos, endPos);
-        commandManager.Execute(moveCommand);
+        CommandManager.Instance.Execute(moveCommand);
         DropSelected();
         GOHovered = playerUnitSelected;
         UIManager.Instance.EnableCombatUI();
@@ -202,6 +203,7 @@ public class UnitSelector : MonoBehaviour
         selectorCanSelect = true;
         UIManager.Instance.EnableUndo();
         PlayerGO.GetComponent<UnitStatSheet>().UnitTookTurn();
+        CommandManager.Instance.ConfirmUnitTurn();
         playerUnitSelected = null;
         ResumeSelectorControl();
         unitsTakenTurn--;
