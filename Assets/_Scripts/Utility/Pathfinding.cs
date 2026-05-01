@@ -1,11 +1,9 @@
-using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 
 
-class Cell
+
+public class Cell
 {
     public Vector2 worldPosition;
     public Vector2 gridPosition;
@@ -35,7 +33,7 @@ public class Pathfinding : MonoBehaviour
     public Vector2 mapStartPos = Vector2.zero;
     List<Cell> cellsSearched;
     List<Cell> cellsToSearch;
-    List<Cell> path;
+    public List<Cell> path;
 
 
     Vector2 startPos;

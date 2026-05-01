@@ -22,6 +22,8 @@ public class GameStateManager : MonoBehaviour
     public void StartEnemyPhase()
     {
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        enemyUnits[0].gameObject.GetComponent<EnemyMovement>().MoveEnemy();
+        enemyUnits[1].gameObject.GetComponent<EnemyMovement>().MoveEnemy();
         //PATHFINDING
         //choice 1:pathfind to everthing to make ai make smarter decision
         //*look into having the enemy ai share its pathfinding data with others*
