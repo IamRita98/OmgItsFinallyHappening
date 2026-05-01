@@ -22,6 +22,7 @@ public class UnitSelector : MonoBehaviour
     int unitsTakenTurn = 0;
     UIManager uiManager;
     Vector3 gridSize;
+    GameStateManager GSM;
     UnitStatSheet unitStatSheet;
     public GameObject GOHovered;
     public GameObject EnemyGO;
@@ -44,7 +45,7 @@ public class UnitSelector : MonoBehaviour
 
     private void Awake()
     {
-
+        GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         gridMovement = GetComponent<GridMovement>();
         uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
         combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
@@ -66,8 +67,11 @@ public class UnitSelector : MonoBehaviour
     {
         if (unitsTakenTurn <= 0)
         {
-            //end player phase
-            //start enemy phase
+            print("Shouldn't be printing!");
+            unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
+            GSM.EndPlayerPhase();
+            
+            
         }
     }
     void CheckForInputs()
