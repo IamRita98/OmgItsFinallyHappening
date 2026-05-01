@@ -42,6 +42,8 @@ public class Pathfinding : MonoBehaviour
     Vector2[] neighbors = new Vector2[4] { Vector2.right, Vector2.left, Vector2.up, Vector2.down };
 
     List<Cell> cells = new List<Cell>();
+    public Dictionary<Vector2, Cell> cellDict;
+
 
     private void Start()
     {
@@ -58,7 +60,7 @@ public class Pathfinding : MonoBehaviour
         goalPos = endPos;
 
         //Give starting cell its costs-- G = distance from node starting node to neighbour, H = distance from neighbour to end node, F = G + H
-        Cell startingCell = cells.Find(Cell => Cell.worldPosition == startPosP);
+        Cell startingCell = cellDict[startPos];
         startingCell.G = 0;
         startingCell.H = ManhattanDistance(startingCell.gridPosition, goalPos);
         startingCell.F = startingCell.G + startingCell.H;
@@ -82,8 +84,8 @@ public class Pathfinding : MonoBehaviour
                 cellsToSearch.Remove(cellToSearch);
                 cellsSearched.Add(cellToSearch);
                 Vector2 neighbourPos = currentPos + neighbour;
-                Cell potentialNeighbour = cells.Find(Cell => Cell.worldPosition == neighbourPos);
-                if (potentialNeighbour.worldPosition == goalPos) ReconstructPath(potentialNeighbour); //Later will add neighbour to connection and make child then run Pathfinding
+                Cell potentialNeighbour = cellDict[neighbourPos];
+                if (potentialNeighbour.worldPosition == goalPos) ReconstructPath(potentialNeighbour);
                 if (cellsSearched.Contains(potentialNeighbour) || cellToSearch == null) continue;
                 
                 float tempG = Mathf.Round(1 + cellToSearch.G);
@@ -115,14 +117,17 @@ public class Pathfinding : MonoBehaviour
 
     void MakeGrid()
     {
+        cellDict = new Dictionary<Vector2, Cell>();
         Vector2 currentWorldPos = mapStartPos;
         for (int x = 0; x < mapSizeX; x++)
         {
             for (int y = 0; y < mapSizeY; y++)
             {
-                currentWorldPos = new Vector2(currentWorldPos.x + x, currentWorldPos.y + y);
                 Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos);
                 cells.Add(thisCell);
+                cellDict.Add(thisCell.gridPosition, thisCell);
+                print(currentWorldPos);
+                currentWorldPos = new Vector2(currentWorldPos.x + x, currentWorldPos.y + y);
             }
         }
     }

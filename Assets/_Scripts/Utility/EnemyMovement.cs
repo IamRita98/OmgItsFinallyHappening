@@ -18,7 +18,7 @@ public class EnemyMovement : MonoBehaviour
     //bool isLerping=false;
     private void Start()
     {
-        pf = gameObject.GetComponent<Pathfinding>();
+        pf = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Pathfinding>();
     }
     public void MoveEnemy()
     {

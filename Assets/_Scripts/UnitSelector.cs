@@ -67,11 +67,8 @@ public class UnitSelector : MonoBehaviour
     {
         if (unitsTakenTurn <= 0)
         {
-            print("Shouldn't be printing!");
             unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
             GSM.EndPlayerPhase();
-            
-            
         }
     }
     void CheckForInputs()

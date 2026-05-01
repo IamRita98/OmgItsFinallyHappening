@@ -864,7 +864,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 9, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -898,6 +898,7 @@ GameObject:
   - component: {fileID: 563748167}
   - component: {fileID: 563748166}
   - component: {fileID: 563748171}
+  - component: {fileID: 563748172}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: GameManager
@@ -998,6 +999,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
   playerUnits: []
   enemyUnits: []
+--- !u!114 &563748172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563748165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33c7b8ce65397fb4aac1b86b7372d359, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Pathfinding
+  mapSizeX: 10
+  mapSizeY: 10
+  mapStartPos: {x: 0, y: 0}
 --- !u!1 &588234898
 GameObject:
   m_ObjectHideFlags: 0
@@ -2543,7 +2559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1146936286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3725,7 +3741,7 @@ Transform:
   m_GameObject: {fileID: 1448542300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 2, z: 0}
+  m_LocalPosition: {x: 7, y: 4, z: 0}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4144,6 +4160,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589493445}
   m_CullTransparentMesh: 1
+--- !u!1 &1619330401
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1619330402}
+  m_Layer: 0
+  m_Name: GridStartPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1619330402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619330401}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1667133490
 GameObject:
   m_ObjectHideFlags: 0
@@ -4294,7 +4341,6 @@ GameObject:
   - component: {fileID: 1681865923}
   - component: {fileID: 1681865924}
   - component: {fileID: 1681865922}
-  - component: {fileID: 1681865925}
   - component: {fileID: 1681865926}
   m_Layer: 0
   m_Name: EnemyUnit
@@ -4371,7 +4417,7 @@ Transform:
   m_GameObject: {fileID: 1681865919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 1, z: 0}
+  m_LocalPosition: {x: 9, y: 7, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4478,21 +4524,6 @@ MonoBehaviour:
   attackRangeTiles: {fileID: 0}
   attackTiles: []
   hasActionThisTurn: 0
---- !u!114 &1681865925
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681865919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c7b8ce65397fb4aac1b86b7372d359, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pathfinding
-  mapSizeX: 10
-  mapSizeY: 10
-  mapStartPos: {x: -4, y: -4}
 --- !u!114 &1681865926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4594,7 +4625,6 @@ GameObject:
   - component: {fileID: 1764220321}
   - component: {fileID: 1764220320}
   - component: {fileID: 1764220319}
-  - component: {fileID: 1764220324}
   - component: {fileID: 1764220325}
   m_Layer: 0
   m_Name: EnemyUnit2
@@ -4772,27 +4802,12 @@ Transform:
   m_GameObject: {fileID: 1764220318}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 9, y: 4, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1764220324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1764220318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33c7b8ce65397fb4aac1b86b7372d359, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pathfinding
-  mapSizeX: 10
-  mapSizeY: 10
-  mapStartPos: {x: -4, y: -4}
 --- !u!114 &1764220325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5357,7 +5372,7 @@ Transform:
   m_GameObject: {fileID: 1996287700}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: 7, y: 7, z: 0}
   m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5517,11 +5532,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5590,3 +5605,4 @@ SceneRoots:
   - {fileID: 1049052737}
   - {fileID: 563748170}
   - {fileID: 1747923714}
+  - {fileID: 1619330402}
