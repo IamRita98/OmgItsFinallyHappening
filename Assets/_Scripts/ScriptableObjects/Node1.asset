@@ -18,3 +18,4 @@ MonoBehaviour:
     idk what to type. here we go! THE...
   choices:
   - {fileID: 11400000, guid: 09fd78432fadce242ba9949f92e26f07, type: 2}
+  charName: Test

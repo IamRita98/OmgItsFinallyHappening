@@ -46,6 +46,8 @@ public class Pathfinding : MonoBehaviour
 
     public void FindPath(Vector2 startPosP, Vector2 endPos)
     {
+        //sort by f cost and pop next lowest for cellsToSearch
+
         //Get starting info
         cellsSearched = new List<Vector2>();
         cellsToSearch = new List<Vector2>();
@@ -55,7 +57,7 @@ public class Pathfinding : MonoBehaviour
 
         //Give starting cell its costs-- G = distance from node starting node to neighbour, H = distance from neighbour to end node, F = G + H
         Cell startingCell = cells[startPos];
-        startingCell.G = 0;
+        startingCell.G = 0;//replace vector2.distance with manhattan distance
         startingCell.H = Vector2.Distance(startPos, endPos);
         startingCell.F = startingCell.G + startingCell.H;
         cellsToSearch.Add(currentPos);
