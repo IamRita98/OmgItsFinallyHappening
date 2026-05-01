@@ -21,8 +21,8 @@ public class Cell
 
     public Cell(Vector2 pos, Vector2 wPos)
     {
-        worldPosition = wPos;
         gridPosition = pos;
+        worldPosition = wPos;
     }
 }
 
