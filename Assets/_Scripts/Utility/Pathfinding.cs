@@ -144,7 +144,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    float ManhattanDistance(Vector2 currentPos, Vector2 goalPos)
+    public float ManhattanDistance(Vector2 currentPos, Vector2 goalPos)
     {
         float h = Mathf.Abs((currentPos.x - goalPos.x)) + Mathf.Abs((currentPos.y - goalPos.y));
         Mathf.Round(h);
