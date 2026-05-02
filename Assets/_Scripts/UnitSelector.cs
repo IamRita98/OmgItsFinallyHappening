@@ -98,7 +98,7 @@ public class UnitSelector : MonoBehaviour
 
     void CancelKey()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && canMoveSelector)
         {
             //Press X w/ unit held
             if (playerUnitSelected != null) ReturnToPickLocationAndCancel();
@@ -278,7 +278,7 @@ public class UnitSelector : MonoBehaviour
     ///States
     public bool HoveringReadyToActUnit()
     {
-        if (GOHovered == true && GOHovered.CompareTag("Player") && GOHovered.GetComponent<UnitStatSheet>().hasActionThisTurn && selectorCanSelect) return true;
+        if (GOHovered == true && GOHovered.CompareTag("Player") && GOHovered.GetComponent<UnitStatSheet>().hasActionThisTurn && selectorCanSelect && canMoveSelector) return true;
         else return false;
     }
 
