@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
 {
     public GameObject target1;
     public GameObject target2;
+    GameStateManager GMS;
     Pathfinding pf;
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
@@ -15,47 +16,53 @@ public class EnemyMovement : MonoBehaviour
     Vector2 currentPos;
     Vector2 newPos;
     bool isMoving=false;
-    private void Start()
+    private void Awake()
     {
+        GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         pf = gameObject.GetComponent<Pathfinding>();
     }
+
     public void MoveEnemy()
     {
-        int r = Random.Range(1, 3);
-        print(r);
-        
-        currentPos = gameObject.transform.position;
-        if (r == 1)
-        {
-            Vector2 t = new Vector2(Mathf.Round(target1.transform.position.x), Mathf.Round(target1.transform.position.y));
-            print( (double)target1.transform.position.x +" ,"+ (double)target1.transform.position.y);
-            pf.FindPath(currentPos, t);
-        }
-        else
-        {
-            Vector2 t = new Vector2(Mathf.Round(target2.transform.position.x), Mathf.Round(target2.transform.position.y));
-            print((double)target2.transform.position.x + " ," + (double)target2.transform.position.y);
-            pf.FindPath(currentPos, t);
-        }
+        //Target AI--Closest enemy for now, later make more sophisticated to target squishiest in range?
+        Vector2 t = GetPathingTarget();
+        pf.FindPath(currentPos, t);
         pathToTake = pf.path;
         GetFoundPath();
-        
-        
     }
+
+    Vector2 GetPathingTarget()
+    {
+        float closestDistance = Mathf.Infinity;
+        GameObject closestUnit = gameObject;
+        foreach (GameObject playerUnit in GMS.playerUnits)
+        {
+            float tempDist = pf.ManhattanDistance(transform.position, playerUnit.transform.position);
+            if (tempDist < closestDistance)
+            {
+                closestDistance = tempDist;
+                closestUnit = playerUnit;
+            }
+        }
+        return (Vector2)closestUnit.transform.position;
+    }
+
     private void GetFoundPath()
     {
-        
         LerpMovement();
     }
+
     private void Update()
     {
         if (!isMoving) currentPos = gameObject.transform.position;
     }
+
     void LerpMovement()
     {//convert to coroutine or implement back into update
         StartCoroutine(LerpRoutine());
         
     }
+
     IEnumerator LerpRoutine()
     {
         while (pathToTake.Count > 0)
@@ -74,6 +81,5 @@ public class EnemyMovement : MonoBehaviour
             currentPos = newPos;
             pathToTake.Remove(pathToTake[0]);
         }
-        
     }
 }
