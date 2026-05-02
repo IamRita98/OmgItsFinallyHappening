@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,12 +9,11 @@ public class EnemyMovement : MonoBehaviour
     public GameObject target2;
     Pathfinding pf;
     public bool enemyTurn=false;
-    List<Cell> pathToTake;
-    float lerpTimer;
+    public List<Cell> pathToTake;
+    float lerpTimer=0f;
     public float lerpTime = 0.1f;
     Vector2 currentPos;
     Vector2 newPos;
-    int idx = 0;
     bool isMoving=false;
     //bool isLerping=false;
     private void Start()
@@ -27,15 +27,21 @@ public class EnemyMovement : MonoBehaviour
         currentPos = gameObject.transform.position;
         if (r == 1)
         {
-            pf.FindPath(currentPos, target1.transform.position);
+            pf.FindPath(currentPos, (Vector2)target1.transform.position);
         }
         else
         {
             pf.FindPath(currentPos, target2.transform.position);
         }
-
         pathToTake = pf.path;
-        while (pathToTake!=null)
+        GetFoundPath();
+        
+        
+    }
+    private void GetFoundPath()
+    {
+        print(pf.path);
+        while (pathToTake != null)
         {
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
@@ -50,20 +56,27 @@ public class EnemyMovement : MonoBehaviour
         if (!isMoving) currentPos = gameObject.transform.position;
     }
     void LerpMovement()
+    {//convert to coroutine or implement back into update
+        print("trying to lerp");
+        StartCoroutine(LerpRoutine());
+        
+    }
+    IEnumerator LerpRoutine()
     {
-        lerpTimer += Time.deltaTime;
-
-        float percent = lerpTimer / lerpTime;
-        if (lerpTimer > lerpTime)
+        print("in coroutine");
+        while (lerpTimer < lerpTime)
         {
-            lerpTimer = 0;
-            if (pathToTake != null)
-            {
-                isMoving = false;
-                MoveEnemy();
-            }
-            
+            print("In loop");
+            lerpTimer += Time.deltaTime;
+            float percent = lerpTimer / lerpTime;
+            transform.position = Vector2.Lerp(currentPos, newPos, percent);
+            yield return null;
         }
-        transform.position = Vector2.Lerp(currentPos, newPos, percent);
+        transform.position = newPos;
+        if (pathToTake != null)
+        {
+            isMoving = false;
+            GetFoundPath();
+        }
     }
 }

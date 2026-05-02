@@ -215,7 +215,7 @@ public class UnitSelector : MonoBehaviour
 
     private void GetValidMovementTiles()
     {
-        Debug.Log("Trying to get tiles to move to");
+        
         for (int i = 0; i <= movementRange; i++)
         {
             for (int j = 0; j <= movementRange - i; j++)
