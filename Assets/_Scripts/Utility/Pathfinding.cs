@@ -102,6 +102,7 @@ public class Pathfinding : MonoBehaviour
 
     void ReconstructPath(Cell currentCell)
     {
+        Debug.Log("backtracking");
         path = new List<Cell>() { currentCell };
 
         while (currentCell.bestNeighbour != null)
@@ -120,7 +121,7 @@ public class Pathfinding : MonoBehaviour
         {
             for (int y = 0; y < mapSizeY; y++)
             {
-                currentWorldPos = new Vector2(currentWorldPos.x + x, currentWorldPos.y + y);
+                currentWorldPos = new Vector2(mapStartPos.x + (1.0f * x), mapStartPos.y + (1.0f * y));
                 Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos);
                 cells.Add(thisCell);
             }
