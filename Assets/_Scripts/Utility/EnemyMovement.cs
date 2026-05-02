@@ -15,7 +15,6 @@ public class EnemyMovement : MonoBehaviour
     Vector2 currentPos;
     Vector2 newPos;
     bool isMoving=false;
-    //bool isLerping=false;
     private void Start()
     {
         pf = gameObject.GetComponent<Pathfinding>();
@@ -23,15 +22,20 @@ public class EnemyMovement : MonoBehaviour
     public void MoveEnemy()
     {
         int r = Random.Range(1, 3);
+        print(r);
         
         currentPos = gameObject.transform.position;
         if (r == 1)
         {
-            pf.FindPath(currentPos, (Vector2)target1.transform.position);
+            Vector2 t = new Vector2(Mathf.Round(target1.transform.position.x), Mathf.Round(target1.transform.position.y));
+            print( (double)target1.transform.position.x +" ,"+ (double)target1.transform.position.y);
+            pf.FindPath(currentPos, t);
         }
         else
         {
-            pf.FindPath(currentPos, target2.transform.position);
+            Vector2 t = new Vector2(Mathf.Round(target2.transform.position.x), Mathf.Round(target2.transform.position.y));
+            print((double)target2.transform.position.x + " ," + (double)target2.transform.position.y);
+            pf.FindPath(currentPos, t);
         }
         pathToTake = pf.path;
         GetFoundPath();
@@ -40,16 +44,8 @@ public class EnemyMovement : MonoBehaviour
     }
     private void GetFoundPath()
     {
-        print(pf.path);
-        while (pathToTake != null)
-        {
-            Cell c = pathToTake[0];
-            newPos = c.worldPosition;
-            isMoving = true;
-            LerpMovement();
-            currentPos = newPos;
-            pathToTake.Remove(pathToTake[0]);
-        }
+        
+        LerpMovement();
     }
     private void Update()
     {
@@ -57,26 +53,27 @@ public class EnemyMovement : MonoBehaviour
     }
     void LerpMovement()
     {//convert to coroutine or implement back into update
-        print("trying to lerp");
         StartCoroutine(LerpRoutine());
         
     }
     IEnumerator LerpRoutine()
     {
-        print("in coroutine");
-        while (lerpTimer < lerpTime)
+        while (pathToTake.Count > 0)
         {
-            print("In loop");
-            lerpTimer += Time.deltaTime;
-            float percent = lerpTimer / lerpTime;
-            transform.position = Vector2.Lerp(currentPos, newPos, percent);
-            yield return null;
+            Cell c = pathToTake[0];
+            newPos = c.worldPosition;
+            while (lerpTimer < lerpTime)
+            {
+                lerpTimer += Time.deltaTime;
+                float percent = lerpTimer / lerpTime;
+                transform.position = Vector2.Lerp(currentPos, newPos, percent);
+                yield return null;
+            }
+            lerpTimer = 0;
+            transform.position = newPos;
+            currentPos = newPos;
+            pathToTake.Remove(pathToTake[0]);
         }
-        transform.position = newPos;
-        if (pathToTake != null)
-        {
-            isMoving = false;
-            GetFoundPath();
-        }
+        
     }
 }

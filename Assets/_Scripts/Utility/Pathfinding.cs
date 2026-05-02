@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 
 
@@ -76,14 +77,25 @@ public class Pathfinding : MonoBehaviour
             cellsToSearch.Sort((Cell a, Cell b) => a.F.CompareTo(b.F));
             Cell cellToSearch = cellsToSearch[0];
             cellsToSearch.Remove(cellToSearch);
-
+            cellsSearched.Add(cellToSearch);
             foreach (Vector2 neighbour in neighbors)
             {
-                cellsToSearch.Remove(cellToSearch);
-                cellsSearched.Add(cellToSearch);
-                Vector2 neighbourPos = currentPos + neighbour;
+                Vector2 neighbourPos = cellToSearch.worldPosition + neighbour;
+                if (neighbourPos.x<mapStartPos.x||neighbourPos.y<mapStartPos.y||neighbourPos.x>(mapStartPos.x+mapSizeX)||neighbourPos.y>(mapStartPos.y+mapSizeY))
+                {
+                    continue;
+                }
                 Cell potentialNeighbour = cells.Find(Cell => Cell.worldPosition == neighbourPos);
-                if (potentialNeighbour.worldPosition == goalPos) ReconstructPath(potentialNeighbour); //Later will add neighbour to connection and make child then run Pathfinding
+                if (potentialNeighbour.worldPosition == goalPos)
+                {
+                    if(potentialNeighbour.worldPosition==new Vector2(-4, -4)|| potentialNeighbour.worldPosition == new Vector2(-4, 5))
+                    {
+
+                    }
+                    potentialNeighbour.bestNeighbour = cellToSearch;
+                    ReconstructPath(potentialNeighbour); //Later will add neighbour to connection and make child then run Pathfinding
+                    return;
+                }
                 if (cellsSearched.Contains(potentialNeighbour) || cellToSearch == null) continue;
                 
                 float tempG = Mathf.Round(1 + cellToSearch.G);
@@ -103,10 +115,12 @@ public class Pathfinding : MonoBehaviour
     void ReconstructPath(Cell currentCell)
     {
         Debug.Log("backtracking");
+        currentCell = currentCell.bestNeighbour;
         path = new List<Cell>() { currentCell };
 
         while (currentCell.bestNeighbour != null)
         {
+            print(currentCell.worldPosition);
             currentCell = currentCell.bestNeighbour;
             path.Add(currentCell);
         }
@@ -117,12 +131,14 @@ public class Pathfinding : MonoBehaviour
     void MakeGrid()
     {
         Vector2 currentWorldPos = mapStartPos;
-        for (int x = 0; x < mapSizeX; x++)
+        for (int x = 0; x <= mapSizeX; x++)
         {
-            for (int y = 0; y < mapSizeY; y++)
+            for (int y = 0; y <= mapSizeY; y++)
             {
-                currentWorldPos = new Vector2(mapStartPos.x + (1.0f * x), mapStartPos.y + (1.0f * y));
+                Vector2 t = new Vector2(Mathf.Round(mapStartPos.x + x), Mathf.Round(mapStartPos.y + y));
+                currentWorldPos = t;
                 Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos);
+                //print(thisCell.worldPosition);
                 cells.Add(thisCell);
             }
         }
