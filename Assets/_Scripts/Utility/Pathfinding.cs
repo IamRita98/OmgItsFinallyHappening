@@ -88,10 +88,6 @@ public class Pathfinding : MonoBehaviour
                 Cell potentialNeighbour = cells.Find(Cell => Cell.worldPosition == neighbourPos);
                 if (potentialNeighbour.worldPosition == goalPos)
                 {
-                    if(potentialNeighbour.worldPosition==new Vector2(-4, -4)|| potentialNeighbour.worldPosition == new Vector2(-4, 5))
-                    {
-
-                    }
                     potentialNeighbour.bestNeighbour = cellToSearch;
                     ReconstructPath(potentialNeighbour); //Later will add neighbour to connection and make child then run Pathfinding
                     return;

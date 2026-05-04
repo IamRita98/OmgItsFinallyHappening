@@ -2543,7 +2543,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1146936286
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4297,7 +4297,7 @@ GameObject:
   - component: {fileID: 1681865925}
   - component: {fileID: 1681865926}
   m_Layer: 0
-  m_Name: EnemyUnit
+  m_Name: MeleeEnemyUnit
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4470,9 +4470,9 @@ MonoBehaviour:
   Skill:
     BaseValue: 3
   Movement:
-    BaseValue: 3
+    BaseValue: 5
   AttackRange:
-    BaseValue: 0
+    BaseValue: 1
   HitChance:
     BaseValue: 70
   attackRangeTiles: {fileID: 0}
@@ -4505,6 +4505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23dbbf105b795f4280c7f310335e918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  actionType: 0
   target1: {fileID: 1996287700}
   target2: {fileID: 1448542300}
   enemyTurn: 0
@@ -4597,7 +4598,7 @@ GameObject:
   - component: {fileID: 1764220324}
   - component: {fileID: 1764220325}
   m_Layer: 0
-  m_Name: EnemyUnit2
+  m_Name: RangedEnemyUnit2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4683,9 +4684,9 @@ MonoBehaviour:
   Skill:
     BaseValue: 6
   Movement:
-    BaseValue: 3
+    BaseValue: 4
   AttackRange:
-    BaseValue: 0
+    BaseValue: 2
   HitChance:
     BaseValue: 70
   attackRangeTiles: {fileID: 0}
@@ -4772,7 +4773,7 @@ Transform:
   m_GameObject: {fileID: 1764220318}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 4, y: -2, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -4805,6 +4806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c23dbbf105b795f4280c7f310335e918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMovement
+  actionType: 0
   target1: {fileID: 1996287700}
   target2: {fileID: 1448542300}
   enemyTurn: 0
@@ -5517,7 +5519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5691681741243878860, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_LocalPosition.y
