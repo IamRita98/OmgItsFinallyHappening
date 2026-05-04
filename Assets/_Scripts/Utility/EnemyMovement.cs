@@ -87,7 +87,7 @@ public class EnemyMovement : MonoBehaviour
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
-            if (tilesMoved > unitStats.Movement.Value) yield break; //Enemy reached max movement
+            if (tilesMoved > unitStats.Movement.Value) yield break; //Enemy reached max movement--Using > instead of >= makes the enemy move their full movement despite us having logic that makes them do otherwise elsewhere
             if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) yield break; //Enemy reached their max attack range away from target
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
