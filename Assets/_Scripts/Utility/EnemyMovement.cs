@@ -43,6 +43,7 @@ public class EnemyMovement : MonoBehaviour
     public void MoveEnemy()
     {
         GameObject closestEnemy = GetPathingTarget();
+        //Check if we need to move before running Pathfinding
         pf.FindPath(currentPos, (Vector2)closestEnemy.transform.position);
         pathToTake = pf.path;
         StartCoroutine(LerpRoutine());
