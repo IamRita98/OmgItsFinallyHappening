@@ -5,10 +5,19 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    public enum ActionType
+    {
+        MOVING,
+        ATTACKING,
+        ABILITY,
+        //add more as needed
+    }
+    public ActionType actionType;
     public GameObject target1;
     public GameObject target2;
     GameStateManager GMS;
     Pathfinding pf;
+    UnitStatSheet unitStats;
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
     float lerpTimer=0f;
@@ -16,40 +25,57 @@ public class EnemyMovement : MonoBehaviour
     Vector2 currentPos;
     Vector2 newPos;
     bool isMoving=false;
+    int effectiveRange;
+    int distanceFromEnemy;
+
     private void Awake()
     {
         GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         pf = gameObject.GetComponent<Pathfinding>();
+        unitStats = GetComponent<UnitStatSheet>();
+    }
+
+    private void Start()
+    {
+        effectiveRange = (int)unitStats.Movement.Value + (int)unitStats.AttackRange.Value;
     }
 
     public void MoveEnemy()
     {
-        //Target AI--Closest enemy for now, later make more sophisticated to target squishiest in range?
-        Vector2 t = GetPathingTarget();
-        pf.FindPath(currentPos, t);
+        GameObject closestEnemy = GetPathingTarget();
+        //Check if we need to move before running Pathfinding
+        pf.FindPath(currentPos, (Vector2)closestEnemy.transform.position);
         pathToTake = pf.path;
-        GetFoundPath();
+        StartCoroutine(LerpRoutine());
     }
 
-    Vector2 GetPathingTarget()
+    GameObject GetPathingTarget()
     {
-        float closestDistance = Mathf.Infinity;
+        int closestDistance = int.MaxValue;
         GameObject closestUnit = gameObject;
         foreach (GameObject playerUnit in GMS.playerUnits)
         {
             float tempDist = pf.ManhattanDistance(transform.position, playerUnit.transform.position);
             if (tempDist < closestDistance)
             {
-                closestDistance = tempDist;
+                closestDistance = (int)tempDist;
                 closestUnit = playerUnit;
             }
         }
-        return (Vector2)closestUnit.transform.position;
+        if (IsClosestEnemyInAttackRange(closestDistance))
+        {
+            //Prob add more detail to this later so that instead of it being true/false to attack or move it would instead still be false to move but true would
+            //go on to the next step of logic checking whether they should attack or use an ability
+            actionType = ActionType.ATTACKING;
+        }
+        else actionType = ActionType.MOVING;
+        return (closestUnit);
     }
 
-    private void GetFoundPath()
+    bool IsClosestEnemyInAttackRange(int distance)
     {
-        LerpMovement();
+        if (distance <= effectiveRange) return true;
+        else return false;
     }
 
     private void Update()
@@ -57,16 +83,13 @@ public class EnemyMovement : MonoBehaviour
         if (!isMoving) currentPos = gameObject.transform.position;
     }
 
-    void LerpMovement()
-    {//convert to coroutine or implement back into update
-        StartCoroutine(LerpRoutine());
-        
-    }
-
     IEnumerator LerpRoutine()
     {
+        int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
+            if (tilesMoved > unitStats.Movement.Value) yield break; //Enemy reached max movement--Using > instead of >= makes the enemy move their full movement despite us having logic that makes them stop 1 early elsewhere
+            if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) yield break; //Enemy reached their max attack range away from target
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
             while (lerpTimer < lerpTime)
@@ -76,6 +99,7 @@ public class EnemyMovement : MonoBehaviour
                 transform.position = Vector2.Lerp(currentPos, newPos, percent);
                 yield return null;
             }
+            tilesMoved++;
             lerpTimer = 0;
             transform.position = newPos;
             currentPos = newPos;
