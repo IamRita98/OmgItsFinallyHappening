@@ -42,12 +42,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveEnemy()
     {
-        //Target AI--Closest enemy for now, later make more sophisticated to target squishiest in range?
-        //Get ClosestEnemy
-        //Check if Closest Enemy is in effective range
-        //Get Path to Closest Enemy
-        //Move along path and stop at attack range tiles away from enemy
-        //Attack from attack range tiles away
         GameObject closestEnemy = GetPathingTarget();
         pf.FindPath(currentPos, (Vector2)closestEnemy.transform.position);
         pathToTake = pf.path;
@@ -67,14 +61,18 @@ public class EnemyMovement : MonoBehaviour
                 closestUnit = playerUnit;
             }
         }
-        if (IsClosestEnemyInAttackRange(closestDistance)) actionType = ActionType.ATTACKING;
+        if (IsClosestEnemyInAttackRange(closestDistance))
+        {
+            //Prob add more detail to this later so that instead of it being true/false to attack or move it would instead still be false to move but true would
+            //go on to the next step of logic checking whether they should attack or use an ability
+            actionType = ActionType.ATTACKING;
+        }
         else actionType = ActionType.MOVING;
         return (closestUnit);
     }
 
     bool IsClosestEnemyInAttackRange(int distance)
-    {//Prob add more detail to this later so that instead of it being true/false to attack or move it would instead still be false to move but true would
-     //go on to the next step of logic checking wether they should attack or use an ability
+    {
         if (distance <= effectiveRange) return true;
         else return false;
     }
