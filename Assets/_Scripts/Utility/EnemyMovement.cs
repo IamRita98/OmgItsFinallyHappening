@@ -27,6 +27,7 @@ public class EnemyMovement : MonoBehaviour
     bool isMoving=false;
     int effectiveRange;
     int distanceFromEnemy;
+    public bool needsToMove = false;
 
     private void Awake()
     {
@@ -42,11 +43,13 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveEnemy()
     {
-        GameObject closestEnemy = GetPathingTarget();
-        //Check if we need to move before running Pathfinding
-        pf.FindPath(currentPos, (Vector2)closestEnemy.transform.position);
-        pathToTake = pf.path;
-        StartCoroutine(LerpRoutine());
+        GameObject bestTarget = GetPathingTarget();
+        if (needsToMove)
+        {
+            pf.FindPath(currentPos, (Vector2)bestTarget.transform.position);
+            pathToTake = pf.path;
+            StartCoroutine(LerpRoutine());
+        }
     }
 
     GameObject GetPathingTarget()
@@ -62,7 +65,7 @@ public class EnemyMovement : MonoBehaviour
                 closestUnit = playerUnit;
             }
         }
-        if (IsClosestEnemyInAttackRange(closestDistance))
+        if (IsBestTargetInAttackRange(closestDistance))
         {
             //Prob add more detail to this later so that instead of it being true/false to attack or move it would instead still be false to move but true would
             //go on to the next step of logic checking whether they should attack or use an ability
@@ -72,8 +75,11 @@ public class EnemyMovement : MonoBehaviour
         return (closestUnit);
     }
 
-    bool IsClosestEnemyInAttackRange(int distance)
+    bool IsBestTargetInAttackRange(int distance)
     {
+        if (distance > unitStats.AttackRange.Value) needsToMove = true;
+        else needsToMove = false;
+
         if (distance <= effectiveRange) return true;
         else return false;
     }
@@ -85,6 +91,7 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator LerpRoutine()
     {
+        print("Pathfinding");
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
