@@ -8,9 +8,22 @@ public class GameStateManager : MonoBehaviour
     public List<GameObject> enemyUnits = new List<GameObject>();
     UnitSelector uSelector;
 
+    public enum GameState
+    {
+        PlayerTurn,
+        EnemyTurn,
+        OutOfCombat
+    }
+    public GameState gameState;
+
     private void Awake()
     {
         uSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+    }
+
+    private void Start()
+    {
+        gameState = GameState.PlayerTurn;
     }
 
     public void EndPlayerPhase()
@@ -27,6 +40,7 @@ public class GameStateManager : MonoBehaviour
 
     public void StartEnemyPhase()
     {
+        gameState = GameState.EnemyTurn;
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         EnemyActions();
         
@@ -50,5 +64,6 @@ public class GameStateManager : MonoBehaviour
             //Wait until first unit has finished moving before continuing Loop
             //After movement is finished this enemy Attacks
         }
+        //StartPlayerPhase/EndEnemyPhase
     }
 }
