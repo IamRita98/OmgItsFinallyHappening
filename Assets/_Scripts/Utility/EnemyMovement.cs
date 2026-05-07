@@ -17,6 +17,7 @@ public class EnemyMovement : MonoBehaviour
     public GameObject target2;
     GameStateManager GMS;
     Pathfinding pf;
+    CombatHandler cHandler;
     UnitStatSheet unitStats;
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
@@ -28,10 +29,12 @@ public class EnemyMovement : MonoBehaviour
     int effectiveRange;
     int distanceFromEnemy;
     public bool needsToMove = false;
+    GameObject bestTarget;
 
     private void Awake()
     {
         GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
+        cHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
         pf = gameObject.GetComponent<Pathfinding>();
         unitStats = GetComponent<UnitStatSheet>();
     }
@@ -43,7 +46,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveEnemy()
     {
-        GameObject bestTarget = GetPathingTarget();
+        bestTarget = GetPathingTarget();
         if (needsToMove)
         {
             pf.FindPath(currentPos, (Vector2)bestTarget.transform.position);
@@ -112,5 +115,13 @@ public class EnemyMovement : MonoBehaviour
             currentPos = newPos;
             pathToTake.Remove(pathToTake[0]);
         }
+        if (actionType == ActionType.ATTACKING) Attack(); //I'm putting this here for now, later we might want to break it up and leave this class to just handle movement?
+    }
+
+    void Attack()
+    {
+        print(gameObject + " Is Attacking"); //BUG: Archer is never attacking for some reason
+        cHandler.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
+        cHandler.RunCombatCalc();
     }
 }

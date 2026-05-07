@@ -21,6 +21,7 @@ public class CombatHandler : MonoBehaviour
     UnitStatSheet unitStats;
     int critMulti = 2;
     bool noEnemies=false;
+    GameStateManager GMS;
 
     UnitStatSheet attackerStats;
     UnitStatSheet defenderStats;
@@ -40,6 +41,7 @@ public class CombatHandler : MonoBehaviour
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
+        GMS = GetComponent<GameStateManager>();
     }
     public void AttackSelected()
     {
@@ -146,7 +148,7 @@ public class CombatHandler : MonoBehaviour
         ClearTiles();
     }
 
-public void ClearTiles()
+    public void ClearTiles()
     {
         enemiesToAttack.Clear();
         attackRange.Clear();
@@ -167,8 +169,10 @@ public void ClearTiles()
         defenderDamage = (int)Mathf.Clamp((defenderStats.Strength.Value - attackerStats.Defense.Value), 1, Mathf.Infinity);
         defenderHitChance = (int)(defenderStats.HitChance.Value + defenderStats.Skill.Value - attackerStats.Speed.Value);
         defenderCritChance = (int)(defenderStats.Skill.Value);
-        //if(isPlayersTurn)
-        UIManager.Instance.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
+        if (GMS.gameState == GameStateManager.GameState.PlayerTurn)
+        {
+            UIManager.Instance.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
+        }
     }
 
     public void RunCombatCalc()
@@ -177,12 +181,28 @@ public void ClearTiles()
         int hitRoll = Random.Range(1, 101);
         if (hitRoll >= 100 - attackerHitChance)
         {
-            hitRoll = Random.Range(1, 101);
-            if (hitRoll >= 100 - attackerCritChance)
+            int critRoll = Random.Range(1, 101);
+            if (critRoll >= 100 - attackerCritChance)
             {
                 attackerDamage *= critMulti;
                 print("BIG CRIT!!!!");
             }
+        }
+        else print("Miss");
+
+        // Only run attack command if player turn
+        if (GMS.gameState == GameStateManager.GameState.PlayerTurn)
+        {
+            AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
+            CommandManager.Instance.Execute(attackerAttack);
+            inCombat = false;
+            enemiesToAttack.Clear();
+        }
+        else
+        {
+            defenderStats.health -= attackerDamage;
+            //playerStats.health -= enemyDamage; This is the counter attack I'm pretty sure, I stole this from AttackCommand but we don't want to rip it like this, there are cases where there will be no coutner attack
+            Debug.Log("Damage Dealt: " + attackerDamage + "\n" + "Enemy HP: " + defenderStats.health);
         }
 
         //Defender Counter attack
@@ -194,11 +214,5 @@ public void ClearTiles()
 
                 }
          */
-
-        // Only run attack command if player turn
-        AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
-        CommandManager.Instance.Execute(attackerAttack);
-        inCombat = false;
-        enemiesToAttack.Clear();
     }
 }
