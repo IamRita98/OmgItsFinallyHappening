@@ -2,11 +2,15 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 public class GameStateManager : MonoBehaviour
 {
     public List <GameObject> playerUnits=new List<GameObject>();
     public List<GameObject> enemyUnits = new List<GameObject>();
     UnitSelector uSelector;
+    int enemiesToTakeTheirTurn;
+    int idx = 0;
+
 
     public enum GameState
     {
@@ -15,7 +19,18 @@ public class GameStateManager : MonoBehaviour
         OutOfCombat
     }
     public GameState gameState;
-
+    private void OnEnable()
+    {
+        EnemyMovement.EndedThisEnemyUnitTurn += EnemyActions;
+    }
+    private void OnDisable()
+    {
+        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyActions;
+    }
+    private void OnDestroy()
+    {
+        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyActions;
+    }
     private void Awake()
     {
         uSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
@@ -31,17 +46,26 @@ public class GameStateManager : MonoBehaviour
         if (playerUnits.Count <= 0 || playerUnits == null) playerUnits = GameObject.FindGameObjectsWithTag("Player").ToList();
 
         uSelector.StopSelectorControl();
+       
         foreach (var player in playerUnits)
         {
             player.GetComponent<UnitStatSheet>().NewTurn();
         }
         StartEnemyPhase();
     }
+    public void StartPlayerTurn()
+    {
+        gameState = GameState.PlayerTurn;
+        playerUnits.Clear();
+        uSelector.ResumeSelectorControl();//this should be the very last line
+    }
 
     public void StartEnemyPhase()
     {
         gameState = GameState.EnemyTurn;
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
+        enemiesToTakeTheirTurn = enemyUnits.Count();
+        idx = -1;
         EnemyActions();
         
         //PATHFINDING
@@ -58,12 +82,29 @@ public class GameStateManager : MonoBehaviour
     }
     void EnemyActions()
     {
-        foreach (GameObject enemyUnit in enemyUnits)
+        if (gameState == GameState.PlayerTurn) return;
+        if (enemiesToTakeTheirTurn <= 0)
         {
-            enemyUnit.GetComponent<EnemyMovement>().MoveEnemy(); //Move
-            //Wait until first unit has finished moving before continuing Loop
-            //After movement is finished this enemy Attacks
+            //end enemy phase
+            idx = 0;
+            enemiesToTakeTheirTurn = 0;
+            enemyUnits.Clear();
+            StartPlayerTurn();
         }
+        else
+        {
+            idx++;
+            enemiesToTakeTheirTurn--;
+            if (idx > enemyUnits.Count - 1) EnemyActions();
+            else {
+                enemyUnits[idx].GetComponent<EnemyMovement>().MoveEnemy();
+            }
+            
+        }
+            
+        //Move
+        //Wait until first unit has finished moving before continuing Loop
+        //After movement is finished this enemy Attacks
         //StartPlayerPhase/EndEnemyPhase
     }
 }

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class EnemyMovement : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class EnemyMovement : MonoBehaviour
     public bool needsToMove = false;
     GameObject bestTarget;
 
+    public static event Action EndedThisEnemyUnitTurn;
     private void Awake()
     {
         GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
@@ -47,11 +49,21 @@ public class EnemyMovement : MonoBehaviour
     public void MoveEnemy()
     {
         bestTarget = GetPathingTarget();
-        if (needsToMove)
+        if (needsToMove||actionType==ActionType.MOVING)
         {
             pf.FindPath(currentPos, (Vector2)bestTarget.transform.position);
             pathToTake = pf.path;
             StartCoroutine(LerpRoutine());
+        }
+        else
+        {
+            if (actionType == ActionType.ATTACKING) { 
+                Attack(); 
+            }
+            else if (actionType == ActionType.ABILITY)
+            {
+                //do the things
+            }
         }
     }
 
@@ -80,10 +92,13 @@ public class EnemyMovement : MonoBehaviour
 
     bool IsBestTargetInAttackRange(int distance)
     {
+
         if (distance > unitStats.AttackRange.Value) needsToMove = true;
         else needsToMove = false;
 
-        if (distance <= effectiveRange) return true;
+        if (distance <= effectiveRange) {
+            return true; 
+        }
         else return false;
     }
 
@@ -98,8 +113,8 @@ public class EnemyMovement : MonoBehaviour
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
-            if (tilesMoved > unitStats.Movement.Value) yield break; //Enemy reached max movement--Using > instead of >= makes the enemy move their full movement despite us having logic that makes them stop 1 early elsewhere
-            if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) yield break; //Enemy reached their max attack range away from target
+            if (tilesMoved > unitStats.Movement.Value) break; //Enemy reached max movement--Using > instead of >= makes the enemy move their full movement despite us having logic that makes them stop 1 early elsewhere
+            if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) break; //Enemy reached their max attack range away from target
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
             while (lerpTimer < lerpTime)
@@ -116,12 +131,17 @@ public class EnemyMovement : MonoBehaviour
             pathToTake.Remove(pathToTake[0]);
         }
         if (actionType == ActionType.ATTACKING) Attack(); //I'm putting this here for now, later we might want to break it up and leave this class to just handle movement?
+        else {
+            EndedThisEnemyUnitTurn?.Invoke();
+        }
+        
     }
 
     void Attack()
     {
-        print(gameObject + " Is Attacking"); //BUG: Archer is never attacking for some reason
+        print(gameObject + " Is Attacking"); 
         cHandler.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
         cHandler.RunCombatCalc();
+        EndedThisEnemyUnitTurn?.Invoke();
     }
 }
