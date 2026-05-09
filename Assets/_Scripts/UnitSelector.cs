@@ -95,7 +95,7 @@ public class UnitSelector : MonoBehaviour
 
     void CancelKey()
     {
-        if (Input.GetKeyDown(KeyCode.X) && canMoveSelector)
+        if (Input.GetKeyDown(KeyCode.X))
         {
             //Press X w/ unit held
             if (playerUnitSelected != null) ReturnToPickLocationAndCancel();
@@ -130,10 +130,12 @@ public class UnitSelector : MonoBehaviour
 
     void PickupPlayerUnit()
     {//Should begin unit session here, will need to add logic for unit switching or just hardlock the player
+        //transform.position = playerUnitSelected.transform.position;
         movementRange = ((int)unitStatSheet.Movement.Value);
         playerUnitSelected = GOHovered.GetComponent<ISelectable>().Select();
         selectedGOPickupPos = playerUnitSelected.transform.position;
         playerUnitSelected.transform.parent = this.gameObject.transform;
+        //playerUnitSelected.transform.localPosition = Vector2.zero;
         GetValidMovementTiles();
         GOHovered = null;
         FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
@@ -270,7 +272,6 @@ public class UnitSelector : MonoBehaviour
     {
         //if(playerUnitSelected==null) GOHovered = null;
     }
-
 
     ///States
     public bool HoveringReadyToActUnit()
