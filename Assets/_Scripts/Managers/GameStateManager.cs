@@ -21,15 +21,15 @@ public class GameStateManager : MonoBehaviour
     public GameState gameState;
     private void OnEnable()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn += EnemyActions;
+        EnemyMovement.EndedThisEnemyUnitTurn += EnemyPhaseValues;
     }
     private void OnDisable()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyActions;
+        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
     }
     private void OnDestroy()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyActions;
+        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
     }
     private void Awake()
     {
@@ -65,7 +65,7 @@ public class GameStateManager : MonoBehaviour
         gameState = GameState.EnemyTurn;
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         enemiesToTakeTheirTurn = enemyUnits.Count();
-        idx = -1;
+        idx = 0;
         EnemyActions();
         
         //PATHFINDING
@@ -80,6 +80,12 @@ public class GameStateManager : MonoBehaviour
 
         //uSelector.ResumeSelectorControl();
     }
+    void EnemyPhaseValues()
+    {
+        idx++;
+        enemiesToTakeTheirTurn--;
+        EnemyActions();
+    }
     void EnemyActions()
     {
         if (gameState == GameState.PlayerTurn) return;
@@ -93,13 +99,7 @@ public class GameStateManager : MonoBehaviour
         }
         else
         {
-            idx++;
-            enemiesToTakeTheirTurn--;
-            if (idx > enemyUnits.Count - 1) EnemyActions();
-            else {
-                enemyUnits[idx].GetComponent<EnemyMovement>().MoveEnemy();
-            }
-            
+                enemyUnits[idx].GetComponent<EnemyMovement>().MoveEnemy();   
         }
             
         //Move
