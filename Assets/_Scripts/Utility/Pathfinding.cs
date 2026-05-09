@@ -51,6 +51,7 @@ public class Pathfinding : MonoBehaviour
 
     public void FindPath(Vector2 startPosP, Vector2 endPos)
     {
+        ResetCells();
         //Get starting info
         cellsSearched = new List<Cell>();
         cellsToSearch = new List<Cell>();
@@ -81,7 +82,7 @@ public class Pathfinding : MonoBehaviour
             foreach (Vector2 neighbour in neighbors)
             {
                 Vector2 neighbourPos = cellToSearch.worldPosition + neighbour;
-                if (neighbourPos.x<mapStartPos.x||neighbourPos.y<mapStartPos.y||neighbourPos.x>(mapStartPos.x+mapSizeX)||neighbourPos.y>(mapStartPos.y+mapSizeY))
+                if (neighbourPos.x < mapStartPos.x || neighbourPos.y < mapStartPos.y || neighbourPos.x > (mapStartPos.x + mapSizeX) || neighbourPos.y > (mapStartPos.y + mapSizeY))
                 {
                     continue;
                 }
@@ -93,7 +94,7 @@ public class Pathfinding : MonoBehaviour
                     return;
                 }
                 if (cellsSearched.Contains(potentialNeighbour) || cellToSearch == null) continue;
-                
+
                 float tempG = Mathf.Round(1 + cellToSearch.G);
                 if (!cellsToSearch.Contains(potentialNeighbour) || tempG < potentialNeighbour.G)
                 {
@@ -102,7 +103,7 @@ public class Pathfinding : MonoBehaviour
                     potentialNeighbour.F = potentialNeighbour.G + potentialNeighbour.H;
                     potentialNeighbour.bestNeighbour = cellToSearch;
 
-                    if(!cellsToSearch.Contains(potentialNeighbour)) cellsToSearch.Add(potentialNeighbour);
+                    if (!cellsToSearch.Contains(potentialNeighbour)) cellsToSearch.Add(potentialNeighbour);
                 }
             }
         }
@@ -122,6 +123,18 @@ public class Pathfinding : MonoBehaviour
         }
 
         path.Reverse();
+    }
+
+    void ResetCells()
+    {
+        foreach (Cell cell in cells)
+        {
+            cell.bestNeighbour = null;
+            cell.G = int.MaxValue;
+            cell.H = int.MaxValue;
+            cell.F = int.MaxValue;
+        }
+
     }
 
     void MakeGrid()

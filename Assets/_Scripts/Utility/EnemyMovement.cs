@@ -48,6 +48,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveEnemy()
     {
+        print("Going into Move Enemy");
         bestTarget = GetPathingTarget();
         if (needsToMove||actionType==ActionType.MOVING)
         {
@@ -69,6 +70,7 @@ public class EnemyMovement : MonoBehaviour
 
     GameObject GetPathingTarget()
     {
+        print("Going into Pathing target");
         int closestDistance = int.MaxValue;
         GameObject closestUnit = gameObject;
         foreach (GameObject playerUnit in GMS.playerUnits)
@@ -92,7 +94,7 @@ public class EnemyMovement : MonoBehaviour
 
     bool IsBestTargetInAttackRange(int distance)
     {
-
+        print("Going into BestTarget");
         if (distance > unitStats.AttackRange.Value) needsToMove = true;
         else needsToMove = false;
 
@@ -109,7 +111,7 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator LerpRoutine()
     {
-        print("Pathfinding");
+        print("Going into Lerp Routine");
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
@@ -139,6 +141,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Attack()
     {
+        print("Going into Attack");
         print(gameObject + " Is Attacking"); 
         cHandler.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
         cHandler.RunCombatCalc();

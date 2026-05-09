@@ -80,7 +80,7 @@ public class GameStateManager : MonoBehaviour
 
         //uSelector.ResumeSelectorControl();
     }
-    void EnemyPhaseValues()
+    public void EnemyPhaseValues()
     {
         idx++;
         enemiesToTakeTheirTurn--;
