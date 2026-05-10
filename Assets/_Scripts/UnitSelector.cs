@@ -33,7 +33,7 @@ public class UnitSelector : MonoBehaviour
     List<GameObject> moveableTilePlacements = new List<GameObject>();
     public float startingX;
     public float startingY;
-    Vector2 selectedGOPickupPos;
+    public Vector2 selectedGOPickupPos;
     public GameObject moveableTileMarker;
     public bool canMoveSelector = true;
     GridMovement gridMovement;
@@ -98,13 +98,13 @@ public class UnitSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             //Press X w/ unit held
-            if (playerUnitSelected != null) ReturnToPickLocationAndCancel();
+            if (playerUnitSelected != null&&canMoveSelector) ReturnToPickLocationAndCancel();
 
             //Press X while in Menu
             if (!canMoveSelector)
             {
                 ResumeSelectorControl();
-                CancelSelection();
+                ReturnToPickLocationAndCancel();
                 uiManager.DisableCombatUI();
             }
 
@@ -130,9 +130,9 @@ public class UnitSelector : MonoBehaviour
 
     void PickupPlayerUnit()
     {//Should begin unit session here, will need to add logic for unit switching or just hardlock the player
-        //transform.position = playerUnitSelected.transform.position;
-        movementRange = ((int)unitStatSheet.Movement.Value);
         playerUnitSelected = GOHovered.GetComponent<ISelectable>().Select();
+        transform.position = playerUnitSelected.transform.position;
+        movementRange = ((int)unitStatSheet.Movement.Value);
         selectedGOPickupPos = playerUnitSelected.transform.position;
         playerUnitSelected.transform.parent = this.gameObject.transform;
         //playerUnitSelected.transform.localPosition = Vector2.zero;
@@ -187,9 +187,11 @@ public class UnitSelector : MonoBehaviour
     public void CancelSelection()
     {
         ClearMoveableTiles();
-        transform.position = selectedGOPickupPos;
-        playerUnitSelected.transform.position = selectedGOPickupPos;
         playerUnitSelected.transform.parent = null;
+        transform.position = selectedGOPickupPos;
+        //playerUnitSelected.transform.position = selectedGOPickupPos;
+        
+        playerUnitSelected = null;
         GOHovered = PlayerGO;
         selectorCanSelect = true;
     }
