@@ -23,27 +23,27 @@ public class EnemyMovement : MonoBehaviour
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
     float lerpTimer=0f;
-    public float lerpTime = 0.1f;
     Vector2 currentPos;
     Vector2 newPos;
     bool isMoving=false;
     int effectiveRange;
-    int distanceFromEnemy;
     public bool needsToMove = false;
     GameObject bestTarget;
+    Lerping lerp;
 
     public static event Action EndedThisEnemyUnitTurn;
     private void Awake()
     {
-        GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
-        cHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
         pf = gameObject.GetComponent<Pathfinding>();
         unitStats = GetComponent<UnitStatSheet>();
     }
 
     private void Start()
     {
+        GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
+        cHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
         effectiveRange = (int)unitStats.Movement.Value + (int)unitStats.AttackRange.Value;
+        lerp = gameObject.GetComponent<Lerping>();
     }
 
     public void MoveEnemy()
@@ -54,7 +54,7 @@ public class EnemyMovement : MonoBehaviour
         {
             pf.FindPath(currentPos, (Vector2)bestTarget.transform.position);
             pathToTake = pf.path;
-            StartCoroutine(LerpRoutine());
+            StartCoroutine(TryLerp());
         }
         else
         {
@@ -108,10 +108,8 @@ public class EnemyMovement : MonoBehaviour
     {
         if (!isMoving) currentPos = gameObject.transform.position;
     }
-
-    IEnumerator LerpRoutine()
+    IEnumerator TryLerp()
     {
-        print("Going into Lerp Routine");
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {
@@ -119,25 +117,32 @@ public class EnemyMovement : MonoBehaviour
             if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) break; //Enemy reached their max attack range away from target
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
-            while (lerpTimer < lerpTime)
-            {
-                lerpTimer += Time.deltaTime;
-                float percent = lerpTimer / lerpTime;
-                transform.position = Vector2.Lerp(currentPos, newPos, percent);
-                yield return null;
-            }
+            lerp.SetEnemyValues(newPos);
+            yield return StartCoroutine(lerp.LerpRoutine());
+            //bool testB = true;
+            //while (testB)
+            //{
+            //    testB = lerp.isLerping;
+            //}
+            //while (lerpTimer < lerpTime)
+            //{
+            //    lerpTimer += Time.deltaTime;
+            //    float percent = lerpTimer / lerpTime;
+            //    transform.position = Vector2.Lerp(currentPos, newPos, percent);
+            //    yield return null;
+            //}
             tilesMoved++;
-            lerpTimer = 0;
-            transform.position = newPos;
+            //transform.position = newPos;
             currentPos = newPos;
             pathToTake.Remove(pathToTake[0]);
         }
         if (actionType == ActionType.ATTACKING) Attack(); //I'm putting this here for now, later we might want to break it up and leave this class to just handle movement?
-        else {
+        else
+        {
             EndedThisEnemyUnitTurn?.Invoke();
         }
-        
     }
+  
 
     void Attack()
     {
