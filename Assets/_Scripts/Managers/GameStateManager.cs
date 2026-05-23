@@ -21,15 +21,15 @@ public class GameStateManager : MonoBehaviour
     public GameState gameState;
     private void OnEnable()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn += EnemyPhaseValues;
+        EnemyActions.EndedThisEnemyUnitTurn += EnemyPhaseValues;
     }
     private void OnDisable()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
+        EnemyActions.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
     }
     private void OnDestroy()
     {
-        EnemyMovement.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
+        EnemyActions.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
     }
     private void Awake()
     {
@@ -66,7 +66,7 @@ public class GameStateManager : MonoBehaviour
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         enemiesToTakeTheirTurn = enemyUnits.Count();
         idx = 0;
-        EnemyActions();
+        EnemyAction();
         
         //PATHFINDING
         //choice 1:pathfind to everthing to make ai make smarter decision
@@ -84,9 +84,9 @@ public class GameStateManager : MonoBehaviour
     {
         idx++;
         enemiesToTakeTheirTurn--;
-        EnemyActions();
+        EnemyAction();
     }
-    void EnemyActions()
+    void EnemyAction()
     {
         if (gameState == GameState.PlayerTurn) return;
         if (enemiesToTakeTheirTurn <= 0)
@@ -99,7 +99,7 @@ public class GameStateManager : MonoBehaviour
         }
         else
         {
-                enemyUnits[idx].GetComponent<EnemyMovement>().MoveEnemy();   
+                enemyUnits[idx].GetComponent<EnemyActions>().MoveEnemy();   
         }
             
         //Move
