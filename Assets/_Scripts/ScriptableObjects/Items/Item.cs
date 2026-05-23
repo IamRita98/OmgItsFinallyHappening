@@ -6,6 +6,7 @@ public class Item : ScriptableObject, IUsable, IEquipable
 {
     //WeaponItems,ArmourItems,QuestItems,ConsumableItems
     public string name;
+    public int amount;
     public string equipEffectText; //Like "+2 str" or "Auto-consume potion when hp reaches 50%"
     public string flavorText;
     //Image menuSprite;
