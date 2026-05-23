@@ -5295,6 +5295,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4977187809378646826, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      propertyPath: lerpTime
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       propertyPath: m_Name
       value: UnitSelector

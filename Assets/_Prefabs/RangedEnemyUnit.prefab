@@ -229,7 +229,6 @@ MonoBehaviour:
   target1: {fileID: 0}
   target2: {fileID: 0}
   enemyTurn: 0
-  lerpTime: 0.2
   needsToMove: 0
 --- !u!114 &359686164441181291
 MonoBehaviour:
@@ -243,3 +242,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0e678d01f991e489dd650a7f449dc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lerping
+  lerpTime: 0.15

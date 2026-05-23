@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5425926121782289095}
   - component: {fileID: 4009892350217847511}
   - component: {fileID: 4986290535494760080}
+  - component: {fileID: -4977187809378646826}
   m_Layer: 0
   m_Name: UnitSelector
   m_TagString: Untagged
@@ -49,10 +50,11 @@ MonoBehaviour:
   GOHovered: {fileID: 0}
   EnemyGO: {fileID: 0}
   PlayerGO: {fileID: 0}
-  GOSelected: {fileID: 0}
+  playerUnitSelected: {fileID: 0}
   movementRange: 0
   startingX: 0
   startingY: 0
+  selectedGOPickupPos: {x: 0, y: 0}
   moveableTileMarker: {fileID: 0}
   canMoveSelector: 1
   selectSFXRef:
@@ -62,6 +64,14 @@ MonoBehaviour:
       Data3: 0
       Data4: 0
     Path: 
+  invalidMoveSFXRef:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  selectorCanSelect: 1
 --- !u!212 &4009892350217847511
 SpriteRenderer:
   serializedVersion: 2
@@ -148,3 +158,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-4977187809378646826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355603993909756202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0e678d01f991e489dd650a7f449dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Lerping
+  lerpTime: 0

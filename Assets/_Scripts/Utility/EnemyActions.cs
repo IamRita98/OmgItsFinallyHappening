@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EnemyMovement : MonoBehaviour
+public class EnemyActions : MonoBehaviour
 {
     public enum ActionType
     {
@@ -22,7 +22,6 @@ public class EnemyMovement : MonoBehaviour
     UnitStatSheet unitStats;
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
-    float lerpTimer=0f;
     Vector2 currentPos;
     Vector2 newPos;
     bool isMoving=false;
@@ -117,7 +116,7 @@ public class EnemyMovement : MonoBehaviour
             if (pathToTake.Count < unitStats.AttackRange.Value && actionType == ActionType.ATTACKING) break; //Enemy reached their max attack range away from target
             Cell c = pathToTake[0];
             newPos = c.worldPosition;
-            lerp.SetEnemyValues(newPos);
+            lerp.SetValues(newPos);
             yield return StartCoroutine(lerp.LerpRoutine());
             //bool testB = true;
             //while (testB)
@@ -146,8 +145,6 @@ public class EnemyMovement : MonoBehaviour
 
     void Attack()
     {
-        print("Going into Attack");
-        print(gameObject + " Is Attacking"); 
         cHandler.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
         cHandler.RunCombatCalc();
         EndedThisEnemyUnitTurn?.Invoke();
