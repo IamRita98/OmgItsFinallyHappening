@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class InventoryList : MonoBehaviour
 {
@@ -14,7 +15,14 @@ public class InventoryList : MonoBehaviour
     {
         Chest.OnChestOpen -= GetItem;
     }
+    public void SavePlayerInventory()
+    {
+        string savePath = Path.Combine(Application.persistentDataPath, "InventoryTestSave.json");
+    }
+    public void LoadPlayerInventory()
+    {
 
+    }
     void GetItem(List<InventoryItem> itemsToAdd)
     {
         foreach (InventoryItem item in itemsToAdd)
