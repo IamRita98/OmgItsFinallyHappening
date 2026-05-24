@@ -37,7 +37,6 @@ public class InventoryList : MonoBehaviour
                 partyInventory.Add(item);
                 print("Gained " + item.GetStacks() + " " + item.item);
             }
-
         }
     }
 }

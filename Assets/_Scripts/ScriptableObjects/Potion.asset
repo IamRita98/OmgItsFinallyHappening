@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36bd4e019bff6794c80405637d8941ec, type: 3}
   m_Name: Potion
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableItem
-  name: 
-  equipEffectText: 
-  flavorText: 
+  name: Potion
+  amount: 10
+  equipEffectText: Yummu
+  flavorText: Mmhhm
   isKeyItem: 0
-  tags: []
+  tags:
+  - Consumable
+  - Healing
   sprite: {fileID: 0}
   rarity: 0
