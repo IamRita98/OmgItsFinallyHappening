@@ -69,4 +69,9 @@ public class InventoryList : MonoBehaviour
 
         }
     }
+
+    public Dictionary<string, InventoryItem> GetPartyInv()
+    {
+        return partyInv;
+    }
 }

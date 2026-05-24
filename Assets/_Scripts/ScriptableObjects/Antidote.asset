@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 196a0f731a0fbfa47981444a8b2264c3, type: 3}
-  m_Name: test
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponItem
-  name: Basic Dagger
-  equipEffectText: 
-  flavorText: 
+  m_Script: {fileID: 11500000, guid: 36bd4e019bff6794c80405637d8941ec, type: 3}
+  m_Name: Antidote
+  m_EditorClassIdentifier: Assembly-CSharp::ConsumableItem
+  name: Antidote
+  amount: 2
+  equipEffectText: Cure poison
+  flavorText: not yummy
   isKeyItem: 0
   tags:
-  - Weapon
-  - Dagger
-  - One-Handed
+  - Consumable
+  - Healing
+  sprite: {fileID: 0}
   rarity: 0
