@@ -173,7 +173,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -771,7 +771,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -1373,6 +1373,7 @@ GameObject:
   - component: {fileID: 563748167}
   - component: {fileID: 563748166}
   - component: {fileID: 563748171}
+  - component: {fileID: 563748172}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: GameManager
@@ -1480,6 +1481,18 @@ MonoBehaviour:
   playerUnits: []
   enemyUnits: []
   gameState: 0
+--- !u!114 &563748172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563748165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44763077ed2050f449f710da561fd944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArtificialDelay
 --- !u!1 &588234898
 GameObject:
   m_ObjectHideFlags: 0
@@ -1730,13 +1743,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 650191090}
+  - component: {fileID: 650191091}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &650191090
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1756,9 +1770,35 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144, y: 408}
+  m_AnchoredPosition: {x: -276, y: 355}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &650191091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650191089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 100
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &651725212
 GameObject:
   m_ObjectHideFlags: 0
@@ -2518,6 +2558,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e18f8c9c554dc94b9ca874aec3e0552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectorJiggle
+--- !u!114 &803586556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803586540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44763077ed2050f449f710da561fd944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArtificialDelay
 --- !u!1 &839982480
 GameObject:
   m_ObjectHideFlags: 0
@@ -3121,6 +3173,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 563748167}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: DisplayInventory
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1140267381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3329,7 +3393,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -6391,6 +6455,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       insertIndex: -1
       addedObject: {fileID: 803586552}
+    - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 803586556}
   m_SourcePrefab: {fileID: 100100000, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
