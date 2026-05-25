@@ -109,6 +109,7 @@ public class EnemyActions : MonoBehaviour
     }
     IEnumerator TryLerp()
     {
+        
         int tilesMoved = 0;
         while (pathToTake.Count > 0)
         {

@@ -41,20 +41,31 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference invalidMoveSFXRef;
     CombatHandler combatHandler;
     public bool selectorCanSelect = true;
+    bool isInInv;
+    ArtificialDelay artificialDelay;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
     {
         GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         gridMovement = GetComponent<GridMovement>();
+        artificialDelay = GetComponent<ArtificialDelay>();
         uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
         combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
     }
 
     private void Start()
     {
-        
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
+    }
+
+    private void OnEnable()
+    {
+        UIManager.PlayerOpenedInventory += IsInInvState;
+    }
+    private void OnDisable()
+    {
+        UIManager.PlayerOpenedInventory -= IsInInvState;
     }
 
     private void Update()
@@ -90,6 +101,12 @@ public class UnitSelector : MonoBehaviour
             }
 
             if (HoveringEnemyUnit()) ViewEnemyDetails();
+
+            if (isInInv)
+            {
+                //UseInvItem;
+                uiManager.HideInv();
+            }
         }
     }
 
@@ -98,7 +115,7 @@ public class UnitSelector : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             //Press X w/ unit held
-            if (playerUnitSelected != null&&canMoveSelector) ReturnToPickLocationAndCancel();
+            if (HasPlayerUnitSelected() && !HoveringEnemyUnit() && !isInInv) ReturnToPickLocationAndCancel();
 
             //Press X while in Menu
             if (!canMoveSelector)
@@ -114,6 +131,12 @@ public class UnitSelector : MonoBehaviour
                 unitStatSheet.attackTiles.Clear();
                 DrawTiles dt = combatHandler.GetComponent<DrawTiles>();
                 dt.ClearTiles();
+            }
+
+            if (isInInv)
+            {
+                uiManager.CancelInv();
+                isInInv = false;
             }
         }
     }
@@ -276,15 +299,24 @@ public class UnitSelector : MonoBehaviour
     }
 
     ///States
+
+    bool HasPlayerUnitSelected()
+    {
+        return(playerUnitSelected == gameObject.CompareTag("Player") && canMoveSelector);
+    }
+
     public bool HoveringReadyToActUnit()
     {
-        if (GOHovered == true && GOHovered.CompareTag("Player") && GOHovered.GetComponent<UnitStatSheet>().hasActionThisTurn && selectorCanSelect && canMoveSelector) return true;
-        else return false;
+        return(GOHovered == true && GOHovered.CompareTag("Player") && GOHovered.GetComponent<UnitStatSheet>().hasActionThisTurn && selectorCanSelect && canMoveSelector);
     }
 
     bool HoveringEnemyUnit()
     {
-        if (GOHovered != null && GOHovered.CompareTag("Enemy")) return true;
-        else return false;
+        return (GOHovered != null && GOHovered.CompareTag("Enemy"));
+    }
+
+    void IsInInvState()
+    {
+        isInInv = true;
     }
 }
