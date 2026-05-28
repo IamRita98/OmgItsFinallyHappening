@@ -1,11 +1,12 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using TMPro;
-using System.Collections.Generic;
-using Unity.Collections;
-using System.Linq;
+using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.Collections;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -76,7 +77,7 @@ public class UIManager : MonoBehaviour
         enemyCritChanceText.text = playerCrit.ToString();
     }
 
-    public void DisplayInventory()
+    async public void DisplayInventory()
     {
         inventoryUI.SetActive(true);
         Dictionary<string, InventoryItem> pInv = iList.GetPartyInv();
@@ -99,9 +100,8 @@ public class UIManager : MonoBehaviour
 
             UIInvList.Add(item.Key);
         }
-        var obj = new object();
-        lock (obj) PlayerOpenedInventory?.Invoke();
-
+        await UniTask.DelayFrame(1);
+        PlayerOpenedInventory?.Invoke();
 
         //go through list-- For each element create a new text box
         //Fill textbox w/ Inventory item info
