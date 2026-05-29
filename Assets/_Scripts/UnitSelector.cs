@@ -41,7 +41,6 @@ public class UnitSelector : MonoBehaviour
     GridMovement gridMovement;
     public FMODUnity.EventReference selectSFXRef;
     public FMODUnity.EventReference invalidMoveSFXRef;
-    CombatHandler combatHandler;
     public bool selectorCanSelect = true;
     bool isInInv;
     ArtificialDelay artificialDelay;
@@ -53,7 +52,7 @@ public class UnitSelector : MonoBehaviour
         gridMovement = GetComponent<GridMovement>();
         artificialDelay = GetComponent<ArtificialDelay>();
         uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
-        combatHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
+
     }
 
     private void Start()
@@ -109,7 +108,7 @@ public class UnitSelector : MonoBehaviour
             if (isInInv)
             {
                 //UseInvItem;
-                uiManager.HideInv();
+                uiManager.ClearUI();
             }
         }
     }
@@ -127,20 +126,20 @@ public class UnitSelector : MonoBehaviour
             {
                 ResumeSelectorControl();
                 ReturnToPickLocationAndCancel();
-                uiManager.DisableCombatUI();
+                uiManager.ClearUI();
             }
 
             //Press X while enemies are in attack range to clear tiles
             if (unitStatSheet.attackTiles.Count > 0)
             {
                 unitStatSheet.attackTiles.Clear();
-                DrawTiles dt = combatHandler.GetComponent<DrawTiles>();
+                DrawTiles dt = CombatHandler.Instance.GetComponent<DrawTiles>();
                 dt.ClearTiles();
             }
 
             if (isInInv)
             {
-                uiManager.CancelInv();
+                uiManager.ClearUI();
                 isInInv = false;
             }
         }
@@ -180,7 +179,7 @@ public class UnitSelector : MonoBehaviour
         DropSelected();
         GOHovered = playerUnitSelected;
         GameStateManager.Instance.state = State.Menu;
-        UIManager.Instance.EnableCombatUI();
+        UIManager.Instance.SetCombatOptionsStates();
         StopSelectorControl();
         FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);
     }

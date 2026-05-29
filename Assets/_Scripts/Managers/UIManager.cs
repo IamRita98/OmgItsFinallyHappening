@@ -10,9 +10,23 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public enum SubMenuStates
+    {
+        //Combat UI
+        CombatOptions,
+        SelectTarget,
+        Inventory,
+        //Non-Combat UI
+
+    }
+
+    public SubMenuStates subMenuStates;
+    Canvas canvas;
+
     public static UIManager Instance;
     public InventoryList iList;
-    ArtificialDelay artificialDelay;
+
+    UnitSelector unitSelector;
 
     public GameObject combatOptions;
     public GameObject combatCalcUI;
@@ -43,43 +57,45 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
-        artificialDelay = GetComponent<ArtificialDelay>();
     }
 
     private void Start()
     {
         iList = GameObject.FindGameObjectWithTag("PersistentGameManager").GetComponent<InventoryList>();
+        canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
+        unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
     }
 
-    public void EnableCombatUI()
-    {
-        firstSelected = attackButton;
-        combatOptions.SetActive(true);
-        firstSelected.Select();
-    }
-
-    public void DisableCombatUI()
-    {
-        combatOptions.SetActive(false);
-    }
     private void Update()
     {
         if (GameStateManager.Instance.state != State.Menu) return;
         ProcessInputs();
     }
+
     private void ProcessInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Z)) { }//confirm I dont think we are doing anything with this
-        if (Input.GetKeyDown(KeyCode.X)) {
+        if (Input.GetKeyDown(KeyCode.Z)) 
+        { 
+            
+        }//confirm I dont think we are doing anything with this
 
-            /*
-             * fsm for submenu navigation, pressing x returns to previous menu
-             * maybe a command manager implementation?
-                ResumeSelectorControl();
-                ReturnToPickLocationAndCancel();
-                uiManager.DisableCombatUI();
-            */
-        }//cancel
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            switch (subMenuStates)
+            {
+                case (SubMenuStates.CombatOptions):
+                    GameStateManager.Instance.state = State.Combat;
+                    ClearUI();
+                    unitSelector.ResumeSelectorControl();
+                    break;
+                case (SubMenuStates.SelectTarget):
+                    SetCombatOptionsStates();
+                    break;
+                case (SubMenuStates.Inventory):
+                    SetCombatOptionsStates();
+                    break;
+            }
+        }
     }
     public void ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
     {
@@ -128,10 +144,6 @@ public class UIManager : MonoBehaviour
         //When we get to this we will also want a way to be able to filter through items while in town so that we only display one of weapons/armor/consumables at a time
     }
 
-    public void HideInv()
-    {
-        inventoryUI.SetActive(false);
-    }
 
 /*    public void ConfirmCombatItemUse()
     {
@@ -139,16 +151,7 @@ public class UIManager : MonoBehaviour
         ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
     }*/
 
-    public void CancelInv()
-    {
-        HideInv();
-        EnableCombatUI();
-    }
 
-    public void HideCombatCalcs()
-    {
-        combatCalcUI.SetActive(false);
-    }
     public void EnableUndo()
     {
         undoButton.SetActive(true);
@@ -156,5 +159,46 @@ public class UIManager : MonoBehaviour
     public void DisableUndo()
     {
         undoButton.SetActive(false);
+    }
+
+    public void ClearUI()
+    {
+        List<Transform> childrenOfCanvas = canvas.GetComponentsInChildren<Transform>().ToList();
+        if (childrenOfCanvas.Count <= 0) return;
+        for (int i = 1; i < childrenOfCanvas.Count; i++)
+        {
+            childrenOfCanvas[i].gameObject.SetActive(false);
+        }
+/*        foreach (Transform child in childrenOfCanvas)
+        {
+            child.gameObject.SetActive(false);
+        }*/
+    }
+
+    public void SetCombatOptionsStates()
+    {
+        ClearUI();
+        subMenuStates = SubMenuStates.CombatOptions;
+        firstSelected = attackButton;
+        combatOptions.SetActive(true);
+        foreach (Transform child in combatOptions.GetComponentsInChildren<Transform>(true).ToList())
+        {
+            child.gameObject.SetActive(true);
+        }
+        firstSelected.Select();
+    }
+
+    public void SetSelectTargetStates()
+    {
+        ClearUI();
+        CombatHandler.Instance.AttackSelected();
+        subMenuStates = SubMenuStates.SelectTarget;
+    }
+
+    public void SetInventoryStates()
+    {
+        ClearUI();
+        DisplayInventory();
+        subMenuStates = SubMenuStates.Inventory;
     }
 }
