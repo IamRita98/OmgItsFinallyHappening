@@ -8,12 +8,6 @@ public class Lerping : MonoBehaviour
     public float lerpTime;
     float lerpTimer = 0;
     Vector2 currentPos;
-    //public void LerpMovement(Vector2 goalPos)
-    //{
-    //    goalPosition = goalPos;
-    //    currentPos= gameObject.transform.position;
-    //    StartCoroutine(LerpRoutine());
-    //}
     public void SetValues(Vector2 goalPos)
     {
         goalPosition = goalPos;

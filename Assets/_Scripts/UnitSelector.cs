@@ -72,6 +72,7 @@ public class UnitSelector : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance.state != State.Combat) return;
         CheckForTurnPhase();
         CheckForInputs();
         CheckHoveredUnit();
@@ -178,6 +179,7 @@ public class UnitSelector : MonoBehaviour
         CommandManager.Instance.Execute(moveCommand);
         DropSelected();
         GOHovered = playerUnitSelected;
+        GameStateManager.Instance.state = State.Menu;
         UIManager.Instance.EnableCombatUI();
         StopSelectorControl();
         FMODUnity.RuntimeManager.PlayOneShotAttached(selectSFXRef, gameObject);

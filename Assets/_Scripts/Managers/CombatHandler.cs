@@ -21,7 +21,6 @@ public class CombatHandler : MonoBehaviour
     UnitStatSheet unitStats;
     int critMulti = 2;
     bool noEnemies=false;
-    GameStateManager GMS;
 
     UnitStatSheet attackerStats;
     UnitStatSheet defenderStats;
@@ -41,7 +40,6 @@ public class CombatHandler : MonoBehaviour
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
-        GMS = GetComponent<GameStateManager>();
     }
     public void AttackSelected()
     {
@@ -169,7 +167,7 @@ public class CombatHandler : MonoBehaviour
         defenderDamage = (int)Mathf.Clamp((defenderStats.Strength.Value - attackerStats.Defense.Value), 1, Mathf.Infinity);
         defenderHitChance = (int)(defenderStats.HitChance.Value + defenderStats.Skill.Value - attackerStats.Speed.Value);
         defenderCritChance = (int)(defenderStats.Skill.Value);
-        if (GMS.gameState == GameStateManager.GameState.PlayerTurn)
+        if (GameStateManager.Instance.gameState == GameStateManager.TurnState.PlayerTurn)
         {
             UIManager.Instance.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
         }
@@ -191,7 +189,7 @@ public class CombatHandler : MonoBehaviour
         else print("Miss");
 
         // Only run attack command if player turn
-        if (GMS.gameState == GameStateManager.GameState.PlayerTurn)
+        if (GameStateManager.Instance.gameState == GameStateManager.TurnState.PlayerTurn)
         {
             AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
             CommandManager.Instance.Execute(attackerAttack);
