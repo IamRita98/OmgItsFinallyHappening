@@ -16,7 +16,6 @@ public class EnemyActions : MonoBehaviour
     public ActionType actionType;
     public GameObject target1;
     public GameObject target2;
-    GameStateManager GMS;
     Pathfinding pf;
     CombatHandler cHandler;
     UnitStatSheet unitStats;
@@ -39,7 +38,6 @@ public class EnemyActions : MonoBehaviour
 
     private void Start()
     {
-        GMS = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         cHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
         effectiveRange = (int)unitStats.Movement.Value + (int)unitStats.AttackRange.Value;
         lerp = gameObject.GetComponent<Lerping>();
@@ -72,7 +70,7 @@ public class EnemyActions : MonoBehaviour
         print("Going into Pathing target");
         int closestDistance = int.MaxValue;
         GameObject closestUnit = gameObject;
-        foreach (GameObject playerUnit in GMS.playerUnits)
+        foreach (GameObject playerUnit in GameStateManager.Instance.playerUnits)
         {
             float tempDist = pf.ManhattanDistance(transform.position, playerUnit.transform.position);
             if (tempDist < closestDistance)

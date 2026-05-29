@@ -3,8 +3,32 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+
+
+public enum State
+{
+    Menu,//Inventory/InCombatMenus/GeneralMenus
+    Combat,//unitSelection/attackSelection/etc.
+    Exploration,//NonCombat
+    Dialogue,
+}
 public class GameStateManager : MonoBehaviour
 {
+    public static GameStateManager Instance;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        uSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+    }
+    public State state;
+
     public List <GameObject> playerUnits=new List<GameObject>();
     public List<GameObject> enemyUnits = new List<GameObject>();
     UnitSelector uSelector;
@@ -12,13 +36,13 @@ public class GameStateManager : MonoBehaviour
     int idx = 0;
 
 
-    public enum GameState
+    public enum TurnState
     {
         PlayerTurn,
         EnemyTurn,
         OutOfCombat
     }
-    public GameState gameState;
+    public TurnState gameState;
     private void OnEnable()
     {
         EnemyActions.EndedThisEnemyUnitTurn += EnemyPhaseValues;
@@ -31,14 +55,12 @@ public class GameStateManager : MonoBehaviour
     {
         EnemyActions.EndedThisEnemyUnitTurn -= EnemyPhaseValues;
     }
-    private void Awake()
-    {
-        uSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
-    }
+
 
     private void Start()
     {
-        gameState = GameState.PlayerTurn;
+        gameState = TurnState.PlayerTurn;
+        state = State.Combat;
     }
 
     public void EndPlayerPhase()
@@ -55,14 +77,14 @@ public class GameStateManager : MonoBehaviour
     }
     public void StartPlayerTurn()
     {
-        gameState = GameState.PlayerTurn;
+        gameState = TurnState.PlayerTurn;
         playerUnits.Clear();
         uSelector.ResumeSelectorControl();//this should be the very last line
     }
 
     public void StartEnemyPhase()
     {
-        gameState = GameState.EnemyTurn;
+        gameState = TurnState.EnemyTurn;
         if(enemyUnits.Count<=0||enemyUnits==null) enemyUnits = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         enemiesToTakeTheirTurn = enemyUnits.Count();
         idx = 0;
@@ -88,7 +110,7 @@ public class GameStateManager : MonoBehaviour
     }
     void EnemyAction()
     {
-        if (gameState == GameState.PlayerTurn) return;
+        if (gameState == TurnState.PlayerTurn) return;
         if (enemiesToTakeTheirTurn <= 0)
         {
             //end enemy phase

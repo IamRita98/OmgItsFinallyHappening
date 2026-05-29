@@ -62,7 +62,25 @@ public class UIManager : MonoBehaviour
     {
         combatOptions.SetActive(false);
     }
+    private void Update()
+    {
+        if (GameStateManager.Instance.state != State.Menu) return;
+        ProcessInputs();
+    }
+    private void ProcessInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.Z)) { }//confirm I dont think we are doing anything with this
+        if (Input.GetKeyDown(KeyCode.X)) {
 
+            /*
+             * fsm for submenu navigation, pressing x returns to previous menu
+             * maybe a command manager implementation?
+                ResumeSelectorControl();
+                ReturnToPickLocationAndCancel();
+                uiManager.DisableCombatUI();
+            */
+        }//cancel
+    }
     public void ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
     {
         combatCalcUI.SetActive(true); 
