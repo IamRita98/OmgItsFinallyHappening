@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CombatHandler : MonoBehaviour
 {
+    public static CombatHandler Instance;
     float playerUnitRange;
     GameObject unitSelectorGO;
     UnitSelector unitSelector;
@@ -36,6 +37,10 @@ public class CombatHandler : MonoBehaviour
 
     private void Awake()
     {
+
+        if (Instance == null) Instance = this;
+        else Destroy(this.gameObject);
+
         allEnemiesList = GameObject.FindGameObjectsWithTag("Enemy").ToList();
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
@@ -108,7 +113,7 @@ public class CombatHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Enemy"))
             {
                 RunCombatCalc();
-                UIManager.Instance.HideCombatCalcs();
+                UIManager.Instance.ClearUI();
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<DrawTiles>().ClearTiles();
                 unitSelector.EndUnitTurn();
             }
@@ -151,7 +156,7 @@ public class CombatHandler : MonoBehaviour
         enemiesToAttack.Clear();
         attackRange.Clear();
         drawTiles.ClearTiles();
-        UIManager.Instance.HideCombatCalcs();
+        //UIManager.Instance.ClearUI();
     }
     public void CombatCalc(UnitStatSheet attackerStatsP, UnitStatSheet defenderStatsP)
     {

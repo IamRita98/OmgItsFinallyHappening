@@ -17,7 +17,6 @@ public class EnemyActions : MonoBehaviour
     public GameObject target1;
     public GameObject target2;
     Pathfinding pf;
-    CombatHandler cHandler;
     UnitStatSheet unitStats;
     public bool enemyTurn=false;
     public List<Cell> pathToTake;
@@ -38,7 +37,6 @@ public class EnemyActions : MonoBehaviour
 
     private void Start()
     {
-        cHandler = GameObject.FindGameObjectWithTag("GameManager").GetComponent<CombatHandler>();
         effectiveRange = (int)unitStats.Movement.Value + (int)unitStats.AttackRange.Value;
         lerp = gameObject.GetComponent<Lerping>();
     }
@@ -144,8 +142,8 @@ public class EnemyActions : MonoBehaviour
 
     void Attack()
     {
-        cHandler.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
-        cHandler.RunCombatCalc();
+        CombatHandler.Instance.CombatCalc(unitStats, bestTarget.GetComponent<UnitStatSheet>());
+        CombatHandler.Instance.RunCombatCalc();
         EndedThisEnemyUnitTurn?.Invoke();
     }
 }
