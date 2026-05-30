@@ -6,11 +6,50 @@ public class SceneChange : MonoBehaviour
 {
     public SceneAsset newScene;
     public Vector2 posInNewScene;
+    GameObject player;
+    UnitSelector unitSelector;
+    PlayerExplorationController explorationController;
+
+
+    public enum NewSceneType
+    {
+        Exploration,
+        Combat
+    }
+    public NewSceneType newSceneType;
+
+    private void Start()
+    {
+        unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+        explorationController = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<PlayerExplorationController>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         SceneManager.LoadSceneAsync(newScene.name);
         DontDestroyOnLoad(collision);
         collision.gameObject.transform.position = posInNewScene;
+        MakeChangesBasedOnSceneType();
     }
+
+    void MakeChangesBasedOnSceneType()
+    {
+        switch (newSceneType)
+        {
+            case NewSceneType.Exploration:
+                GameStateManager.Instance.state = State.Exploration;
+                explorationController.enabled = true;
+                unitSelector.enabled = false;
+                explorationController.SetExplorationPlayer();
+                break;
+            case NewSceneType.Combat:
+                GameStateManager.Instance.state = State.Combat;
+                unitSelector.enabled = true;
+                explorationController.enabled = false;
+                unitSelector.SetCombatPlayer();
+                break;
+        }
+    }
+
+
 }
