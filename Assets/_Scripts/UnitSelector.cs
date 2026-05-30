@@ -6,7 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 /*public enum UnitSelectorIsHovering
 {
     Player,
@@ -21,9 +20,8 @@ using UnityEngine.InputSystem;
 }*/
 public class UnitSelector : MonoBehaviour
 {
+    public static UnitSelector Instance;
     int unitsTakenTurn = 0;
-    UIManager uiManager;
-    Vector3 gridSize;
     GameStateManager GSM;
     UnitStatSheet unitStatSheet;
     public GameObject GOHovered;
@@ -43,21 +41,24 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference invalidMoveSFXRef;
     public bool selectorCanSelect = true;
     bool isInInv;
-    ArtificialDelay artificialDelay;
+    
+    public Sprite playerCombatSprite;
+    SpriteRenderer playerSRend;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
     {
         GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         gridMovement = GetComponent<GridMovement>();
-        artificialDelay = GetComponent<ArtificialDelay>();
-        uiManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<UIManager>();
 
+        if (Instance == null) Instance = this;
+        else Destroy(this.gameObject);
     }
 
     private void Start()
     {
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
+        playerSRend = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -104,7 +105,6 @@ public class UnitSelector : MonoBehaviour
         {
             //Press X w/ unit held
             if (HasPlayerUnitSelected() && !HoveringEnemyUnit() && !isInInv) ReturnToPickLocationAndCancel();
-
         }
     }
 
@@ -268,8 +268,12 @@ public class UnitSelector : MonoBehaviour
         //if(playerUnitSelected==null) GOHovered = null;
     }
 
-    ///States
+    public void SetCombatPlayer()
+    {
+        playerSRend.sprite = playerCombatSprite;
+    }
 
+    ///States
     bool HasPlayerUnitSelected()
     {
         return(playerUnitSelected == gameObject.CompareTag("Player") && canMoveSelector);
@@ -284,5 +288,4 @@ public class UnitSelector : MonoBehaviour
     {
         return (GOHovered != null && GOHovered.CompareTag("Enemy"));
     }
-
 }
