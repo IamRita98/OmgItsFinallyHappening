@@ -60,15 +60,6 @@ public class UnitSelector : MonoBehaviour
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
     }
 
-    private void OnEnable()
-    {
-        UIManager.PlayerOpenedInventory += IsInInvState;
-    }
-    private void OnDisable()
-    {
-        UIManager.PlayerOpenedInventory -= IsInInvState;
-    }
-
     private void Update()
     {
         if (GameStateManager.Instance.state != State.Combat) return;
@@ -102,14 +93,7 @@ public class UnitSelector : MonoBehaviour
                 if (CheckIfValidMove()) MoveUnit();
                 else Debug.Log("Can't drop here");
             }
-
             if (HoveringEnemyUnit()) ViewEnemyDetails();
-
-            if (isInInv)
-            {
-                //UseInvItem;
-                uiManager.ClearUI();
-            }
         }
     }
 
@@ -121,27 +105,6 @@ public class UnitSelector : MonoBehaviour
             //Press X w/ unit held
             if (HasPlayerUnitSelected() && !HoveringEnemyUnit() && !isInInv) ReturnToPickLocationAndCancel();
 
-            //Press X while in Menu
-            if (!canMoveSelector)
-            {
-                ResumeSelectorControl();
-                ReturnToPickLocationAndCancel();
-                uiManager.ClearUI();
-            }
-
-            //Press X while enemies are in attack range to clear tiles
-            if (unitStatSheet.attackTiles.Count > 0)
-            {
-                unitStatSheet.attackTiles.Clear();
-                DrawTiles dt = CombatHandler.Instance.GetComponent<DrawTiles>();
-                dt.ClearTiles();
-            }
-
-            if (isInInv)
-            {
-                uiManager.ClearUI();
-                isInInv = false;
-            }
         }
     }
 
@@ -240,6 +203,8 @@ public class UnitSelector : MonoBehaviour
         playerUnitSelected = null;
         ResumeSelectorControl();
         unitsTakenTurn--;
+        UIManager.Instance.ClearUI();
+        GameStateManager.Instance.state = State.Combat;
     }
 
     private void GetValidMovementTiles()
@@ -320,8 +285,4 @@ public class UnitSelector : MonoBehaviour
         return (GOHovered != null && GOHovered.CompareTag("Enemy"));
     }
 
-    void IsInInvState()
-    {
-        isInInv = true;
-    }
 }
