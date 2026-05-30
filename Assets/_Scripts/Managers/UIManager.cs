@@ -51,7 +51,7 @@ public class UIManager : MonoBehaviour
 
     List<string> UIInvList = new List<string>();
 
-    public static event Action PlayerOpenedInventory;
+    public static event Action PlayerOpenedInventory;//signal not currently being used
 
     private void Awake()
     {

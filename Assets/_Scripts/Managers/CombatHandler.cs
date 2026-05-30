@@ -1,8 +1,10 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class CombatHandler : MonoBehaviour
 {
@@ -34,7 +36,8 @@ public class CombatHandler : MonoBehaviour
     int defenderDamage;
     int defenderHitChance;
     int defenderCritChance;
-
+    public static event Action<GameObject> UnitDied;/*when player attacks the checks are done 
+                                          later, maybe setup a second signal or refactor?*/
     private void Awake()
     {
 
@@ -116,6 +119,7 @@ public class CombatHandler : MonoBehaviour
                 UIManager.Instance.ClearUI();
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<DrawTiles>().ClearTiles();
                 unitSelector.EndUnitTurn();
+                GameStateManager.Instance.state = State.Combat;
             }
             else if (Input.GetKeyDown(KeyCode.X))
             {
@@ -206,6 +210,10 @@ public class CombatHandler : MonoBehaviour
             defenderStats.health -= attackerDamage;
             //playerStats.health -= enemyDamage; This is the counter attack I'm pretty sure, I stole this from AttackCommand but we don't want to rip it like this, there are cases where there will be no coutner attack
             Debug.Log("Damage Dealt: " + attackerDamage + "\n" + "Enemy HP: " + defenderStats.health);
+            if (defenderStats.health <= 0)
+            {
+                UnitDied?.Invoke(defenderStats.gameObject);
+            }
         }
 
         //Defender Counter attack

@@ -30,7 +30,23 @@ public class UnitStatSheet : MonoBehaviour
         sRend = GetComponent<SpriteRenderer>();
         SetStatsForCombat();
     }
-
+    private void OnEnable()
+    {
+        CombatHandler.UnitDied += HandleDeath;
+    }
+    private void OnDisable()
+    {
+        CombatHandler.UnitDied -= HandleDeath;
+    }
+    private void HandleDeath(GameObject unitDied)
+    {
+        if (unitDied == gameObject)
+        {
+            gameObject.SetActive(false);
+            //add animations, reset states, other things later
+        }
+        return;
+    }
     void SetStatsForCombat()
     {
         health = maxHP = (int)Health.Value;
