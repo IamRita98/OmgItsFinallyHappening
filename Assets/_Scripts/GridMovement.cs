@@ -1,7 +1,15 @@
+using JetBrains.Annotations;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
+public enum DirectionFacing
+{
+    left,
+    right,
+    up,
+    down
+}
 public class GridMovement : MonoBehaviour
 {
     float gridSizeSide = 1;
@@ -15,7 +23,9 @@ public class GridMovement : MonoBehaviour
     Vector2 newPos;
     public FMODUnity.EventReference moveSFXRef;
     Lerping lerp;
+    public DirectionFacing dirFacing;
 
+   
     private void Awake()
     {
         gridSize = new Vector3(gridSizeSide, gridSizeSide, gridSizeSide);
@@ -24,6 +34,7 @@ public class GridMovement : MonoBehaviour
     private void Start()
     {
         lerp = gameObject.GetComponent<Lerping>();
+        
     }
     void Update()
     {
@@ -43,6 +54,7 @@ public class GridMovement : MonoBehaviour
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
                 FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
+                dirFacing = DirectionFacing.up;
                 StartCoroutine(LerpMovement());
             }
             else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
@@ -51,6 +63,7 @@ public class GridMovement : MonoBehaviour
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
                 FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
+                dirFacing = DirectionFacing.down;
                 StartCoroutine(LerpMovement());
             }
             else if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
@@ -58,6 +71,7 @@ public class GridMovement : MonoBehaviour
                 newPos = currentPos + Vector2.right * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
+                dirFacing = DirectionFacing.right;
                 FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
                 StartCoroutine(LerpMovement());
             }
@@ -66,6 +80,7 @@ public class GridMovement : MonoBehaviour
                 newPos = currentPos + Vector2.left * gridSize;
                 playerWantsToMove = true;
                 RemoveGOHoveredOnMovement();
+                dirFacing = DirectionFacing.left;
                 FMODUnity.RuntimeManager.PlayOneShotAttached(moveSFXRef, gameObject);
                 StartCoroutine(LerpMovement());
             }
