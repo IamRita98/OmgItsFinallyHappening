@@ -24,6 +24,7 @@ public class UnitSelector : MonoBehaviour
     int unitsTakenTurn = 0;
     GameStateManager GSM;
     UnitStatSheet unitStatSheet;
+    PlayerExplorationController explorationController;
     public GameObject GOHovered;
     public GameObject EnemyGO;
     public GameObject PlayerGO;
@@ -59,6 +60,7 @@ public class UnitSelector : MonoBehaviour
     {
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
+        explorationController = GetComponent<PlayerExplorationController>();
     }
 
     private void Update()
@@ -271,6 +273,8 @@ public class UnitSelector : MonoBehaviour
     public void SetCombatPlayer()
     {
         playerSRend.sprite = playerCombatSprite;
+        explorationController.enabled = false;
+        gridMovement.enabled = true;
     }
 
     ///States
