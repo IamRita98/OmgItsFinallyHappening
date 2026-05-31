@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,11 +38,7 @@ public class PlayerExplorationController : MonoBehaviour
         //CheckDirFacing();
         NattyDir();
         ray = Physics2D.Raycast(transform.position, rayDir,maxRayDist,mask);
-        Quaternion dir2=transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z+15,0);
-        Vector3 test = transform.position;
-        transform.eulerAngles = new Vector3(0, 0, 15);
         //RaycastHit2D ray2 = Physics2D.Raycast(transform.rotation.z+15, rayDir, maxRayDist, mask);
-        Quaternion dir3 = transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z - 15, 0);
         CheckRayHits();
         //check enum state and set direction
     }
@@ -55,7 +52,15 @@ public class PlayerExplorationController : MonoBehaviour
             rayDir = fM.dir;
             
         }
+        Vector3 noAngle = Vector3.zero;
+        Vector2 ogDir = rayDir;
+        Quaternion posSpread = Quaternion.Euler(0, 0, 15f);
+        Quaternion negSpread = Quaternion.Euler(0, 0, -15f);
+        Vector2 rayDir2 = posSpread * ogDir;
+        Vector2 rayDir3 = negSpread * ogDir;
         Debug.DrawRay(transform.position, rayDir * maxRayDist, Color.green, 1f);
+        Debug.DrawRay(transform.position, rayDir2 * maxRayDist, Color.green, 1f);
+        Debug.DrawRay(transform.position, rayDir3 * maxRayDist, Color.green, 1f);
 
     }
     private void CheckRayHits()
