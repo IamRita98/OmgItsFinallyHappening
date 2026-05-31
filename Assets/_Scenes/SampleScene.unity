@@ -2311,7 +2311,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &803586546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2335,6 +2335,7 @@ MonoBehaviour:
       Data3: 325540528
       Data4: 1182618046
     Path: event:/SelectorMove
+  dirFacing: 0
 --- !u!114 &803586547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,6 +2397,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerExplorationController
   playerExplorationSprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  rayDir: {x: 0, y: 0}
+--- !u!114 &803586561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803586540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 401f2f663a6855c4e95a6cdab5525290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FreeMovement
+  speed: 10
+  dir: {x: 0, y: 0}
+  dirFacing: 0
 --- !u!1 &839982480
 GameObject:
   m_ObjectHideFlags: 0
@@ -6340,6 +6357,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       insertIndex: -1
       addedObject: {fileID: 803586556}
+    - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 803586561}
   m_SourcePrefab: {fileID: 100100000, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

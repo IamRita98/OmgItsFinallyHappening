@@ -25,7 +25,7 @@ public class GridMovement : MonoBehaviour
     Lerping lerp;
     public DirectionFacing dirFacing;
 
-   
+
     private void Awake()
     {
         gridSize = new Vector3(gridSizeSide, gridSizeSide, gridSizeSide);
