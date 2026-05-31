@@ -11,93 +11,100 @@ public class PlayerExplorationController : MonoBehaviour
     float maxRayDist = 1.3f;
     RaycastHit2D ray;
     int mask;
-    FreeMovement fM;
+    Rigidbody2D rb;
+    public float speed = 1f;
+    public Vector2 dir;
+    public DirectionFacing dirFacing;
+    Transform interactionCone;
+
+
     private void Start()
     {
-        //playerSRend = gameObject.GetComponent<SpriteRenderer>();
         mask = LayerMask.GetMask("Interactable");
     }
     private void OnEnable()
     {
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
         gM = gameObject.GetComponent<GridMovement>();
-        fM = gameObject.GetComponent<FreeMovement>();
-        gM.enabled=false;
+        rb = GetComponent<Rigidbody2D>();
     }
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = dir * speed;
+    }
+
     private void Update()
     {
-        CheckRayCast();
+        Movement();
+        CheckDirFacing();
     }
+
+    private void Movement()
+    {
+        dir.x = Input.GetAxisRaw("Horizontal");
+        dir.y = Input.GetAxisRaw("Vertical");
+        dir.Normalize();
+    }
+
     public void SetExplorationPlayer()
     {
+        gM.enabled = false;
+        interactionCone = transform.GetChild(0);
+        interactionCone.gameObject.SetActive(true);
+        interactionCone.transform.localPosition = Vector3.zero;
         playerSRend.sprite = playerExplorationSprite;
     }
-    void CheckRayCast()
-    {
-        //CheckDirFacing();
-        NattyDir();
-        ray = Physics2D.Raycast(transform.position, rayDir,maxRayDist,mask);
-        Quaternion dir2=transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z+15,0);
-        Vector3 test = transform.position;
-        transform.eulerAngles = new Vector3(0, 0, 15);
-        //RaycastHit2D ray2 = Physics2D.Raycast(transform.rotation.z+15, rayDir, maxRayDist, mask);
-        Quaternion dir3 = transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z - 15, 0);
-        CheckRayHits();
-        //check enum state and set direction
-    }
-    private void NattyDir()
-    {
-        if (fM.dir == Vector2.zero)
-        {
-            //maintain last dir
-        }
-        else {
-            rayDir = fM.dir;
-            
-        }
-        Debug.DrawRay(transform.position, rayDir * maxRayDist, Color.green, 1f);
 
-    }
-    private void CheckRayHits()
-    { 
-        if (ray)
+    /*    void CheckRayCast()
         {
-            //if (ray.collider.TryGetComponent<ISelectable>(out ISelectable sel))
-            //{
-            //    Debug.Log($"hit {sel}, OWNER: {sel.}");
-            //    //do stuff
-            //}
-            Debug.Log($"Hit this {ray.collider.gameObject}");
-            if (ray.collider.TryGetComponent<ISelectable>(out ISelectable sel))
+            //CheckDirFacing();
+            NattyDir();
+            ray = Physics2D.Raycast(transform.position, rayDir,maxRayDist,mask);
+            Quaternion dir2=transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z+15,0);
+            Vector3 test = transform.position;
+            transform.eulerAngles = new Vector3(0, 0, 15);
+            //RaycastHit2D ray2 = Physics2D.Raycast(transform.rotation.z+15, rayDir, maxRayDist, mask);
+            Quaternion dir3 = transform.rotation = new Quaternion(gameObject.transform.rotation.x, transform.rotation.y, transform.rotation.z - 15, 0);
+            CheckRayHits();
+            //check enum state and set direction
+        }*/
+    /*    private void NattyDir()
+        {
+            if (fM.dir == Vector2.zero)
             {
-                
-                Debug.Log($"hit {sel}, OWNER: {ray.collider.gameObject}");
-                //do stuff
+                //maintain last dir
             }
-        }
-    }
+            else {
+                rayDir = fM.dir;
+
+            }
+            Debug.DrawRay(transform.position, rayDir * maxRayDist, Color.green, 1f);
+
+        }*/
+    /*    private void CheckRayHits()
+        { 
+            if (ray)
+            {
+                //if (ray.collider.TryGetComponent<ISelectable>(out ISelectable sel))
+                //{
+                //    Debug.Log($"hit {sel}, OWNER: {sel.}");
+                //    //do stuff
+                //}
+                Debug.Log($"Hit this {ray.collider.gameObject}");
+                if (ray.collider.TryGetComponent<ISelectable>(out ISelectable sel))
+                {
+
+                    Debug.Log($"hit {sel}, OWNER: {ray.collider.gameObject}");
+                    //do stuff
+                }
+            }
+        }*/
     private void CheckDirFacing()
     {
-        if (gM.dirFacing == DirectionFacing.up)
-        {
-            rayDir = Vector2.up;
-            Debug.DrawRay(transform.position, rayDir*maxRayDist, Color.green,1f);
-        }
-        else if (gM.dirFacing == DirectionFacing.down)
-        {
-            rayDir = Vector2.down;
-            Debug.DrawRay(transform.position, rayDir*maxRayDist, Color.green,1f);
-        }
-        else if (gM.dirFacing == DirectionFacing.right)
-        {
-            rayDir = Vector2.right;
-            Debug.DrawRay(transform.position, rayDir*maxRayDist, Color.green,1f);
-        }
-        else if(gM.dirFacing==DirectionFacing.left)
-        {
-            rayDir = Vector2.left;
-            Debug.DrawRay(transform.position, rayDir*maxRayDist, Color.green,1f);
-        }
-    }
+        if (dir.y > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 0);
+        else if (dir.y < 0) interactionCone.transform.rotation = Quaternion.Euler(0,0, 180);
+        else if (dir.x > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 270);
+        else if (dir.x < 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 90);
 
+    }
 }
