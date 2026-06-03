@@ -42,6 +42,7 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference invalidMoveSFXRef;
     public bool selectorCanSelect = true;
     bool isInInv;
+    Rigidbody2D rb;
     
     public Sprite playerCombatSprite;
     SpriteRenderer playerSRend;
@@ -49,11 +50,11 @@ public class UnitSelector : MonoBehaviour
 
     private void Awake()
     {
-        GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
-        gridMovement = GetComponent<GridMovement>();
-
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
+        GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
+        gridMovement = GetComponent<GridMovement>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
@@ -275,6 +276,7 @@ public class UnitSelector : MonoBehaviour
         playerSRend.sprite = playerCombatSprite;
         explorationController.enabled = false;
         gridMovement.enabled = true;
+        rb.linearVelocity = Vector2.zero;
     }
 
     ///States
