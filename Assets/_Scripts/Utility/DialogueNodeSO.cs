@@ -8,5 +8,5 @@ public class DialogueNodeSO : ScriptableObject
     public List<DialogueChoiceSO> choices;
     public string charName;
     //Next Node if no choice
-    public DialogueNodeSO d;
+    public DialogueNodeSO nextNode;
 }

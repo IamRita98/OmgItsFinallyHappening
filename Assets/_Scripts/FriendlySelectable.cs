@@ -5,7 +5,7 @@ public class FriendlySelectable : MonoBehaviour, ISelectable
     public string type = "friendly";
     public GameObject Select()
     {
-        //print(this.gameObject);
+        print($"Selected this: {this.gameObject} w/ string: {type}");
         return this.gameObject;
     }
 }

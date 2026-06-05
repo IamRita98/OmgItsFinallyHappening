@@ -34,7 +34,7 @@ public class DialogueManager : MonoBehaviour
         LoadNode(startNode);
     }
 
-    // Update is called once per frame
+    // add signal when dialogue ends for any subscribers to run their logic on end of dialogue
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -50,7 +50,8 @@ public class DialogueManager : MonoBehaviour
                 }
             }else if (currentNode.choices.Count == 0)
             {
-                gameObject.SetActive(false);
+                return;
+                //gameObject.SetActive(false);
             }
 
         }
@@ -59,7 +60,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (node == null)
         {//no dialogue
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
             return;
         }
         ClearDialogueChoices();
