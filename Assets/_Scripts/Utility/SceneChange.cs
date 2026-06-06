@@ -24,6 +24,7 @@ public class SceneChange : MonoBehaviour
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
         explorationController = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<PlayerExplorationController>();
         currentSceneName = SceneManager.GetActiveScene().name;
+        MakeChangesBasedOnSceneType(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -46,22 +47,36 @@ public class SceneChange : MonoBehaviour
 
     void MakeChangesBasedOnSceneType(Scene loadedScene, LoadSceneMode sceneMode)
     {
-        currentSceneName = loadedScene.name;
+        currentSceneName = loadedScene.name.ToLower();
         //Change this switch statement from using the pre-set Enum to automatically detect scene type based on scene name using truncated strings:
         //RPGTestSceneExploration > "...Exploration" changes GSM into Exploration State
-        switch (newSceneType)
+        if (currentSceneName.Contains("exploration"))
         {
-            case NewSceneType.Exploration:
-                GameStateManager.Instance.state = State.Exploration;
-                explorationController.enabled = true;
-                unitSelector.enabled = false;
-                break;
-            case NewSceneType.Combat:
-                GameStateManager.Instance.state = State.Combat;
-                unitSelector.enabled = true;
-                explorationController.enabled = false;
-                unitSelector.SetCombatPlayer();
-                break;
+            GameStateManager.Instance.state = State.Exploration;
+            explorationController.enabled = true;
+            unitSelector.enabled = false;
         }
+        else if (currentSceneName.Contains("combat"))
+        {
+            GameStateManager.Instance.state = State.Combat;
+            unitSelector.enabled = true;
+            explorationController.enabled = false;
+            unitSelector.SetCombatPlayer();
+        }
+        /*
+                    switch (currentSceneName)
+                    {
+                        case currentSceneName.Contains("exploration"):
+                            GameStateManager.Instance.state = State.Exploration;
+                            explorationController.enabled = true;
+                            unitSelector.enabled = false;
+                            break;
+                        case NewSceneType.Combat:
+                            GameStateManager.Instance.state = State.Combat;
+                            unitSelector.enabled = true;
+                            explorationController.enabled = false;
+                            unitSelector.SetCombatPlayer();
+                            break;
+                    }*/
     }
 }
