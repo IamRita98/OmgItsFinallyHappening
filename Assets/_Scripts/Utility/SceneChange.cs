@@ -9,6 +9,7 @@ public class SceneChange : MonoBehaviour
     GameObject player;
     UnitSelector unitSelector;
     PlayerExplorationController explorationController;
+    public string currentSceneName;
 
 
     public enum NewSceneType
@@ -22,6 +23,7 @@ public class SceneChange : MonoBehaviour
     {
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
         explorationController = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<PlayerExplorationController>();
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -29,18 +31,30 @@ public class SceneChange : MonoBehaviour
         SceneManager.LoadSceneAsync(newScene.name);
         DontDestroyOnLoad(collision);
         collision.gameObject.transform.position = posInNewScene;
-        MakeChangesBasedOnSceneType();
+        //MakeChangesBasedOnSceneType();
     }
 
-    void MakeChangesBasedOnSceneType()
+    private void OnEnable()
     {
+        SceneManager.sceneLoaded += MakeChangesBasedOnSceneType;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= MakeChangesBasedOnSceneType;
+    }
+
+    void MakeChangesBasedOnSceneType(Scene loadedScene, LoadSceneMode sceneMode)
+    {
+        currentSceneName = loadedScene.name;
+        //Change this switch statement from using the pre-set Enum to automatically detect scene type based on scene name using truncated strings:
+        //RPGTestSceneExploration > "...Exploration" changes GSM into Exploration State
         switch (newSceneType)
         {
             case NewSceneType.Exploration:
                 GameStateManager.Instance.state = State.Exploration;
                 explorationController.enabled = true;
                 unitSelector.enabled = false;
-                explorationController.SetExplorationPlayer();
                 break;
             case NewSceneType.Combat:
                 GameStateManager.Instance.state = State.Combat;
@@ -50,6 +64,4 @@ public class SceneChange : MonoBehaviour
                 break;
         }
     }
-
-
 }

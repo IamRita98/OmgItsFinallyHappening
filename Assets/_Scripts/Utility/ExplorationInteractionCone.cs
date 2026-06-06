@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class ExplorationInteractionCone : MonoBehaviour
 {
+    public PlayerExplorationController controller;
+    private void Start()
+    {
+        controller = gameObject.GetComponentInParent<PlayerExplorationController>(true);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Cumb");
-        if (collision.gameObject.GetComponent<IInteractable>() != null)
-        {
-            //IInteractable interact = collision.gameObject.GetComponent<IInteractable>();
-            //interact.Interact();
-            collision.gameObject.GetComponent<IInteractable>().Interact();
-        }
+        if (collision.gameObject.GetComponent<IInteractable>() != null) controller.GOInInteractionCone = collision.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        controller.GOInInteractionCone = null;
     }
 }

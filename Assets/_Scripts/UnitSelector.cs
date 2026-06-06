@@ -22,7 +22,6 @@ public class UnitSelector : MonoBehaviour
 {
     public static UnitSelector Instance;
     int unitsTakenTurn = 0;
-    GameStateManager GSM;
     UnitStatSheet unitStatSheet;
     PlayerExplorationController explorationController;
     public GameObject GOHovered;
@@ -52,7 +51,6 @@ public class UnitSelector : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
-        GSM = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameStateManager>();
         gridMovement = GetComponent<GridMovement>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -76,7 +74,7 @@ public class UnitSelector : MonoBehaviour
         if (unitsTakenTurn <= 0)
         {
             unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
-            GSM.EndPlayerPhase();
+            GameStateManager.Instance.EndPlayerPhase();
         }
     }
     void CheckForInputs()

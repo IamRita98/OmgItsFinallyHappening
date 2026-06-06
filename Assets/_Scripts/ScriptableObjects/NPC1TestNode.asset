@@ -16,4 +16,4 @@ MonoBehaviour:
     the dialogue manager
   choices: []
   charName: NPC-12zr3b
-  d: {fileID: 11400000, guid: 4bf9f422530f9c9478801eddd8755021, type: 2}
+  nextNode: {fileID: 11400000, guid: 4bf9f422530f9c9478801eddd8755021, type: 2}
