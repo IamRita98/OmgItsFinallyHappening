@@ -49,6 +49,10 @@ public class UIManager : MonoBehaviour
     public TMP_Text enemyHitChanceText;
     public TMP_Text enemyCritChanceText;
 
+    public GameObject dBox;
+    public Image dBoxImg;
+    Transform[] dBoxChildren;
+
     List<string> UIInvList = new List<string>();
 
     public static event Action PlayerOpenedInventory;//signal not currently being used
@@ -64,6 +68,7 @@ public class UIManager : MonoBehaviour
         iList = GameObject.FindGameObjectWithTag("PersistentGameManager").GetComponent<InventoryList>();
         canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+        GetDialogueBoxReferences();
     }
 
     private void Update()
@@ -200,5 +205,25 @@ public class UIManager : MonoBehaviour
         ClearUI();
         DisplayInventory();
         subMenuStates = SubMenuStates.Inventory;
+    }
+
+    void GetDialogueBoxReferences()
+    {
+        dBoxChildren = dBox.GetComponentsInChildren<Transform>(true);
+    }
+
+    public void HideDialogueComponents()
+    {
+
+    }
+
+    public void ShowDialogueComponents()
+    {
+        dBoxImg.enabled = true;
+        foreach (Transform dBoxChild in dBoxChildren)
+        {
+            print("Interating throguh dBoxChildren");
+            dBoxChild.gameObject.SetActive(true);
+        }
     }
 }

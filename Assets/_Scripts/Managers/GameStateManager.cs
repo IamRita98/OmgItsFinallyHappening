@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.SceneManagement;
 
 
 public enum State
@@ -15,6 +16,7 @@ public enum State
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance;
+    public string currentSceneName;
     private void Awake()
     {
         if (Instance == null)
@@ -26,6 +28,7 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject);
         }
         uSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+        currentSceneName = SceneManager.GetActiveScene().name;
     }
     public State state;
 

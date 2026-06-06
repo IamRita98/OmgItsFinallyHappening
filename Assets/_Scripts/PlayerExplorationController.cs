@@ -16,8 +16,13 @@ public class PlayerExplorationController : MonoBehaviour
     public Vector2 dir;
     public DirectionFacing dirFacing;
     Transform interactionCone;
+    public GameObject GOInInteractionCone;
 
 
+    private void Awake()
+    {
+        
+    }
     private void Start()
     {
         mask = LayerMask.GetMask("Interactable");
@@ -27,6 +32,7 @@ public class PlayerExplorationController : MonoBehaviour
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
         gM = gameObject.GetComponent<GridMovement>();
         rb = GetComponent<Rigidbody2D>();
+        SetExplorationPlayer();
     }
     private void FixedUpdate()
     {
@@ -35,8 +41,11 @@ public class PlayerExplorationController : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance.state != State.Exploration) return;
         Movement();
         CheckDirFacing();
+        CheckForInputs();
+        
     }
 
     private void Movement()
@@ -53,6 +62,17 @@ public class PlayerExplorationController : MonoBehaviour
         interactionCone.gameObject.SetActive(true);
         interactionCone.transform.localPosition = Vector3.zero;
         playerSRend.sprite = playerExplorationSprite;
+    }
+
+    void CheckForInputs()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            if (GOInInteractionCone != null)
+            {
+                GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+            }
+        }
     }
 
     /*    void CheckRayCast()

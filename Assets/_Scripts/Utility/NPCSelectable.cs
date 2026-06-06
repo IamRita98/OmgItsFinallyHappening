@@ -1,13 +1,14 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class NPCSelectable : MonoBehaviour,IInteractable
+public class NPCSelectable : MonoBehaviour, IInteractable
 {
     public DialogueNodeSO npcDialogue;
+
     public void Interact()
     {
-        GameObject dBox = GameObject.FindGameObjectWithTag("DialogueManager");
-        dBox.SetActive(true);
         DialogueManager dManager = GameObject.FindGameObjectWithTag("DialogueManager").GetComponent<DialogueManager>();
+        UIManager.Instance.ShowDialogueComponents();
         dManager.LoadNode(npcDialogue);
     }
 }
