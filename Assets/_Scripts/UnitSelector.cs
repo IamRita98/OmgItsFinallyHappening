@@ -53,12 +53,13 @@ public class UnitSelector : MonoBehaviour
         else Destroy(this.gameObject);
         gridMovement = GetComponent<GridMovement>();
         rb = GetComponent<Rigidbody2D>();
+        playerSRend = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
-        playerSRend = gameObject.GetComponent<SpriteRenderer>();
+        
         explorationController = GetComponent<PlayerExplorationController>();
     }
 
@@ -272,7 +273,7 @@ public class UnitSelector : MonoBehaviour
     public void SetCombatPlayer()
     {
         playerSRend.sprite = playerCombatSprite;
-        explorationController.enabled = false;
+        //explorationController.enabled = false; already done in Scene change
         gridMovement.enabled = true;
         rb.linearVelocity = Vector2.zero;
     }

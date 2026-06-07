@@ -19,10 +19,16 @@ public class SceneChange : MonoBehaviour
     }
     public NewSceneType newSceneType;
 
-    private void Start()
+    private void Awake()
     {
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
         explorationController = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<PlayerExplorationController>();
+    }
+
+    private void Start()
+    {
+        
+        
         currentSceneName = SceneManager.GetActiveScene().name;
         MakeChangesBasedOnSceneType(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
