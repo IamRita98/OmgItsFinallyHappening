@@ -10,7 +10,11 @@ public class ExplorationInteractionCone : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<IInteractable>() != null) controller.GOInInteractionCone = collision.gameObject;
+        if (collision.gameObject.GetComponent<IInteractable>() != null)
+        {
+            controller.GOInInteractionCone = collision.gameObject;
+            Debug.Log(controller.GOInInteractionCone);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)

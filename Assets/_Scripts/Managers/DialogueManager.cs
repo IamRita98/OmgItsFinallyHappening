@@ -48,8 +48,13 @@ public class DialogueManager : MonoBehaviour
                 {
                     ShowDialogueChoices();
                 }
-            }else if (currentNode.choices.Count == 0)
+            }else //if (currentNode.choices.Count == 0)
             {
+                if (currentNode.nextNode)
+                {
+                    LoadNode(currentNode.nextNode);
+                }
+
                 return;
                 //gameObject.SetActive(false);
             }
@@ -58,7 +63,7 @@ public class DialogueManager : MonoBehaviour
     }
     public void LoadNode(DialogueNodeSO node)
     {
-        if (node == null)
+        if (!node)
         {//no dialogue
             //gameObject.SetActive(false);
             return;
