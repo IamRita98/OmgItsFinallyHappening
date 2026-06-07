@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text enemyHitChanceText;
     public TMP_Text enemyCritChanceText;
 
+    public TMP_Text promptTextBox;
     public GameObject dBox;
     public Image dBoxImg;
     Transform[] dBoxChildren;
@@ -225,5 +226,16 @@ public class UIManager : MonoBehaviour
             print("Interating throguh dBoxChildren");
             dBoxChild.gameObject.SetActive(true);
         }
+    }
+
+    public void FillAndDisplayButtonPromptUI(string text)
+    {
+        promptTextBox.GetComponent<TMP_Text>().enabled = true;
+        promptTextBox.text = text;
+    }
+
+    public void HideButtonPromptUI()
+    {
+        promptTextBox.GetComponent<TMP_Text>().enabled = false;
     }
 }

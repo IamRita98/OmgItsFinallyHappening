@@ -14,11 +14,13 @@ public class ExplorationInteractionCone : MonoBehaviour
         {
             controller.GOInInteractionCone = collision.gameObject;
             Debug.Log(controller.GOInInteractionCone);
+            UIManager.Instance.FillAndDisplayButtonPromptUI("Z Talk");
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         controller.GOInInteractionCone = null;
+        UIManager.Instance.HideButtonPromptUI();
     }
 }
