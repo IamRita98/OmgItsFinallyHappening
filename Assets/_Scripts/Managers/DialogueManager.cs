@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
     // add signal when dialogue ends for any subscribers to run their logic on end of dialogue
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Z))
         {
             if (isTyping)
             {//skip animating text
