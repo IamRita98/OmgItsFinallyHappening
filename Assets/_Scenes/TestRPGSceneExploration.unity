@@ -734,6 +734,7 @@ GameObject:
   - component: {fileID: 700431633}
   - component: {fileID: 700431632}
   - component: {fileID: 700431631}
+  - component: {fileID: 700431635}
   m_Layer: 6
   m_Name: TestShop
   m_TagString: Untagged
@@ -874,6 +875,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &700431635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700431630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e43642758dbe3844b965626c24115de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shop
+  shopItems:
+  - {fileID: 11400000, guid: 4246e33047b736c4c96fdd22c8cb8820, type: 2}
+  - {fileID: 11400000, guid: af1bd1043c6ba024998cd997691088a5, type: 2}
+  - {fileID: 11400000, guid: fbbf86a3514d66e46897b5c45853f34c, type: 2}
+  shopPrices: 3200000019000000c8000000
 --- !u!1001 &1347305073
 PrefabInstance:
   m_ObjectHideFlags: 0
