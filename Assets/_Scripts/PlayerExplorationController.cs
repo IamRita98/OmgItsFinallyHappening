@@ -70,7 +70,13 @@ public class PlayerExplorationController : MonoBehaviour
         {
             if (GOInInteractionCone != null)
             {
-                GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+                if (GOInInteractionCone.gameObject.GetComponent<NPCSelectable>()!=null)
+                {
+                    GameStateManager.Instance.state = State.Dialogue;
+                    GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+                    
+                }//else chest/items logic later
+                
             }
         }
     }

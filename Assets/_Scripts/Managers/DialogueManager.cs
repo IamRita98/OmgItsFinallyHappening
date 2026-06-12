@@ -1,7 +1,7 @@
+using System;
 using UnityEngine;
 using TMPro;
 using System.Collections;
-using NUnit.Framework;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
@@ -20,6 +20,7 @@ public class DialogueManager : MonoBehaviour
     private DialogueNodeSO currentNode;
     private bool isTyping = false;
     private List<GameObject> activeChoiceButtons = new List<GameObject>();
+    public static event Action FinishedDialogue;
 
     private int index;
     private void Awake()
@@ -47,8 +48,16 @@ public class DialogueManager : MonoBehaviour
                 if (currentNode.choices.Count > 0)
                 {
                     ShowDialogueChoices();
+                }else if (currentNode.nextNode)
+                {
+                    LoadNode(currentNode.nextNode);
+                    
                 }
-            }else //if (currentNode.choices.Count == 0)
+                else
+                {
+                    FinishedDialogue?.Invoke();
+                }
+            }/*else //if (currentNode.choices.Count == 0) UNCOMMENT BLOCK IF ABOVE SETUP IS NOT WORKING PROPERLY
             {
                 if (currentNode.nextNode)
                 {
@@ -57,7 +66,7 @@ public class DialogueManager : MonoBehaviour
 
                 return;
                 //gameObject.SetActive(false);
-            }
+            }*/
 
         }
     }
@@ -85,6 +94,7 @@ public class DialogueManager : MonoBehaviour
         }
         isTyping = false;
         if (currentNode.choices.Count > 0) ShowDialogueChoices();
+        
     }
     void ShowDialogueChoices()
     {

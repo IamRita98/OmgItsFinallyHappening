@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.Collections;
+
 using UnityEngine;
-using UnityEngine.EventSystems;
+
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -70,6 +70,15 @@ public class UIManager : MonoBehaviour
         canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
         GetDialogueBoxReferences();
+    }
+    private void OnEnable()
+    {
+        DialogueManager.FinishedDialogue += HideDialogueComponents;
+    }
+
+    private void OnDisable()
+    {
+        DialogueManager.FinishedDialogue -= HideDialogueComponents;
     }
 
     private void Update()
@@ -167,6 +176,8 @@ public class UIManager : MonoBehaviour
         undoButton.SetActive(false);
     }
 
+
+
     public void ClearUI()
     {
         List<Transform> childrenOfCanvas = canvas.GetComponentsInChildren<Transform>().ToList();
@@ -215,7 +226,12 @@ public class UIManager : MonoBehaviour
 
     public void HideDialogueComponents()
     {
-
+        dBoxImg.enabled = false;
+        foreach (Transform dBoxChild in dBoxChildren)
+        {
+            print("Interating throguh dBoxChildren");
+            dBoxChild.gameObject.SetActive(false);
+        }
     }
 
     public void ShowDialogueComponents()
