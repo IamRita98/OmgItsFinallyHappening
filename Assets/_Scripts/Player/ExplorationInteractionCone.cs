@@ -12,9 +12,17 @@ public class ExplorationInteractionCone : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<IInteractable>() != null)
         {
+            if (collision.gameObject.GetComponent<NPCSelectable>())
+            {
+                UIManager.Instance.FillAndDisplayButtonPromptUI("Z Talk");
+            }
+            else if (collision.gameObject.GetComponent<ShopSelectable>())
+            {
+                UIManager.Instance.FillAndDisplayButtonPromptUI("Z Shop");
+            }
+
             controller.GOInInteractionCone = collision.gameObject;
             Debug.Log(controller.GOInInteractionCone);
-            UIManager.Instance.FillAndDisplayButtonPromptUI("Z Talk");
         }
     }
 

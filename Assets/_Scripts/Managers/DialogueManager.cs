@@ -6,6 +6,14 @@ using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
 {
+    enum DialogueType
+    {
+        Dialogue,
+        Shop,
+        Quest
+    }
+
+    DialogueType dType;
     public static DialogueManager Instance;
 
     [Header("UI References")]
@@ -21,6 +29,7 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private List<GameObject> activeChoiceButtons = new List<GameObject>();
     public static event Action FinishedDialogue;
+    public static event Action OpenShop;
 
     private int index;
     private void Awake()
@@ -45,19 +54,13 @@ public class DialogueManager : MonoBehaviour
                 StopAllCoroutines();
                 textComponent.text = currentNode.dialogueText;
                 isTyping = false;
-                if (currentNode.choices.Count > 0)
-                {
-                    ShowDialogueChoices();
-                }else if (currentNode.nextNode)
-                {
-                    LoadNode(currentNode.nextNode);
-                    
-                }
-                else
-                {
-                    FinishedDialogue?.Invoke();
-                }
-            }/*else //if (currentNode.choices.Count == 0) UNCOMMENT BLOCK IF ABOVE SETUP IS NOT WORKING PROPERLY
+                CheckDialogueState();
+            }
+            else
+            {
+                CheckDialogueState();
+            }
+            /*else //if (currentNode.choices.Count == 0) UNCOMMENT BLOCK IF ABOVE SETUP IS NOT WORKING PROPERLY
             {
                 if (currentNode.nextNode)
                 {
@@ -70,6 +73,33 @@ public class DialogueManager : MonoBehaviour
 
         }
     }
+
+    void CheckDialogueState()
+    {
+        if (currentNode.choices.Count > 0)
+        {
+            ShowDialogueChoices();
+        }
+        else if (currentNode.nextNode)
+        {
+            LoadNode(currentNode.nextNode);
+        }
+        else
+        {
+            switch (dType)
+            {
+                case (DialogueType.Dialogue): break;
+                case (DialogueType.Shop):
+                    OpenShop?.Invoke();
+                    break;
+                case (DialogueType.Quest): break;
+            }
+
+            FinishedDialogue?.Invoke();
+        }
+    }
+
+
     public void LoadNode(DialogueNodeSO node)
     {
         if (!node)
