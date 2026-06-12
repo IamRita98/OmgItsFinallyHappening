@@ -70,12 +70,19 @@ public class PlayerExplorationController : MonoBehaviour
         {
             if (GOInInteractionCone != null)
             {
-                if (GOInInteractionCone.gameObject.GetComponent<NPCSelectable>()!=null)
+/*                if (GOInInteractionCone.gameObject.GetComponent<LootSelectable>() != null) Check if Chest item, else run dialogue
+                {
+                    GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+
+                }*/
+                //This will be else instead of if once we have a lootSelectable
+                if(GOInInteractionCone.gameObject.GetComponent<IInteractable>() != null)
                 {
                     GameStateManager.Instance.state = State.Dialogue;
                     GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
-                    
-                }//else chest/items logic later
+                }
+
+                //else chest/items logic later
                 
             }
         }
