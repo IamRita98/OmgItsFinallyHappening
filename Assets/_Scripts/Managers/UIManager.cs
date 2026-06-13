@@ -99,11 +99,13 @@ public class UIManager : MonoBehaviour
             switch (subMenuStates)
             {
                 case (SubMenuStates.CombatOptions):
+                    Debug.Log("in combat options");
                     GameStateManager.Instance.state = State.Combat;
                     ClearUI();
                     unitSelector.ResumeSelectorControl();
                     break;
                 case (SubMenuStates.SelectTarget):
+                    Debug.Log("in select target");
                     SetCombatOptionsStates();
                     break;
                 case (SubMenuStates.Inventory):
@@ -207,9 +209,10 @@ public class UIManager : MonoBehaviour
 
     public void SetSelectTargetStates()
     {
+        subMenuStates = SubMenuStates.SelectTarget;
         ClearUI();
         CombatHandler.Instance.AttackSelected();
-        subMenuStates = SubMenuStates.SelectTarget;
+        
     }
 
     public void SetInventoryStates()

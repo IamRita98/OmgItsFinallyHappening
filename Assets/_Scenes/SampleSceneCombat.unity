@@ -490,6 +490,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &566933796 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3111193137390096476, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+  m_PrefabInstance: {fileID: 2633047188894566401}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ba7db796c275a46a6710c8bf11cde2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
 --- !u!1 &588234898 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8963053460819108675, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
@@ -1548,21 +1559,37 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 563748166}
+    - target: {fileID: 1345872819356872105, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 566933796}
+    - target: {fileID: 1345872819356872105, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetInventoryStates
+      objectReference: {fileID: 0}
     - target: {fileID: 1387560113688732342, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 803586549}
     - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 563748169}
+      objectReference: {fileID: 566933796}
     - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AttackSelected
+      value: SetSelectTargetStates
       objectReference: {fileID: 0}
     - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CombatHandler, Assembly-CSharp
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2662330877237260340, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
