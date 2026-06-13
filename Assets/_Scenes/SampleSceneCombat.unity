@@ -1552,10 +1552,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 803586549}
+    - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 563748169}
+    - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AttackSelected
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488219822611015615, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CombatHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2662330877237260340, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 563748166}
+    - target: {fileID: 6876232756312005936, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7657782283432592059, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: m_Name
       value: Canvas
