@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-
+using Unity.VisualScripting;
 using UnityEngine;
 
 using UnityEngine.UI;
@@ -35,10 +35,7 @@ public class UIManager : MonoBehaviour
     public GameObject undoButton;
 
     public GameObject inventoryUI;
-    public TMP_Text invTextBoxGO;
-    public GameObject InvItemSpriteParent;
-    public GameObject InvItemNameParent;
-    public GameObject InvItemAmountParent;
+    public GameObject InvButtonPrefab;
 
     public TMP_Text playerHPText;
     public TMP_Text playerDamageText;
@@ -145,13 +142,13 @@ public class UIManager : MonoBehaviour
                     continue;
                 }
             }
-            //TMP_Text invTextBoxSprite = Instantiate(invTextBoxGO, InvItemSpriteParent.transform);
-            TMP_Text invTextBoxName = Instantiate(invTextBoxGO, InvItemNameParent.transform);
-            TMP_Text invTextBoxAmount = Instantiate(invTextBoxGO, InvItemAmountParent.transform);
+            GameObject itemButton = Instantiate(InvButtonPrefab, inventoryUI.transform);
+            List<Transform> itemButtonChildren = itemButton.GetComponentsInChildren<Transform>(true).ToList(); //0 parent, 1 sprite, 2 name, 3 amount
+            //itemButtonChildren[1].sprite = itemSpriteSO
+            itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Key + "   -";
+            itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
 
-            //invTextboxSprite.sprite = whateverthefk
-            invTextBoxName.text = item.Key;
-            invTextBoxAmount.text = item.Value.GetStacks().ToString();
+            //itemButton.GetComponent<Button>().onClick.AddListener(() => { item.Value.item. });
 
             UIInvList.Add(item.Key);
         }

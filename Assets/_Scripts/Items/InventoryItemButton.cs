@@ -1,6 +1,7 @@
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-
+/*
 public class InventoryItemButton : MonoBehaviour
 {
     Button thisButton;
@@ -12,7 +13,11 @@ public class InventoryItemButton : MonoBehaviour
 
     public void FillItemInfo(InventoryItem item)
     {
-
+        label.text = text;
+        button.onClick.AddListener(() =>
+        {
+            DialogueManager.Instance.LoadNode(nextNode);
+        });
     }
 
     public void RunButton()
@@ -20,3 +25,4 @@ public class InventoryItemButton : MonoBehaviour
         //Add listener
     }
 }
+*/
