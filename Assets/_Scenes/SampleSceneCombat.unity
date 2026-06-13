@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chest
   itemsInChest:
-  - {fileID: 11400000, guid: 4246e33047b736c4c96fdd22c8cb8820, type: 2}
+  - {fileID: 11400000, guid: 609d84195ceca5b46aebcf524a9e1a3d, type: 2}
   amounts: 0a000000
 --- !u!212 &156168129
 SpriteRenderer:
@@ -883,7 +883,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chest
   itemsInChest:
-  - {fileID: 11400000, guid: af1bd1043c6ba024998cd997691088a5, type: 2}
+  - {fileID: 11400000, guid: 5dd08d6a4994f864bbaf732f75382144, type: 2}
   amounts: 02000000
 --- !u!212 &1569644572
 SpriteRenderer:

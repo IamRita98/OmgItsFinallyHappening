@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36bd4e019bff6794c80405637d8941ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 830eb22a8be5ef041b146572656d43ed, type: 3}
   m_Name: Potion
-  m_EditorClassIdentifier: Assembly-CSharp::ConsumableItem
+  m_EditorClassIdentifier: Assembly-CSharp::Potion
   name: Potion
-  amount: 10
-  equipEffectText: Yummu
-  flavorText: Mmhhm
+  amount: 1
+  equipEffectText: Yum
+  flavorText: Yummy
   isKeyItem: 0
   tags:
-  - Consumable
   - Healing
+  - Consumable
   sprite: {fileID: 0}
   rarity: 0

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
-public class Item : ScriptableObject
+[CreateAssetMenu(fileName = "Item", menuName = "Item/Item")]
+public class Item : ScriptableObject, IUsable, IEquipable
 {
     //WeaponItems,ArmourItems,QuestItems,ConsumableItems
     public string name;
@@ -18,6 +18,21 @@ public class Item : ScriptableObject
     //I guess we could set up like a dictionary in the inv class of like {Item, Amount} to check that still
     public List<string> tags;
     public Sprite sprite;
+    public virtual void Equip() // I don't think you can change the interface uses on scriptable objects... We might have to use inheritence
+    {
+        
+    }
+
+    public virtual void UnEquip()
+    {
+        
+    }
+
+    public virtual void Use()
+    {
+        Debug.Log("We're idiots");
+    }
+    
 }
 public enum Rarity
 {

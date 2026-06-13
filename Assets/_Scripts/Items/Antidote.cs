@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ConsumableItem", menuName = "Items/ConsumableItem")]
-public class ConsumableItem : Item, IUsable, IEquipable
+[CreateAssetMenu(fileName = "Antidote", menuName = "Item/Antidote")]
+public class Antidote : Item, IUsable, IEquipable
 {
     //are gonna affect stats
     public Rarity rarity;
@@ -18,6 +18,6 @@ public class ConsumableItem : Item, IUsable, IEquipable
 
     public override void Use()
     {
-        Debug.Log("hello");
+        Debug.Log("Remove Poison");
     }
 }
