@@ -124,6 +124,8 @@ public class CombatHandler : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.X))
             {
                 inCombat = false;
+                UnitSelector.Instance.GOHovered=null;
+                UnitSelector.Instance.transform.position = UnitSelector.Instance.playerUnitSelected.transform.position;
                 ClearTiles();
             }
         }
