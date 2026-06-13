@@ -6,7 +6,7 @@ public class Shop : MonoBehaviour
 {
     public List<Item> shopItems = new List<Item>();
     public List<int> shopPrices = new List<int>();
-    Dictionary<Item, int> shopStock;
+    Dictionary<Item, int> shopStock = new Dictionary<Item, int>();
 
     private void Start()
     {
