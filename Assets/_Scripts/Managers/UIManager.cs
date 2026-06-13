@@ -117,6 +117,10 @@ public class UIManager : MonoBehaviour
     public void ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
     {
         combatCalcUI.SetActive(true); 
+        foreach (Transform child in combatCalcUI.GetComponentsInChildren<Transform>(true).ToList())
+        {
+            child.gameObject.SetActive(true);
+        }
         playerHPText.text = playerHP.ToString();
         playerDamageText.text = playerDamage.ToString();
         playerHitChanceText.text = playerHit.ToString();

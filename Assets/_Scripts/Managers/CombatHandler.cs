@@ -126,6 +126,7 @@ public class CombatHandler : MonoBehaviour
                 inCombat = false;
                 UnitSelector.Instance.GOHovered=null;
                 UnitSelector.Instance.transform.position = UnitSelector.Instance.playerUnitSelected.transform.position;
+                UIManager.Instance.SetCombatOptionsStates();
                 ClearTiles();
             }
         }
