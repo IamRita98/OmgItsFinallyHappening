@@ -31,11 +31,13 @@ public class CombatHandler : MonoBehaviour
     int attackerDamage;
     int attackerHitChance;
     int attackerCritChance;
+    int attackerAtkRange;
 
     int defenderHp;
     int defenderDamage;
     int defenderHitChance;
     int defenderCritChance;
+    int defenderAtkRange;
     public static event Action<GameObject> UnitDied;/*when player attacks the checks are done 
                                           later, maybe setup a second signal or refactor?*/
     private void Awake()
@@ -174,11 +176,14 @@ public class CombatHandler : MonoBehaviour
         attackerDamage = (int)Mathf.Clamp((attackerStats.Strength.Value - defenderStats.Defense.Value), 1, Mathf.Infinity);
         attackerHitChance = (int)(attackerStats.HitChance.Value + attackerStats.Skill.Value - defenderStats.Speed.Value);
         attackerCritChance = (int)(attackerStats.Skill.Value);
+        attackerAtkRange = (int)(attackerStats.AttackRange.Value);
 
         defenderHp = (int)(defenderStats.Health.Value);
         defenderDamage = (int)Mathf.Clamp((defenderStats.Strength.Value - attackerStats.Defense.Value), 1, Mathf.Infinity);
         defenderHitChance = (int)(defenderStats.HitChance.Value + defenderStats.Skill.Value - attackerStats.Speed.Value);
         defenderCritChance = (int)(defenderStats.Skill.Value);
+        defenderAtkRange = (int)(defenderStats.AttackRange.Value);
+
         if (GameStateManager.Instance.gameState == GameStateManager.TurnState.PlayerTurn)
         {
             UIManager.Instance.ShowCombatCalcs(attackerHp, defenderHp, attackerDamage, defenderDamage, attackerHitChance, defenderHitChance, attackerCritChance, defenderCritChance);
@@ -187,18 +192,8 @@ public class CombatHandler : MonoBehaviour
 
     public void RunCombatCalc()
     {
-        //Attacker Hit
-        int hitRoll = Random.Range(1, 101);
-        if (hitRoll >= 100 - attackerHitChance)
-        {
-            int critRoll = Random.Range(1, 101);
-            if (critRoll >= 100 - attackerCritChance)
-            {
-                attackerDamage *= critMulti;
-                print("BIG CRIT!!!!");
-            }
-        }
-        else print("Miss");
+        //Attacker's attack
+        attackerDamage = RollHitChance(attackerHitChance, attackerCritChance, attackerDamage);
 
         // Only run attack command if player turn
         if (GameStateManager.Instance.gameState == GameStateManager.TurnState.PlayerTurn)
@@ -212,7 +207,7 @@ public class CombatHandler : MonoBehaviour
         {
             defenderStats.health -= attackerDamage;
             //playerStats.health -= enemyDamage; This is the counter attack I'm pretty sure, I stole this from AttackCommand but we don't want to rip it like this, there are cases where there will be no coutner attack
-            Debug.Log("Damage Dealt: " + attackerDamage + "\n" + "Enemy HP: " + defenderStats.health);
+            Debug.Log("Damage Dealt: " + attackerDamage + "\n" + "Defender HP: " + defenderStats.health);
             if (defenderStats.health <= 0)
             {
                 UnitDied?.Invoke(defenderStats.gameObject);
@@ -220,13 +215,44 @@ public class CombatHandler : MonoBehaviour
         }
 
         //Defender Counter attack
-        /*        if(EnemycanCounterAttack)
-         *        else defenderDamage = 0;
-                hitRoll = Random.Range(1, 101);
-                if (hitRoll >= 100 - defenderHitChance)
-                {
+        if (DefenderCanCounterAttack())
+        {
+            defenderDamage = RollHitChance(defenderHitChance, defenderCritChance, defenderDamage);
+            attackerStats.health -= defenderDamage;
+            Debug.Log("Counter attack damage Dealt: " + defenderDamage + "\n" + "Defender HP: " + attackerStats.health);
+            if (attackerStats.health <= 0)
+            {
+                UnitDied?.Invoke(attackerStats.gameObject);
+            }
+        }
+    }
+    public int RollHitChance(int attackerHit, int attackerCrit, int attackerDam)
+    {
+        int hitRoll = Random.Range(1, 101);
+        if (hitRoll >= 100 - attackerHit)
+        {
+            int critRoll = Random.Range(1, 101);
+            if (critRoll >= 100 - attackerCrit)
+            {
+                attackerDam *= critMulti;
+                print("BIG CRIT!!!!");
+            }
+            else print("Normal Dmg");
+            return attackerDam;
+        }
+        else
+        {
+            print("Miss");
+            return 0;
+        }
+    }
 
-                }
-         */
+    public bool DefenderCanCounterAttack()
+    {
+        if (defenderAtkRange >= attackerAtkRange)
+        {
+            return true; //Made this a method because I assume more logic will go into it later
+        }
+        else return false;
     }
 }

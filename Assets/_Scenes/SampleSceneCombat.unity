@@ -771,7 +771,7 @@ MonoBehaviour:
   Movement:
     BaseValue: 5
   AttackRange:
-    BaseValue: 0
+    BaseValue: 1
   HitChance:
     BaseValue: 80
   attackRangeTiles: {fileID: 0}
@@ -1335,7 +1335,7 @@ MonoBehaviour:
   Movement:
     BaseValue: 5
   AttackRange:
-    BaseValue: 0
+    BaseValue: 1
   HitChance:
     BaseValue: 80
   attackRangeTiles: {fileID: 0}
