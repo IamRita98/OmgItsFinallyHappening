@@ -148,7 +148,7 @@ public class UIManager : MonoBehaviour
             itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Key + "   -";
             itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
 
-            itemButton.GetComponent<Button>().onClick.AddListener(() => { item.Value.item.Use(); });
+            itemButton.GetComponent<Button>().onClick.AddListener(() => { item.Value.item.Use();});
 
             UIInvList.Add(item.Key);
         }

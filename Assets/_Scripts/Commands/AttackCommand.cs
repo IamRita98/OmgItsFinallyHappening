@@ -18,7 +18,7 @@ public class AttackCommand : ICommand
     {
         enemyStats.health -= playerDamage;
         playerStats.health -= enemyDamage;
-        Debug.Log("Damage Dealt: " + playerDamage + "\n" + "Enemy HP: " + enemyStats.health);
+        Debug.Log("Damage Dealt by player: " + playerDamage + "\n" + "Enemy HP: " + enemyStats.health);
     }
     public void Undo()
     {

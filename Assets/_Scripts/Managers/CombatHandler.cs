@@ -194,38 +194,50 @@ public class CombatHandler : MonoBehaviour
     {
         //Attacker's attack
         attackerDamage = RollHitChance(attackerHitChance, attackerCritChance, attackerDamage);
-
+        bool counter = DefenderCanCounterAttack();
+        
         // Only run attack command if player turn
         if (GameStateManager.Instance.gameState == GameStateManager.TurnState.PlayerTurn)
         {
+            if (counter)
+            {
+                defenderDamage=RollHitChance(defenderHitChance, defenderCritChance, defenderDamage);
+            }
+            else
+            {
+                defenderDamage=0;
+            }
             AttackCommand attackerAttack = new AttackCommand(attackerStats, defenderStats, attackerDamage, defenderDamage);
             CommandManager.Instance.Execute(attackerAttack);
+            Debug.Log($"Enemy counter attacked for: {defenderDamage} playerHP: {attackerStats.health}");
             inCombat = false;
             enemiesToAttack.Clear();
         }
         else
         {
             defenderStats.health -= attackerDamage;
+            
             //playerStats.health -= enemyDamage; This is the counter attack I'm pretty sure, I stole this from AttackCommand but we don't want to rip it like this, there are cases where there will be no coutner attack
-            Debug.Log("Damage Dealt: " + attackerDamage + "\n" + "Defender HP: " + defenderStats.health);
+            Debug.Log("Damage Dealt by enemy: " + attackerDamage + "\n" + "Defender HP: " + defenderStats.health);
+            if (counter)
+            {
+                defenderDamage=RollHitChance(defenderHitChance, defenderCritChance, defenderDamage);
+                attackerStats.health -= defenderDamage;
+                Debug.Log($"Player countered for: {defenderDamage} AttackerHP: {attackerStats.health}");
+               
+            }
+            else
+            {
+                /*Debug.Log($"L BOZO, CAN'T COUNTER");*/
+            }
+            
             if (defenderStats.health <= 0)
             {
                 UnitDied?.Invoke(defenderStats.gameObject);
             }
         }
-
-        //Defender Counter attack
-        if (DefenderCanCounterAttack())
-        {
-            defenderDamage = RollHitChance(defenderHitChance, defenderCritChance, defenderDamage);
-            attackerStats.health -= defenderDamage;
-            Debug.Log("Counter attack damage Dealt: " + defenderDamage + "\n" + "Defender HP: " + attackerStats.health);
-            if (attackerStats.health <= 0)
-            {
-                UnitDied?.Invoke(attackerStats.gameObject);
-            }
-        }
     }
+    
     public int RollHitChance(int attackerHit, int attackerCrit, int attackerDam)
     {
         int hitRoll = Random.Range(1, 101);
@@ -243,6 +255,7 @@ public class CombatHandler : MonoBehaviour
         else
         {
             print("Miss");
+            //signal for when attacks missed->sound fx, animation
             return 0;
         }
     }
@@ -251,8 +264,13 @@ public class CombatHandler : MonoBehaviour
     {
         if (defenderAtkRange >= attackerAtkRange)
         {
+            Debug.Log($"Counter attack succeeded Defender Atk Range: {attackerAtkRange}");
             return true; //Made this a method because I assume more logic will go into it later
         }
-        else return false;
+        else
+        {
+            Debug.Log($"Failed to counter rolling 0-> Defender Atk Range: {attackerAtkRange}");
+            return false;
+        }
     }
 }

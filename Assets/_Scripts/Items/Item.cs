@@ -17,6 +17,7 @@ public class Item : ScriptableObject, IUsable, IEquipable
     //Reference it just pull the data on start and thats it. So the quantity as part of the class thing won't work w/ SO's
     //I guess we could set up like a dictionary in the inv class of like {Item, Amount} to check that still
     public List<string> tags;
+    public List<ItemEffects> itemEffects;
     public Sprite sprite;
     public virtual void Equip() // I don't think you can change the interface uses on scriptable objects... We might have to use inheritence
     {
@@ -30,7 +31,7 @@ public class Item : ScriptableObject, IUsable, IEquipable
 
     public virtual void Use()
     {
-        Debug.Log("We're idiots");
+        
     }
     
 }
