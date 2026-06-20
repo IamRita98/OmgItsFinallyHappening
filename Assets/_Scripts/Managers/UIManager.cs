@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
 
     public static UIManager Instance;
     public InventoryList iList;
-
+    private InventoryItem inventoryItem;
     UnitSelector unitSelector;
 
     public GameObject combatOptions;
@@ -71,10 +71,12 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         DialogueManager.FinishedDialogue += HideDialogueComponents;
+        CombatHandler.UsedItem += DecrementInvItem;
     }
 
     private void OnDisable()
     {
+        CombatHandler.UsedItem -= DecrementInvItem;
         DialogueManager.FinishedDialogue -= HideDialogueComponents;
     }
 
@@ -84,6 +86,10 @@ public class UIManager : MonoBehaviour
         ProcessInputs();
     }
 
+    private void DecrementInvItem()
+    {
+        inventoryItem.RemoveFromStack();
+    }
     private void ProcessInputs()
     {
         if (Input.GetKeyDown(KeyCode.Z)) 
@@ -148,8 +154,8 @@ public class UIManager : MonoBehaviour
             itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Key + "   -";
             itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
 
-            itemButton.GetComponent<Button>().onClick.AddListener(() => { item.Value.item.Use();});
-            UseItem(item.Value.item);
+            itemButton.GetComponent<Button>().onClick.AddListener(() => { UseItem(item.Value.item,item.Value); });
+            
 
             UIInvList.Add(item.Key);
         }
@@ -172,13 +178,18 @@ public class UIManager : MonoBehaviour
 
 
 
-    public void UseItem(Item item)
+    public void UseItem(Item item,InventoryItem invItem)
     {
+        inventoryItem = invItem;
+        CombatHandler.Instance.item = item;
         switch (item.target)
         {
+                
             case (ItemTargets.Allys):
+                
                 break;
             case (ItemTargets.Enemies):
+                
                 break;
             case (ItemTargets.Self):
                 break;
@@ -233,7 +244,7 @@ public class UIManager : MonoBehaviour
     {
         subMenuStates = SubMenuStates.SelectTarget;
         ClearUI();
-        CombatHandler.Instance.AttackSelected();
+        CombatHandler.Instance.SelectTarget();
         
     }
 
