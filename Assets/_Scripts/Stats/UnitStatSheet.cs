@@ -33,10 +33,12 @@ public class UnitStatSheet : MonoBehaviour
     private void OnEnable()
     {
         CombatHandler.UnitDied += HandleDeath;
+        //Signal for taking damage += CheckHealthForClamp;
     }
     private void OnDisable()
     {
         CombatHandler.UnitDied -= HandleDeath;
+        //Signal for taking damage -= CheckHealthForClamp;
     }
     private void HandleDeath(GameObject unitDied)
     {
@@ -47,6 +49,12 @@ public class UnitStatSheet : MonoBehaviour
         }
         return;
     }
+
+    void CheckHealthForClamp()
+    {
+        health = Mathf.Clamp(health, 0, maxHP);
+    }
+
     void SetStatsForCombat()
     {
         health = maxHP = (int)Health.Value;

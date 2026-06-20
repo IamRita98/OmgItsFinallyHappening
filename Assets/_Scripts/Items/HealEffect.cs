@@ -4,8 +4,8 @@ using UnityEngine;
 public class HealEffect : ItemEffects
 {
     public int healAmount;
-    public override void ExecuteEffects(GameObject gameObject)
+    public override void ExecuteEffects(GameObject target)
     {
-        //gameobject.stats.hp+=healAmount
+        target.GetComponent<UnitStatSheet>().health += healAmount;
     }
 }

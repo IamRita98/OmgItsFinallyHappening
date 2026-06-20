@@ -474,7 +474,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CombatHandler
   AttackTiles: {fileID: 3707126651705642032, guid: 4cd66883b6a46d94db51d87111581b32, type: 3}
   enemiesToAttack: []
+  selectTargets: []
   allEnemiesList: []
+  displayTargetUI: 0
+  item: {fileID: 0}
 --- !u!4 &563748170
 Transform:
   m_ObjectHideFlags: 0
@@ -584,7 +587,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5425926121782289095, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
   m_PrefabInstance: {fileID: 8313243337110851086}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2026942052}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c4e658cd53dc9040953026833f9e64d, type: 3}
@@ -1341,6 +1344,23 @@ MonoBehaviour:
   attackRangeTiles: {fileID: 0}
   attackTiles: []
   hasActionThisTurn: 0
+--- !u!1 &2026942052 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+  m_PrefabInstance: {fileID: 8313243337110851086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2026942062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026942052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a063b8728ff8d46a91d1d6eb75c151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemHandler
 --- !u!1001 &501611213315562154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1781,7 +1801,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2026942062}
   m_SourcePrefab: {fileID: 100100000, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

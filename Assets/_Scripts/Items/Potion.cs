@@ -20,17 +20,14 @@ public class Potion : Item, IUsable, IEquipable
 
     public override void Use()
     {
-        while (target == null)
-        {
-            
-        }
+
         //CALL TO UIMANAGER TO PULL UP LIST OF ENEMIES/ALLIES IN RANGE FOR THING
         //get target ->pulls up list of allies or enemies in range to use
         //once player picks target->target=target
         //then run itemEffects
-/*        foreach (var item in itemEffects)
-        {
-            item.ExecuteEffects(target);
-        }*/
+        /*        foreach (var item in itemEffects)
+                {
+                    item.ExecuteEffects(target);
+                }*/
     }
 }
