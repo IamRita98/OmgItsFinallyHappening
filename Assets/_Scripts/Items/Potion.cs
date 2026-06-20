@@ -4,8 +4,10 @@ using UnityEngine;
 public class Potion : Item, IUsable, IEquipable
 {
     //are gonna affect stats
-    public Rarity rarity;
-    private GameObject target;
+
+    //private GameObject target;
+
+    
     public void Equip()
     {
         throw new System.NotImplementedException();
@@ -26,9 +28,9 @@ public class Potion : Item, IUsable, IEquipable
         //get target ->pulls up list of allies or enemies in range to use
         //once player picks target->target=target
         //then run itemEffects
-        foreach (var item in itemEffects)
+/*        foreach (var item in itemEffects)
         {
             item.ExecuteEffects(target);
-        }
+        }*/
     }
 }

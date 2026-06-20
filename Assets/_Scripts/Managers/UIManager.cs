@@ -149,6 +149,7 @@ public class UIManager : MonoBehaviour
             itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
 
             itemButton.GetComponent<Button>().onClick.AddListener(() => { item.Value.item.Use();});
+            UseItem(item.Value.item);
 
             UIInvList.Add(item.Key);
         }
@@ -169,6 +170,26 @@ public class UIManager : MonoBehaviour
         ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
     }*/
 
+
+
+    public void UseItem(Item item)
+    {
+        switch (item.target)
+        {
+            case (ItemTargets.Allys):
+                break;
+            case (ItemTargets.Enemies):
+                break;
+            case (ItemTargets.Self):
+                break;
+            case (ItemTargets.NoTarget):
+                break;
+        }
+        //CALL TO UIMANAGER TO PULL UP LIST OF ENEMIES/ALLIES IN RANGE FOR THING
+        //get target ->pulls up list of allies or enemies in range to use
+        //once player picks target->target=target
+        //then run itemEffects
+    }
 
     public void EnableUndo()
     {
