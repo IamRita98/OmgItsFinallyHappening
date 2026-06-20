@@ -20,5 +20,9 @@ MonoBehaviour:
   tags:
   - Healing
   - Consumable
+  itemEffects:
+  - {fileID: 11400000, guid: 44576a21abcaab544b20017aa0ca8b5b, type: 2}
   sprite: {fileID: 0}
   rarity: 0
+  target: 0
+  range: 1

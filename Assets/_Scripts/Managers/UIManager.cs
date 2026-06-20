@@ -182,20 +182,15 @@ public class UIManager : MonoBehaviour
     {
         inventoryItem = invItem;
         CombatHandler.Instance.item = item;
-        switch (item.target)
+        if (item.itemTargets == ItemTargets.NoTarget)
         {
-                
-            case (ItemTargets.Allys):
-                
-                break;
-            case (ItemTargets.Enemies):
-                
-                break;
-            case (ItemTargets.Self):
-                break;
-            case (ItemTargets.NoTarget):
-                break;
+            //Do Something
         }
+        else
+        {
+            CombatHandler.Instance.SelectTarget(item.itemTargets);
+        }
+
         //CALL TO UIMANAGER TO PULL UP LIST OF ENEMIES/ALLIES IN RANGE FOR THING
         //get target ->pulls up list of allies or enemies in range to use
         //once player picks target->target=target

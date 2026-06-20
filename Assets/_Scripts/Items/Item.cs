@@ -21,7 +21,8 @@ public class Item : ScriptableObject, IUsable, IEquipable
     public List<ItemEffects> itemEffects;
     public Sprite sprite;
     public Rarity rarity;
-    public ItemTargets target;
+    public ItemTargets itemTargets;
+    public GameObject GOTarget;
     public int range;
 
     public virtual void Equip() // I don't think you can change the interface uses on scriptable objects... We might have to use inheritence
@@ -36,7 +37,13 @@ public class Item : ScriptableObject, IUsable, IEquipable
 
     public virtual void Use()
     {
-        
+        while (GOTarget != null)
+        {
+            foreach (ItemEffects effect in itemEffects)
+            {
+                effect.ExecuteEffects(GOTarget);
+            }
+        }
     }
     
 }

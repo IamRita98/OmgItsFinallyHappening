@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class CombatHandler : MonoBehaviour
 {
+    ItemHandler itemHandler;
     public static CombatHandler Instance;
     float playerUnitRange;
     GameObject unitSelectorGO;
@@ -54,6 +55,11 @@ public class CombatHandler : MonoBehaviour
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
     }
+    private void Start()
+    {
+        itemHandler = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<ItemHandler>();
+    }
+
     public void SelectTarget(ItemTargets target=ItemTargets.Enemies)
     {
         //select target 
@@ -71,9 +77,7 @@ public class CombatHandler : MonoBehaviour
         }else if (target == ItemTargets.Allys)
         {
             SelectAllies();
-        }
-        
-
+        }        
     }
 
     private void SelectEnemies()
@@ -155,10 +159,16 @@ public class CombatHandler : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Player"))
             {
-                UsedItem?.Invoke();
+                
                 if (item != null)
                 {
+                    UsedItem?.Invoke();
+                    itemHandler.ItemUsed(unitSelector.GOHovered, item);
                     //CALL ITEMMANAGER OR WHATEVER SCRIPT TO HANDLE USAGE
+                }
+                else
+                {
+                    //spell used
                 }
                 //TODO: healing/buffing friendly ally or self
                 //if item!=null ->call item manager else call 
