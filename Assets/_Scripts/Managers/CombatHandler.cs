@@ -16,15 +16,17 @@ public class CombatHandler : MonoBehaviour
     GameObject enemyObject;
     public GameObject AttackTiles;
     public List<GameObject> enemiesToAttack = new List<GameObject>();
+    public List<GameObject> selectTargets=new List<GameObject>();
     List<Vector2> attackRange = new List<Vector2>();
     public List<GameObject> allEnemiesList = new List<GameObject>();
+    public ItemTargets displayTargetUI;
     bool inCombat = false;
     int index = 0;
     DrawTiles drawTiles;
     UnitStatSheet unitStats;
     int critMulti = 2;
     bool noEnemies=false;
-
+    public Item item;
     UnitStatSheet attackerStats;
     UnitStatSheet defenderStats;
     int attackerHp;
@@ -40,6 +42,7 @@ public class CombatHandler : MonoBehaviour
     int defenderAtkRange;
     public static event Action<GameObject> UnitDied;/*when player attacks the checks are done 
                                           later, maybe setup a second signal or refactor?*/
+    public static event Action UsedItem;
     private void Awake()
     {
 
@@ -51,7 +54,29 @@ public class CombatHandler : MonoBehaviour
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
     }
-    public void AttackSelected()
+    public void SelectTarget(ItemTargets target=ItemTargets.Enemies)
+    {
+        //select target 
+        //if target selected is enemy ->attack
+        //if target selected is friendly-> positive effect
+        //self->unitSelector.selectedGO
+        displayTargetUI = target;//for controlling UI display in update
+        if (target == ItemTargets.Enemies)
+        {
+            SelectEnemies();
+        }
+        else if (target == ItemTargets.Self)
+        {
+            SelectSelf();
+        }else if (target == ItemTargets.Allys)
+        {
+            SelectAllies();
+        }
+        
+
+    }
+
+    private void SelectEnemies()
     {
         playerObject = unitSelectorGO.GetComponent<UnitSelector>().PlayerGO;
         //enemyObject = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>().GOHovered;
@@ -70,6 +95,7 @@ public class CombatHandler : MonoBehaviour
         }
         if (enemiesToAttack.Count > 0)
         {
+            selectTargets = enemiesToAttack;
             inCombat = true;
             Vector2 tempPos = enemiesToAttack[index].transform.position;
             unitSelectorGO.transform.position = tempPos;
@@ -83,7 +109,16 @@ public class CombatHandler : MonoBehaviour
             unitSelectorGO.GetComponent<UnitSelector>().ResumeSelectorControl();
             //move freely
         }
+    }
 
+    private void SelectSelf()
+    {
+        //TODO: add in logic for self
+    }
+
+    private void SelectAllies()
+    {
+        
     }
     bool skipOnce = false;
     private void Update()
@@ -95,26 +130,40 @@ public class CombatHandler : MonoBehaviour
                 index--;
                 if (index < 0)
                 {
-                    index = enemiesToAttack.Count - 1;
+                    index = selectTargets.Count - 1;
                 }
-                Vector2 tempPos = enemiesToAttack[index].transform.position;
+                Vector2 tempPos = selectTargets[index].transform.position;
                 unitSelectorGO.transform.position = tempPos;
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             {
                 index++;
-                if (index >= enemiesToAttack.Count())
+                if (index >= selectTargets.Count())
                 {
                     index = 0;
                 }
-                Vector2 tempPos = enemiesToAttack[index].transform.position;
+                Vector2 tempPos = selectTargets[index].transform.position;
                 unitSelectorGO.transform.position = tempPos;
             }
-            UnitStatSheet enemyStats = enemiesToAttack[index].GetComponent<UnitStatSheet>();
-            CombatCalc(unitStats, enemyStats);
-            //CombatCalc()
-            //UI.ShowCombatCalcs()
 
+            if (displayTargetUI == ItemTargets.Enemies)
+            {
+                UnitStatSheet enemyStats = selectTargets[index].GetComponent<UnitStatSheet>();
+                CombatCalc(unitStats, enemyStats);//find a way to hide this when allies are being selected
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Player"))
+            {
+                UsedItem?.Invoke();
+                if (item != null)
+                {
+                    //CALL ITEMMANAGER OR WHATEVER SCRIPT TO HANDLE USAGE
+                }
+                //TODO: healing/buffing friendly ally or self
+                //if item!=null ->call item manager else call 
+                //if spell !=null->spell manager
+            }
             if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Enemy"))
             {
                 RunCombatCalc();
