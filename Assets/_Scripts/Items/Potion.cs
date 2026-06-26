@@ -18,16 +18,16 @@ public class Potion : Item, IUsable, IEquipable
         throw new System.NotImplementedException();
     }
 
-    public override void Use()
+/*    public void Use()
     {
 
         //CALL TO UIMANAGER TO PULL UP LIST OF ENEMIES/ALLIES IN RANGE FOR THING
         //get target ->pulls up list of allies or enemies in range to use
         //once player picks target->target=target
         //then run itemEffects
-        /*        foreach (var item in itemEffects)
+        *//*        foreach (var item in itemEffects)
                 {
                     item.ExecuteEffects(target);
-                }*/
-    }
+                }*//*
+    }*/
 }

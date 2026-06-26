@@ -3616,12 +3616,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8397372078350339386}
+  - component: {fileID: 3111193137390096476}
   - component: {fileID: 5014956043398394785}
   - component: {fileID: 5001453751270296826}
   - component: {fileID: 2127356547733005096}
   - component: {fileID: 5336665385861235779}
   - component: {fileID: 8307652706511812668}
-  - component: {fileID: 3111193137390096476}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Canvas
@@ -3655,6 +3655,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &3111193137390096476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7657782283432592059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ba7db796c275a46a6710c8bf11cde2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  subMenuStates: 0
+  iList: {fileID: 0}
+  combatOptions: {fileID: 6876232756312005936}
+  combatCalcUI: {fileID: 6888803346542233267}
+  attackButton: {fileID: 2488219822611015615}
+  undoButton: {fileID: 3766549979202911635}
+  inventoryUI: {fileID: 2434852008948625031}
+  InvButtonPrefab: {fileID: 0}
+  playerHPText: {fileID: 6960164050062053684}
+  playerDamageText: {fileID: 6366215828236189385}
+  playerHitChanceText: {fileID: 724086137887282324}
+  playerCritChanceText: {fileID: 3679975812949372374}
+  enemyHPText: {fileID: 3871067376833236638}
+  enemyDamageText: {fileID: 4360515441053591084}
+  enemyHitChanceText: {fileID: 7711416565906066056}
+  enemyCritChanceText: {fileID: 1035098941164158582}
+  promptTextBox: {fileID: 4041139145375613350}
+  dBox: {fileID: 1929937699600610798}
+  dBoxImg: {fileID: 1756266401890659317}
 --- !u!223 &5014956043398394785
 Canvas:
   m_ObjectHideFlags: 0
@@ -3743,40 +3774,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CanvasSingleton
   canvas: {fileID: 5014956043398394785}
---- !u!114 &3111193137390096476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7657782283432592059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ba7db796c275a46a6710c8bf11cde2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  subMenuStates: 0
-  iList: {fileID: 0}
-  combatOptions: {fileID: 6876232756312005936}
-  combatCalcUI: {fileID: 6888803346542233267}
-  attackButton: {fileID: 2488219822611015615}
-  undoButton: {fileID: 3766549979202911635}
-  inventoryUI: {fileID: 2434852008948625031}
-  invTextBoxGO: {fileID: 1671011863095821170, guid: 1e1bba0ff8eb06b4d84c0ba4f5e744c4, type: 3}
-  InvItemSpriteParent: {fileID: 0}
-  InvItemNameParent: {fileID: 0}
-  InvItemAmountParent: {fileID: 0}
-  playerHPText: {fileID: 6960164050062053684}
-  playerDamageText: {fileID: 6366215828236189385}
-  playerHitChanceText: {fileID: 724086137887282324}
-  playerCritChanceText: {fileID: 3679975812949372374}
-  enemyHPText: {fileID: 3871067376833236638}
-  enemyDamageText: {fileID: 4360515441053591084}
-  enemyHitChanceText: {fileID: 7711416565906066056}
-  enemyCritChanceText: {fileID: 1035098941164158582}
-  promptTextBox: {fileID: 4041139145375613350}
-  dBox: {fileID: 1929937699600610798}
-  dBoxImg: {fileID: 1756266401890659317}
 --- !u!1 &8228187288138926633
 GameObject:
   m_ObjectHideFlags: 0

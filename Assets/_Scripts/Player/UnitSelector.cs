@@ -40,7 +40,6 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference selectSFXRef;
     public FMODUnity.EventReference invalidMoveSFXRef;
     public bool selectorCanSelect = true;
-    bool isInInv;
     Rigidbody2D rb;
     
     public Sprite playerCombatSprite;
@@ -102,11 +101,16 @@ public class UnitSelector : MonoBehaviour
 
     void CancelKey()
     {
-        
         if (Input.GetKeyDown(KeyCode.X))
         {
+            GOHovered = playerUnitSelected;
             //Press X w/ unit held
-            if (HasPlayerUnitSelected() && !HoveringEnemyUnit() && !isInInv) ReturnToPickLocationAndCancel();
+            if (HasPlayerUnitSelected() && !HoveringEnemyUnit())
+            {
+                print("Cum");
+                ReturnToPickLocationAndCancel();
+            }
+
         }
     }
 
@@ -122,6 +126,7 @@ public class UnitSelector : MonoBehaviour
 
     void PickupPlayerUnit()
     {//Should begin unit session here, will need to add logic for unit switching or just hardlock the player
+        selectorCanSelect = false;
         playerUnitSelected = GOHovered.GetComponent<ISelectable>().Select();
         transform.position = playerUnitSelected.transform.position;
         movementRange = ((int)unitStatSheet.Movement.Value);
