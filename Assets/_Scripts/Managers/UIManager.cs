@@ -136,9 +136,18 @@ public class UIManager : MonoBehaviour
         enemyCritChanceText.text = playerCrit.ToString();
     }
 
+    
     async public void DisplayInventory()
     {
+        /*
+         * make shop script
+         * setup separate function for shop
+         */
         inventoryUI.SetActive(true);
+        foreach (Transform child in inventoryUI.GetComponentsInChildren<Transform>(true).ToList())
+        {
+            child.gameObject.SetActive(true);
+        }
         Dictionary<string, InventoryItem> pInv = iList.GetPartyInv();
         foreach (var item in pInv)
         {
@@ -146,6 +155,7 @@ public class UIManager : MonoBehaviour
             {
                 if (UIInvList.Contains(item.Key))
                 {
+                    
                     continue;
                 }
             }
@@ -200,6 +210,7 @@ public class UIManager : MonoBehaviour
         //then run itemEffects
 
         ClearUI();
+        DecrementInvItem();
         unitSelector.EndUnitTurn();
     }
 

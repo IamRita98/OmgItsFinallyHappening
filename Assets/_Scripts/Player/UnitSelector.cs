@@ -103,9 +103,9 @@ public class UnitSelector : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            GOHovered = playerUnitSelected;
+            
             //Press X w/ unit held
-            if (HasPlayerUnitSelected() && !HoveringEnemyUnit())
+            if (HasPlayerUnitSelected())//&& !HoveringEnemyUnit()<--- used to be in the if statement
             {
                 print("Cum");
                 ReturnToPickLocationAndCancel();
@@ -286,7 +286,7 @@ public class UnitSelector : MonoBehaviour
     ///States
     bool HasPlayerUnitSelected()
     {
-        return(playerUnitSelected == gameObject.CompareTag("Player") && canMoveSelector);
+        return(playerUnitSelected.CompareTag("Player") && canMoveSelector);
     }
 
     public bool HoveringReadyToActUnit()
