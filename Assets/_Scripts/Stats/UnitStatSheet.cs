@@ -30,6 +30,12 @@ public class UnitStatSheet : MonoBehaviour
         sRend = GetComponent<SpriteRenderer>();
         SetStatsForCombat();
     }
+
+    private void Update()
+    {
+        CheckHealthForClamp();
+    }
+
     private void OnEnable()
     {
         CombatHandler.UnitDied += HandleDeath;
@@ -50,7 +56,7 @@ public class UnitStatSheet : MonoBehaviour
         return;
     }
 
-    void CheckHealthForClamp()
+    void CheckHealthForClamp() //Add a signal later
     {
         health = Mathf.Clamp(health, 0, maxHP);
     }

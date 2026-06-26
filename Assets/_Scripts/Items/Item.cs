@@ -37,10 +37,11 @@ public class Item : ScriptableObject, IUsable, IEquipable
 
     public virtual void Use()
     {
-        while (GOTarget != null)
+        if (GOTarget != null)
         {
             foreach (ItemEffects effect in itemEffects)
             {
+                Debug.Log("Cum");
                 effect.ExecuteEffects(GOTarget);
             }
         }

@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: Antidote
   m_EditorClassIdentifier: Assembly-CSharp::Antidote
   name: Antidote
-  amount: 1
+  amount: 2
   equipEffectText: not yummy
   flavorText: heal poison
   isKeyItem: 0
   tags:
   - Consumable
   - Healing
+  itemEffects:
+  - {fileID: 11400000, guid: 44576a21abcaab544b20017aa0ca8b5b, type: 2}
   sprite: {fileID: 0}
+  rarity: 0
+  itemTargets: 0
+  GOTarget: {fileID: 0}
+  range: 0
   rarity: 0

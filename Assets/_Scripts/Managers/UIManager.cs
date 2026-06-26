@@ -105,6 +105,7 @@ public class UIManager : MonoBehaviour
                     Debug.Log("in combat options");
                     GameStateManager.Instance.state = State.Combat;
                     ClearUI();
+                    unitSelector.ReturnToPickLocationAndCancel();
                     unitSelector.ResumeSelectorControl();
                     break;
                 case (SubMenuStates.SelectTarget):
@@ -180,21 +181,26 @@ public class UIManager : MonoBehaviour
 
     public void UseItem(Item item,InventoryItem invItem)
     {
+        item.GOTarget = unitSelector.GOHovered;
+        item.Use();
         inventoryItem = invItem;
         CombatHandler.Instance.item = item;
-        if (item.itemTargets == ItemTargets.NoTarget)
+/*        if (item.itemTargets == ItemTargets.NoTarget)
         {
             //Do Something
         }
         else
         {
             CombatHandler.Instance.SelectTarget(item.itemTargets);
-        }
+        }*/
 
         //CALL TO UIMANAGER TO PULL UP LIST OF ENEMIES/ALLIES IN RANGE FOR THING
         //get target ->pulls up list of allies or enemies in range to use
         //once player picks target->target=target
         //then run itemEffects
+
+        ClearUI();
+        unitSelector.EndUnitTurn();
     }
 
     public void EnableUndo()
@@ -246,8 +252,8 @@ public class UIManager : MonoBehaviour
     public void SetInventoryStates()
     {
         ClearUI();
-        DisplayInventory();
         subMenuStates = SubMenuStates.Inventory;
+        DisplayInventory();
     }
 
     void GetDialogueBoxReferences()
