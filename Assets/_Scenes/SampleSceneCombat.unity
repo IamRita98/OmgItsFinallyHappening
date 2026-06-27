@@ -1585,9 +1585,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 563748166}
     - target: {fileID: 3111193137390096476, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: shopUI
+      value: 
+      objectReference: {fileID: 2633047188894566402}
+    - target: {fileID: 3111193137390096476, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: InvButtonPrefab
       value: 
       objectReference: {fileID: 2184346864958873204, guid: 6b90dd95267edaa42bf435aa681b0986, type: 3}
+    - target: {fileID: 3111193137390096476, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+      propertyPath: shopButtonPrefab
+      value: 
+      objectReference: {fileID: 2184346864958873204, guid: 7ba436a15c06bf94f818b26938a5e571, type: 3}
     - target: {fileID: 3111193137390096476, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
       propertyPath: InvItemNameParent
       value: 
@@ -1689,6 +1697,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+--- !u!1 &2633047188894566402 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7470230008695920195, guid: a94de759fa8b07343beed3372bc8d3ce, type: 3}
+  m_PrefabInstance: {fileID: 2633047188894566401}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6642672449418764978
 PrefabInstance:
   m_ObjectHideFlags: 0

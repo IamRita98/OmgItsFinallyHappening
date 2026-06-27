@@ -888,8 +888,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   shopItems:
-  - {fileID: 11400000, guid: 4246e33047b736c4c96fdd22c8cb8820, type: 2}
-  - {fileID: 11400000, guid: af1bd1043c6ba024998cd997691088a5, type: 2}
+  - {fileID: 11400000, guid: 609d84195ceca5b46aebcf524a9e1a3d, type: 2}
+  - {fileID: 11400000, guid: 5dd08d6a4994f864bbaf732f75382144, type: 2}
   - {fileID: 11400000, guid: fbbf86a3514d66e46897b5c45853f34c, type: 2}
   shopPrices: 3200000019000000c8000000
 --- !u!1001 &1347305073

@@ -41,7 +41,7 @@ public class UnitSelector : MonoBehaviour
     public FMODUnity.EventReference invalidMoveSFXRef;
     public bool selectorCanSelect = true;
     Rigidbody2D rb;
-    
+    private uint playerGold;
     public Sprite playerCombatSprite;
     SpriteRenderer playerSRend;
     //public UnitSelectorIsHovering unitHovered;
@@ -61,13 +61,31 @@ public class UnitSelector : MonoBehaviour
         
         explorationController = GetComponent<PlayerExplorationController>();
     }
-
+    
     private void Update()
     {
         if (GameStateManager.Instance.state != State.Combat) return;
         CheckForTurnPhase();
         CheckForInputs();
         CheckHoveredUnit();
+    }
+
+    public void AddGold(uint amt)
+    {
+        playerGold += amt;
+    }
+
+    public void SubtractGold(uint amt)
+    {
+        if (playerGold - amt < 0)
+        {
+            playerGold =0;
+        }
+        else
+        {
+            playerGold -= amt;    
+        }
+        
     }
     public void CheckForTurnPhase()
     {

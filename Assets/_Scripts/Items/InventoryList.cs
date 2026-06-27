@@ -7,14 +7,15 @@ public class InventoryList : MonoBehaviour
 {
     List<InventoryItem> partyInventory = new List<InventoryItem>();
     Dictionary<string, InventoryItem> partyInv = new Dictionary<string, InventoryItem>();
-
     private void OnEnable()
     {
         Chest.OnChestOpen += GetItem;
+        Shop.OnItemBought += GetItem;
     }
     private void OnDisable()
     {
         Chest.OnChestOpen -= GetItem;
+        Shop.OnItemBought -= GetItem;
     }
     public void SavePlayerInventory()
     {
