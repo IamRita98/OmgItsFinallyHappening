@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
         CombatOptions,
         SelectTarget,
         Inventory,
+        Shop,
         //Non-Combat UI
 
     }
@@ -33,10 +34,12 @@ public class UIManager : MonoBehaviour
     public Button attackButton;
     Selectable firstSelected;
     public GameObject undoButton;
-
+    public List<Tuple<string, Item,int>>shopStock=new List<Tuple<string, Item, int>>();
     public GameObject inventoryUI;
     public GameObject InvButtonPrefab;
-
+    public GameObject shopButtonPrefab;
+    public GameObject shopUI;
+    
     public TMP_Text playerHPText;
     public TMP_Text playerDamageText;
     public TMP_Text playerHitChanceText;
@@ -52,7 +55,7 @@ public class UIManager : MonoBehaviour
     Transform[] dBoxChildren;
 
     List<string> UIInvList = new List<string>();
-
+    List<string> shopList = new List<string>();
     public static event Action PlayerOpenedInventory;//signal not currently being used
 
     private void Awake()
@@ -115,6 +118,10 @@ public class UIManager : MonoBehaviour
                 case (SubMenuStates.Inventory):
                     SetCombatOptionsStates();
                     break;
+                case (SubMenuStates.Shop):
+                    DestroyShop();
+                    GameStateManager.Instance.state = State.Exploration;
+                    break;
             }
         }
     }
@@ -136,42 +143,77 @@ public class UIManager : MonoBehaviour
         enemyCritChanceText.text = playerCrit.ToString();
     }
 
-    
-    async public void DisplayInventory()
+    public void DestroyShop()
     {
+        foreach (Transform child in shopUI.GetComponentsInChildren<Transform>(true).ToList())
+        {
+            if (child == shopUI.transform) continue;
+            Destroy(child.gameObject);
+        }
+    }
+    
+    async public void DisplayInventory(bool isShop=false,GameObject npcShop=null)
+    {
+        Shop shop = npcShop.gameObject.GetComponent<Shop>();
         /*
          * make shop script
          * setup separate function for shop
          */
-        inventoryUI.SetActive(true);
-        foreach (Transform child in inventoryUI.GetComponentsInChildren<Transform>(true).ToList())
+        if (isShop)
         {
-            child.gameObject.SetActive(true);
-        }
-        Dictionary<string, InventoryItem> pInv = iList.GetPartyInv();
-        foreach (var item in pInv)
-        {
-            if (UIInvList.Count > 0)
+            //shop stuff
+            shopUI.SetActive(true);
+            foreach (Transform child in shopUI.GetComponentsInChildren<Transform>(true).ToList())
             {
-                if (UIInvList.Contains(item.Key))
-                {
-                    
-                    continue;
-                }
+                child.gameObject.SetActive(true);
             }
-            GameObject itemButton = Instantiate(InvButtonPrefab, inventoryUI.transform);
-            List<Transform> itemButtonChildren = itemButton.GetComponentsInChildren<Transform>(true).ToList(); //0 parent, 1 sprite, 2 name, 3 amount
-            //itemButtonChildren[1].sprite = itemSpriteSO
-            itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Key + "   -";
-            itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
 
-            itemButton.GetComponent<Button>().onClick.AddListener(() => { UseItem(item.Value.item,item.Value); });
+            foreach (var item in shopStock)
+            {
+                GameObject itemButton = Instantiate(shopButtonPrefab, shopUI.transform);
+                List<Transform> itemButtonChildren = itemButton.GetComponentsInChildren<Transform>(true).ToList(); //0 parent, 1 sprite, 2 name, 3 amount
+                //itemButtonChildren[1].sprite = itemSpriteSO
+                itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Item1 + "   -";
+                itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Item3.ToString();
+
+                itemButton.GetComponent<Button>().onClick.AddListener(() => { shop.ShopItemButtonSetup(item.Item2); });
+            }
+        }
+        else
+        {
+            //player inv stuff
+            inventoryUI.SetActive(true);
+            foreach (Transform child in inventoryUI.GetComponentsInChildren<Transform>(true).ToList())
+            {
+                child.gameObject.SetActive(true);
+            }
+            Dictionary<string, InventoryItem> pInv = iList.GetPartyInv();
+            foreach (var item in pInv)
+            {
+                if (UIInvList.Count > 0)
+                {
+                    if (UIInvList.Contains(item.Key))
+                    {
+                    
+                        continue;
+                    }
+                }
+                GameObject itemButton = Instantiate(InvButtonPrefab, inventoryUI.transform);
+                List<Transform> itemButtonChildren = itemButton.GetComponentsInChildren<Transform>(true).ToList(); //0 parent, 1 sprite, 2 name, 3 amount
+                //itemButtonChildren[1].sprite = itemSpriteSO
+                itemButtonChildren[2].GetComponent<TMP_Text>().text = item.Key + "   -";
+                itemButtonChildren[3].GetComponent<TMP_Text>().text = item.Value.GetStacks().ToString();
+
+                itemButton.GetComponent<Button>().onClick.AddListener(() => { UseItem(item.Value.item,item.Value); });
             
 
-            UIInvList.Add(item.Key);
+                UIInvList.Add(item.Key);
+            }
+            PlayerOpenedInventory?.Invoke();
         }
+        
         await UniTask.DelayFrame(1);
-        PlayerOpenedInventory?.Invoke();
+        
 
         //go through list-- For each element create a new text box
         //Fill textbox w/ Inventory item info
@@ -277,7 +319,7 @@ public class UIManager : MonoBehaviour
         dBoxImg.enabled = false;
         foreach (Transform dBoxChild in dBoxChildren)
         {
-            print("Interating throguh dBoxChildren");
+            print("Interacting throguh dBoxChildren");
             dBoxChild.gameObject.SetActive(false);
         }
     }
@@ -287,7 +329,7 @@ public class UIManager : MonoBehaviour
         dBoxImg.enabled = true;
         foreach (Transform dBoxChild in dBoxChildren)
         {
-            print("Interating throguh dBoxChildren");
+            print("Interacting throguh dBoxChildren");
             dBoxChild.gameObject.SetActive(true);
         }
     }
