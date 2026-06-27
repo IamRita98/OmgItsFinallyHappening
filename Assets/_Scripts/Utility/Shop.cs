@@ -8,7 +8,7 @@ public class Shop : MonoBehaviour
     public List<Item> shopItems = new List<Item>();
     public List<int> shopPrices = new List<int>();
     Dictionary<Item, int> shopStock = new Dictionary<Item, int>();
-    private List<Tuple<string, Item,int>> displayShopItemsList;
+    private List<Tuple<string, Item,int>> displayShopItemsList = new List<Tuple<string, Item, int>>();
     public static event Action<List<InventoryItem>> OnItemBought;
     private void Start()
     {
@@ -26,12 +26,17 @@ public class Shop : MonoBehaviour
         InventoryItem inventoryItem = new InventoryItem(item);
         List<InventoryItem> listToPass =new List<InventoryItem>();
         listToPass.Add(inventoryItem);
-        UnitSelector.Instance.SubtractGold((uint)shopStock[item]);//unsure about this working, just pass in price too,
-                                                                  //to the button listeners
+        if (UnitSelector.Instance.GetPlayerGold() < (uint)shopStock[item])
+        {
+            print("Not enough money");
+            return;
+        }
+        UnitSelector.Instance.SubtractGold((uint)shopStock[item]);//unsure about this working, just pass in price too, to the button listeners
         OnItemBought?.Invoke(listToPass);
     }
     public void DisplayShop()
     {
+        UnitSelector.Instance.DisplayGold();
         MakeShopStock();
         UIManager.Instance.shopStock = displayShopItemsList;
         UIManager.Instance.DisplayInventory(true,gameObject);
@@ -49,7 +54,7 @@ public class Shop : MonoBehaviour
 
         for (int i = 0; i < shopItems.Count; i++)
         {
-            displayShopItemsList.Add(new Tuple<string, Item, int>(shopItems[i].name,shopItems[i], shopPrices[i]));
+            displayShopItemsList.Add(new Tuple<string, Item, int>(shopItems[i].name, shopItems[i], shopPrices[i]));
         }
     }
 }
