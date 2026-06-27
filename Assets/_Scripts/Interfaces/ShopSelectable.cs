@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class ShopSelectable : MonoBehaviour, IInteractable
@@ -12,11 +13,15 @@ public class ShopSelectable : MonoBehaviour, IInteractable
         shop = GetComponent<Shop>();
     }
 
-    public void Interact()
+    async public void Interact()
     {
         UIManager.Instance.HideButtonPromptUI();
         UIManager.Instance.ShowDialogueComponents();
         dManager.LoadNode(shopDialogue);
+        GameStateManager.Instance.state = State.Menu;
+
+        await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Z));
         shop.DisplayShop();
+
     }
 }

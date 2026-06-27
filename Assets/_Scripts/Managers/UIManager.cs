@@ -149,6 +149,7 @@ public class UIManager : MonoBehaviour
         {
             if (child == shopUI.transform) continue;
             Destroy(child.gameObject);
+            shopStock.Clear();
         }
     }
     
@@ -161,6 +162,7 @@ public class UIManager : MonoBehaviour
          */
         if (isShop)
         {
+            subMenuStates = SubMenuStates.Shop;
             //shop stuff
             shopUI.SetActive(true);
             foreach (Transform child in shopUI.GetComponentsInChildren<Transform>(true).ToList())
