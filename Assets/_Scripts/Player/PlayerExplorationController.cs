@@ -18,7 +18,6 @@ public class PlayerExplorationController : MonoBehaviour
     public DirectionFacing dirFacing;
     Transform interactionCone;
     public GameObject GOInInteractionCone;
-    public InputActionReference moveAction;
     private InputSystem_Actions actions;
     private Vector2 move;
     
