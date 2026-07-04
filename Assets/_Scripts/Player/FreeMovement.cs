@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FreeMovement : MonoBehaviour
 {
@@ -7,10 +8,11 @@ public class FreeMovement : MonoBehaviour
     public float speed = 1f;
     public Vector2 dir;
     public DirectionFacing dirFacing;
-
+    public InputActionReference moveAction;
     private void OnEnable()
     {
         rb = GetComponent<Rigidbody2D>();
+        
     }
     private void FixedUpdate()
     {

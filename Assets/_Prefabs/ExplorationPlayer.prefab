@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2734626937459395406}
   - component: {fileID: 5790514064016061446}
   - component: {fileID: 2566341273198163916}
+  - component: {fileID: -4751798235578223628}
   m_Layer: 0
   m_Name: ExplorationPlayer
   m_TagString: UnitSelector
@@ -156,6 +157,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0}
   dirFacing: 0
   GOInInteractionCone: {fileID: 0}
+  moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!114 &-4977187809378646826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +293,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e18f8c9c554dc94b9ca874aec3e0552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SelectorJiggle
+--- !u!114 &-4751798235578223628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 355603993909756202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: 
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &5315518415095016047
 GameObject:
   m_ObjectHideFlags: 0

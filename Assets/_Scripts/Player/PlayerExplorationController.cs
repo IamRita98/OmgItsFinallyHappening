@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlayerExplorationController : MonoBehaviour
@@ -17,11 +18,18 @@ public class PlayerExplorationController : MonoBehaviour
     public DirectionFacing dirFacing;
     Transform interactionCone;
     public GameObject GOInInteractionCone;
-
-
+    public InputActionReference moveAction;
+    private InputSystem_Actions actions;
+    
     private void Awake()
     {
-        
+        actions = new InputSystem_Actions();
+        actions.Player.Move.performed+=context =>SendMessage();
+    }
+
+    void SendMessage()
+    {
+        Debug.Log("PlayerMoved");
     }
     private void Start()
     {
@@ -32,7 +40,13 @@ public class PlayerExplorationController : MonoBehaviour
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
         gM = gameObject.GetComponent<GridMovement>();
         rb = GetComponent<Rigidbody2D>();
+        actions.Player.Enable();
         SetExplorationPlayer();
+    }
+
+    private void OnDisable()
+    {
+        actions.Player.Disable();
     }
     private void FixedUpdate()
     {
