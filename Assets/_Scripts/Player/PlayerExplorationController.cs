@@ -20,17 +20,15 @@ public class PlayerExplorationController : MonoBehaviour
     public GameObject GOInInteractionCone;
     public InputActionReference moveAction;
     private InputSystem_Actions actions;
+    private Vector2 move;
     
     private void Awake()
     {
         actions = new InputSystem_Actions();
-        actions.Player.Move.performed+=context =>SendMessage();
+        actions.Player.Move.performed+=ctx=>move=ctx.ReadValue<Vector2>();
+        actions.Player.Move.canceled+=ctx=>move=Vector2.zero;
     }
-
-    void SendMessage()
-    {
-        Debug.Log("PlayerMoved");
-    }
+    
     private void Start()
     {
         mask = LayerMask.GetMask("Interactable");
@@ -50,7 +48,9 @@ public class PlayerExplorationController : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.linearVelocity = dir * speed;
+        Vector3 movement=new Vector3(move.x,move.y,0.0f) * (speed * Time.deltaTime);
+        transform.Translate(movement,Space.World);
+        /*rb.linearVelocity = dir * speed;*/
     }
 
     private void Update()
