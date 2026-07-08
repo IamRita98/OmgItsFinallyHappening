@@ -44,6 +44,7 @@ public class UnitSelector : MonoBehaviour
     private uint playerGold = 500;
     public Sprite playerCombatSprite;
     SpriteRenderer playerSRend;
+    private InputSystem_Actions actions;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -53,6 +54,9 @@ public class UnitSelector : MonoBehaviour
         gridMovement = GetComponent<GridMovement>();
         rb = GetComponent<Rigidbody2D>();
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
+        actions = new InputSystem_Actions();
+        actions.Player.Confirm.performed += ctx => ConfirmKey();
+        actions.Player.Cancel.performed += ctx => CancelKey();
     }
 
     private void Start()
@@ -66,7 +70,7 @@ public class UnitSelector : MonoBehaviour
     {
         if (GameStateManager.Instance.state != State.Combat) return;
         CheckForTurnPhase();
-        CheckForInputs();
+        //CheckForInputs();
         CheckHoveredUnit();
     }
 
@@ -109,41 +113,29 @@ public class UnitSelector : MonoBehaviour
             GameStateManager.Instance.EndPlayerPhase();
         }
     }
-    void CheckForInputs()
-    {
-        CancelKey();
-        ConfirmKey();
-    }
-    
+    /*    void CheckForInputs()
+        {
+            CancelKey();
+            ConfirmKey();
+        }*/
+
     void ConfirmKey()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Z))
+        //Pickup unit hovered
+        if (HoveringReadyToActUnit()) PickupPlayerUnit();
+        else if (playerUnitSelected != null) //Confirm Selected Units Movement
         {
-            //Pickup unit hovered
-            if(HoveringReadyToActUnit()) PickupPlayerUnit();
-            else if (playerUnitSelected != null) //Confirm Selected Units Movement
-            {
-                if (CheckIfValidMove()) MoveUnit();
-                else Debug.Log("Can't drop here");
-            }
-            if (HoveringEnemyUnit()) ViewEnemyDetails();
+            if (CheckIfValidMove()) MoveUnit();
+            else Debug.Log("Can't drop here");
         }
+        if (HoveringEnemyUnit()) ViewEnemyDetails();
     }
 
     void CancelKey()
     {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            
-            //Press X w/ unit held
-            if (HasPlayerUnitSelected())//&& !HoveringEnemyUnit()<--- used to be in the if statement
-            {
-                print("Cum");
-                ReturnToPickLocationAndCancel();
-            }
-
-        }
+        //Press X w/ unit held
+        if (HasPlayerUnitSelected())//&& !HoveringEnemyUnit()<--- used to be in the if statement
+            ReturnToPickLocationAndCancel();
     }
 
     void CheckHoveredUnit()

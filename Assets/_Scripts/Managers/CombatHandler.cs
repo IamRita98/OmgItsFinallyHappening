@@ -44,6 +44,10 @@ public class CombatHandler : MonoBehaviour
     public static event Action<GameObject> UnitDied;/*when player attacks the checks are done 
                                           later, maybe setup a second signal or refactor?*/
     public static event Action UsedItem;
+    private InputSystem_Actions actions;
+    private bool confirmKeyPressed = false;
+    private bool cancelKeyPressed = false;
+    private Vector2 move;
     private void Awake()
     {
 
@@ -54,6 +58,14 @@ public class CombatHandler : MonoBehaviour
         unitSelectorGO = GameObject.FindGameObjectWithTag("UnitSelector");
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
+
+        actions.UI.Submit.performed += ctx => confirmKeyPressed = true;
+        actions.UI.Submit.canceled += ctx => confirmKeyPressed = false;
+        actions.UI.Cancel.performed += ctx => cancelKeyPressed = true;
+        actions.UI.Cancel.canceled += ctx => cancelKeyPressed = false;
+        actions.UI.Navigate.performed += ctx => move = ctx.ReadValue<Vector2>();
+        actions.UI.Navigate.canceled += ctx => move = Vector2.zero;
+
     }
     private void Start()
     {
@@ -129,7 +141,8 @@ public class CombatHandler : MonoBehaviour
     {
         if (inCombat)
         {
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            
+            if (move.x < 0)
             {
                 index--;
                 if (index < 0)
@@ -139,7 +152,7 @@ public class CombatHandler : MonoBehaviour
                 Vector2 tempPos = selectTargets[index].transform.position;
                 unitSelectorGO.transform.position = tempPos;
             }
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if (move.x > 0)
             {
                 index++;
                 if (index >= selectTargets.Count())
@@ -157,7 +170,7 @@ public class CombatHandler : MonoBehaviour
             }
 
 
-            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Player"))
+            if (confirmKeyPressed && unitSelector.GOHovered.CompareTag("Player"))
             {
                 
                 if (item != null)
@@ -174,7 +187,7 @@ public class CombatHandler : MonoBehaviour
                 //if item!=null ->call item manager else call 
                 //if spell !=null->spell manager
             }
-            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.GOHovered.CompareTag("Enemy"))
+            if (confirmKeyPressed && unitSelector.GOHovered.CompareTag("Enemy"))
             {
                 RunCombatCalc();
                 UIManager.Instance.ClearUI();
@@ -182,7 +195,7 @@ public class CombatHandler : MonoBehaviour
                 unitSelector.EndUnitTurn();
                 GameStateManager.Instance.state = State.Combat;
             }
-            else if (Input.GetKeyDown(KeyCode.X))
+            else if (cancelKeyPressed)
             {
                 inCombat = false;
                 UnitSelector.Instance.GOHovered=null;
@@ -198,12 +211,12 @@ public class CombatHandler : MonoBehaviour
             /*
              aoe attack list to display while moving the selector around
              */
-            if (Input.GetKeyDown(KeyCode.Z) && unitSelector.canMoveSelector)
+            if (confirmKeyPressed && unitSelector.canMoveSelector)
             {
                 if(skipOnce) unitSelector.InvalidMove();
                 skipOnce = true;
             }
-            if (Input.GetKeyDown(KeyCode.X))
+            if (cancelKeyPressed)
             {
                 CancelNoEnemiesAttack();
             }
