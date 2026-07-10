@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -48,6 +49,8 @@ public class CombatHandler : MonoBehaviour
     private bool confirmKeyPressed = false;
     private bool cancelKeyPressed = false;
     private Vector2 move;
+    InputAction confirmKey;
+    InputAction cancelKey;
     private void Awake()
     {
 
@@ -60,8 +63,8 @@ public class CombatHandler : MonoBehaviour
         drawTiles = gameObject.GetComponent<DrawTiles>();
 
         actions = new InputSystem_Actions();
-        actions.UI.Submit.performed += ctx => confirmKeyPressed = true;
-        actions.UI.Submit.canceled += ctx => confirmKeyPressed = false;
+        confirmKey = InputSystem.actions.FindAction("Submit");
+        cancelKey = InputSystem.actions.FindAction("Cancel");
         actions.UI.Cancel.performed += ctx => cancelKeyPressed = true;
         actions.UI.Cancel.canceled += ctx => cancelKeyPressed = false;
         actions.UI.Navigate.performed += ctx => move = ctx.ReadValue<Vector2>();
@@ -71,6 +74,14 @@ public class CombatHandler : MonoBehaviour
     private void Start()
     {
         itemHandler = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<ItemHandler>();
+    }
+    private void OnEnable()
+    {
+        actions.Enable();
+    }
+    private void OnDisable()
+    {
+        actions.Disable();
     }
 
     public void SelectTarget(ItemTargets target=ItemTargets.Enemies)
@@ -171,7 +182,7 @@ public class CombatHandler : MonoBehaviour
             }
 
 
-            if (confirmKeyPressed && unitSelector.GOHovered.CompareTag("Player"))
+            if (confirmKey.WasPressedThisFrame() && unitSelector.GOHovered.CompareTag("Player"))
             {
                 
                 if (item != null)
@@ -188,7 +199,7 @@ public class CombatHandler : MonoBehaviour
                 //if item!=null ->call item manager else call 
                 //if spell !=null->spell manager
             }
-            if (confirmKeyPressed && unitSelector.GOHovered.CompareTag("Enemy"))
+            if (confirmKey.WasPressedThisFrame() && unitSelector.GOHovered.CompareTag("Enemy"))
             {
                 RunCombatCalc();
                 UIManager.Instance.ClearUI();
@@ -196,7 +207,7 @@ public class CombatHandler : MonoBehaviour
                 unitSelector.EndUnitTurn();
                 GameStateManager.Instance.state = State.Combat;
             }
-            else if (cancelKeyPressed)
+            else if (cancelKey.WasPressedThisFrame())
             {
                 inCombat = false;
                 UnitSelector.Instance.GOHovered=null;
@@ -212,12 +223,12 @@ public class CombatHandler : MonoBehaviour
             /*
              aoe attack list to display while moving the selector around
              */
-            if (confirmKeyPressed && unitSelector.canMoveSelector)
+            if (confirmKey.WasPressedThisFrame() && unitSelector.canMoveSelector)
             {
                 if(skipOnce) unitSelector.InvalidMove();
                 skipOnce = true;
             }
-            if (cancelKeyPressed)
+            if (cancelKey.WasPressedThisFrame())
             {
                 CancelNoEnemiesAttack();
             }
