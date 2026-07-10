@@ -26,6 +26,7 @@ public class PlayerExplorationController : MonoBehaviour
         actions = new InputSystem_Actions();
         actions.Player.Move.performed+=ctx=>move=ctx.ReadValue<Vector2>();
         actions.Player.Move.canceled+=ctx=>move=Vector2.zero;
+        actions.Player.Confirm.performed += ctx => Interact();
     }
     
     private void Start()
@@ -57,7 +58,7 @@ public class PlayerExplorationController : MonoBehaviour
         if (GameStateManager.Instance.state != State.Exploration) return;
         Movement();
         CheckDirFacing();
-        CheckForInputs();
+        //CheckForInputs();
         
     }
 
@@ -77,6 +78,27 @@ public class PlayerExplorationController : MonoBehaviour
         playerSRend.sprite = playerExplorationSprite;
     }
 
+
+    void Interact()
+    {
+        if (GOInInteractionCone != null)
+        {
+            /*                if (GOInInteractionCone.gameObject.GetComponent<LootSelectable>() != null) Check if Chest item, else run dialogue
+                            {
+                                GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+
+                            }*/
+            //This will be else instead of if once we have a lootSelectable
+            if (GOInInteractionCone.gameObject.GetComponent<IInteractable>() != null)
+            {
+                GameStateManager.Instance.state = State.Dialogue;
+                GOInInteractionCone.gameObject.GetComponent<IInteractable>().Interact();
+            }
+
+            //else chest/items logic later
+
+        }
+    }
     void CheckForInputs()
     {
         if (Input.GetKeyDown(KeyCode.Z))
@@ -147,10 +169,11 @@ public class PlayerExplorationController : MonoBehaviour
         }*/
     private void CheckDirFacing()
     {
-        if (dir.y > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 0);
-        else if (dir.y < 0) interactionCone.transform.rotation = Quaternion.Euler(0,0, 180);
-        else if (dir.x > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 270);
-        else if (dir.x < 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 90);
+
+        if (move.y > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 0);
+        else if (move.y < 0) interactionCone.transform.rotation = Quaternion.Euler(0,0, 180);
+        else if (move.x > 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 270);
+        else if (move.x < 0) interactionCone.transform.rotation = Quaternion.Euler(0, 0, 90);
 
     }
 }

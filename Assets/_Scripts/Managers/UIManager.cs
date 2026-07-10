@@ -57,11 +57,17 @@ public class UIManager : MonoBehaviour
     List<string> UIInvList = new List<string>();
     List<string> shopList = new List<string>();
     public static event Action PlayerOpenedInventory;//signal not currently being used
+    private InputSystem_Actions actions;
+
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(this.gameObject);
+        actions = new InputSystem_Actions();
+        actions.UI.Submit.performed += ctx => UIConfirmKey();
+        actions.UI.Cancel.performed += ctx => UICancelKey();
+
     }
 
     private void Start()
@@ -86,43 +92,41 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         if (GameStateManager.Instance.state != State.Menu) return;
-        ProcessInputs();
+        //ProcessInputs();
     }
 
     private void DecrementInvItem()
     {
         inventoryItem.RemoveFromStack();
     }
-    private void ProcessInputs()
-    {
-        if (Input.GetKeyDown(KeyCode.Z)) 
-        { 
-            
-        }//confirm I dont think we are doing anything with this
 
-        if (Input.GetKeyDown(KeyCode.X))
+    private void UIConfirmKey()
+    {
+        //confirm I dont think we are doing anything with this because it is all done through button functionality
+    }
+
+    private void UICancelKey()
+    {
+        switch (subMenuStates)
         {
-            switch (subMenuStates)
-            {
-                case (SubMenuStates.CombatOptions):
-                    Debug.Log("in combat options");
-                    GameStateManager.Instance.state = State.Combat;
-                    ClearUI();
-                    unitSelector.ReturnToPickLocationAndCancel();
-                    unitSelector.ResumeSelectorControl();
-                    break;
-                case (SubMenuStates.SelectTarget):
-                    Debug.Log("in select target");
-                    SetCombatOptionsStates();
-                    break;
-                case (SubMenuStates.Inventory):
-                    SetCombatOptionsStates();
-                    break;
-                case (SubMenuStates.Shop):
-                    DestroyShop();
-                    GameStateManager.Instance.state = State.Exploration;
-                    break;
-            }
+            case (SubMenuStates.CombatOptions):
+                Debug.Log("in combat options");
+                GameStateManager.Instance.state = State.Combat;
+                ClearUI();
+                unitSelector.ReturnToPickLocationAndCancel();
+                unitSelector.ResumeSelectorControl();
+                break;
+            case (SubMenuStates.SelectTarget):
+                Debug.Log("in select target");
+                SetCombatOptionsStates();
+                break;
+            case (SubMenuStates.Inventory):
+                SetCombatOptionsStates();
+                break;
+            case (SubMenuStates.Shop):
+                DestroyShop();
+                GameStateManager.Instance.state = State.Exploration;
+                break;
         }
     }
     public void ShowCombatCalcs(int playerHP, int enemyHP, int playerDamage, int enemyDamage, int playerHit, int enemyHit, int playerCrit, int enemyCrit)
