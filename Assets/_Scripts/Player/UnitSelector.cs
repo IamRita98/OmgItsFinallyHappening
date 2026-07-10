@@ -45,6 +45,8 @@ public class UnitSelector : MonoBehaviour
     public Sprite playerCombatSprite;
     SpriteRenderer playerSRend;
     private InputSystem_Actions actions;
+    InputAction confirmKey;
+    InputAction cancelKey;
     //public UnitSelectorIsHovering unitHovered;
 
     private void Awake()
@@ -55,10 +57,20 @@ public class UnitSelector : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerSRend = gameObject.GetComponent<SpriteRenderer>();
         actions = new InputSystem_Actions();
-        actions.Player.Confirm.performed += ctx => ConfirmKey();
-        actions.Player.Cancel.performed += ctx => CancelKey();
-    }
 
+        confirmKey = InputSystem.actions.FindAction("Confirm");
+        cancelKey = InputSystem.actions.FindAction("Cancel");
+        //actions.Player.Confirm.performed += ctx => ConfirmKey;
+        //actions.Player.Cancel.performed += ctx => CancelKey();
+    }
+    private void OnEnable()
+    {
+        actions.Enable();
+    }
+    private void OnDisable()
+    {
+        actions.Disable();
+    }
     private void Start()
     {
         unitsTakenTurn = GameObject.FindGameObjectsWithTag("Player").Count();
@@ -72,6 +84,8 @@ public class UnitSelector : MonoBehaviour
         CheckForTurnPhase();
         //CheckForInputs();
         CheckHoveredUnit();
+        if (confirmKey.WasPressedThisFrame()) ConfirmKey();
+        if (cancelKey.WasPressedThisFrame()) CancelKey();
     }
 
     public void DisplayGold()
@@ -119,9 +133,9 @@ public class UnitSelector : MonoBehaviour
             ConfirmKey();
         }*/
 
-    void ConfirmKey()
+    public void ConfirmKey()
     {
-        print("Cum");
+        if (GameStateManager.Instance.state != State.Combat) return;
         //Pickup unit hovered
         if (HoveringReadyToActUnit()) PickupPlayerUnit();
         else if (playerUnitSelected != null) //Confirm Selected Units Movement
@@ -134,6 +148,7 @@ public class UnitSelector : MonoBehaviour
 
     void CancelKey()
     {
+        if (GameStateManager.Instance.state != State.Combat) return;
         //Press X w/ unit held
         if (HasPlayerUnitSelected())//&& !HoveringEnemyUnit()<--- used to be in the if statement
             ReturnToPickLocationAndCancel();

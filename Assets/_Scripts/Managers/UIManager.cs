@@ -81,12 +81,14 @@ public class UIManager : MonoBehaviour
     {
         DialogueManager.FinishedDialogue += HideDialogueComponents;
         CombatHandler.UsedItem += DecrementInvItem;
+        actions.Enable();
     }
 
     private void OnDisable()
     {
         CombatHandler.UsedItem -= DecrementInvItem;
         DialogueManager.FinishedDialogue -= HideDialogueComponents;
+        actions.Disable();
     }
 
     private void Update()
@@ -102,11 +104,13 @@ public class UIManager : MonoBehaviour
 
     private void UIConfirmKey()
     {
+        if (!CheckGameState()) return;
         //confirm I dont think we are doing anything with this because it is all done through button functionality
     }
 
     private void UICancelKey()
     {
+        if (!CheckGameState()) return;
         switch (subMenuStates)
         {
             case (SubMenuStates.CombatOptions):
@@ -159,12 +163,18 @@ public class UIManager : MonoBehaviour
     
     async public void DisplayInventory(bool isShop=false,GameObject npcShop=null)
     {
-        Shop shop = npcShop.gameObject.GetComponent<Shop>();
+        Shop shop = null;
+
+        if (npcShop != null)
+        {
+            shop = npcShop.gameObject.GetComponent<Shop>();
+        }
+
         /*
          * make shop script
          * setup separate function for shop
          */
-        if (isShop)
+        if (npcShop != null && isShop)
         {
             subMenuStates = SubMenuStates.Shop;
             //shop stuff
@@ -216,6 +226,8 @@ public class UIManager : MonoBehaviour
                 UIInvList.Add(item.Key);
             }
             PlayerOpenedInventory?.Invoke();
+            firstSelected = inventoryUI.GetComponentsInChildren<Button>().ToList()[0];
+            firstSelected.Select();
         }
         
         await UniTask.DelayFrame(1);
@@ -298,10 +310,12 @@ public class UIManager : MonoBehaviour
             child.gameObject.SetActive(true);
         }
         firstSelected.Select();
+        
     }
 
     public void SetSelectTargetStates()
     {
+        if (!CheckGameState()) return;
         subMenuStates = SubMenuStates.SelectTarget;
         ClearUI();
         CombatHandler.Instance.SelectTarget();
@@ -310,6 +324,7 @@ public class UIManager : MonoBehaviour
 
     public void SetInventoryStates()
     {
+        if (!CheckGameState()) return;
         ClearUI();
         subMenuStates = SubMenuStates.Inventory;
         DisplayInventory();
@@ -349,5 +364,11 @@ public class UIManager : MonoBehaviour
     public void HideButtonPromptUI()
     {
         promptTextBox.GetComponent<TMP_Text>().enabled = false;
+    }
+
+    bool CheckGameState()
+    {
+        if (GameStateManager.Instance.state == State.Menu) return true;
+        else return false;
     }
 }
