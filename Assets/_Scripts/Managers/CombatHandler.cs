@@ -59,6 +59,7 @@ public class CombatHandler : MonoBehaviour
         unitSelector = unitSelectorGO.GetComponent<UnitSelector>();
         drawTiles = gameObject.GetComponent<DrawTiles>();
 
+        actions = new InputSystem_Actions();
         actions.UI.Submit.performed += ctx => confirmKeyPressed = true;
         actions.UI.Submit.canceled += ctx => confirmKeyPressed = false;
         actions.UI.Cancel.performed += ctx => cancelKeyPressed = true;

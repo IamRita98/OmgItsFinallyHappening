@@ -121,6 +121,7 @@ public class UnitSelector : MonoBehaviour
 
     void ConfirmKey()
     {
+        print("Cum");
         //Pickup unit hovered
         if (HoveringReadyToActUnit()) PickupPlayerUnit();
         else if (playerUnitSelected != null) //Confirm Selected Units Movement
