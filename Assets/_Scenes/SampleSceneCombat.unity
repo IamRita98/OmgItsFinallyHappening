@@ -1374,7 +1374,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
   m_Actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -1846,11 +1846,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2026942062}
+      insertIndex: 2
+      addedObject: {fileID: 2026942063}
     - targetCorrespondingSourceObject: {fileID: 355603993909756202, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2026942063}
+      addedObject: {fileID: 2026942062}
   m_SourcePrefab: {fileID: 100100000, guid: 040c3e6708d71f041a30adbb71650306, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
