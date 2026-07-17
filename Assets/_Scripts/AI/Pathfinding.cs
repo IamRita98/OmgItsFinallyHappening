@@ -12,11 +12,13 @@ public class Cell
     public float H = int.MaxValue;
     public float F = int.MaxValue;
     public Cell bestNeighbour;
+    TileType tileType;
+    
     public enum TypeOfTile
     {
-        NORMAL,
-        DIFFICULT,
-        IMPASSABLE,
+        NORMAL=1,//grass, roads, floors,
+        DIFFICULT=2,//mud,forest,mountains,ice, quicksand, sand
+        IMPASSABLE,//walls, water maybe,cliffs, holes,lava
         //add more as needed
     }
 
@@ -29,6 +31,7 @@ public class Cell
 
 public class Pathfinding : MonoBehaviour
 {
+    
     public int mapSizeX;
     public int mapSizeY;
     public Vector2 mapStartPos = Vector2.zero;
@@ -146,6 +149,12 @@ public class Pathfinding : MonoBehaviour
             {
                 Vector2 t = new Vector2(Mathf.Round(mapStartPos.x + x), Mathf.Round(mapStartPos.y + y));
                 currentWorldPos = t;
+                //sphereRadius=0.2
+                //use Physics.OverlapSphere(currentWorldPos, sphereRadius,layermask if needed) to get a list of objects here
+                //we are aiming to get the tile object specifically and get its name
+                //once we have this then we can bind the name of the tile to what the cost of traveling through it is
+                //or if it should be unpassable terrain
+                //TypeOfTile t=Globals.TILESCOST[resultFromPhysics.strippedtileName]
                 Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos);
                 //print(thisCell.worldPosition);
                 cells.Add(thisCell);
