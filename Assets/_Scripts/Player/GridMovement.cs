@@ -59,7 +59,7 @@ public class GridMovement : MonoBehaviour
     {
         currentPos = transform.position;
 
-        if (!inCombat)
+        if (GameStateManager.Instance.state==State.Combat)
         {
             if (move.y > 0 && Mathf.Abs(move.y) > Mathf.Abs(move.x))
             {

@@ -5,7 +5,7 @@ using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     public GameObject InvButtonPrefab;
     public GameObject shopButtonPrefab;
     public GameObject shopUI;
+    public GameObject rebindButtonPrefab;
     
     public TMP_Text playerHPText;
     public TMP_Text playerDamageText;
@@ -48,7 +49,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text enemyDamageText;
     public TMP_Text enemyHitChanceText;
     public TMP_Text enemyCritChanceText;
-
+    RebindActions rebindAction;
     public TMP_Text promptTextBox;
     public GameObject dBox;
     public Image dBoxImg;
@@ -75,6 +76,7 @@ public class UIManager : MonoBehaviour
         iList = GameObject.FindGameObjectWithTag("PersistentGameManager").GetComponent<InventoryList>();
         canvas = GameObject.FindGameObjectWithTag("Canvas").GetComponent<Canvas>();
         unitSelector = GameObject.FindGameObjectWithTag("UnitSelector").GetComponent<UnitSelector>();
+        rebindAction=GameObject.FindGameObjectWithTag("PersistentGameManager").GetComponent<RebindActions>();
         GetDialogueBoxReferences();
     }
     private void OnEnable()
@@ -93,6 +95,14 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameStateManager.Instance.state = State.Menu;
+            rebindButtonPrefab.SetActive(true);
+            rebindButtonPrefab.GetComponent<Button>().onClick.AddListener(() => { rebindAction.RemapActionClicked(InputSystem.actions.FindAction("Submit")); });
+            firstSelected = rebindButtonPrefab.GetComponent<Button>();
+            firstSelected.Select();
+        }
         if (GameStateManager.Instance.state != State.Menu) return;
         //ProcessInputs();
     }
