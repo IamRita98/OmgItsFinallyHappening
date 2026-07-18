@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
 
 
@@ -13,7 +15,8 @@ public class Cell
     public float F = int.MaxValue;
     public Cell bestNeighbour;
     TileType tileType;
-    
+    public float cost = 0; 
+
     public enum TypeOfTile
     {
         NORMAL=1,//grass, roads, floors,
@@ -21,11 +24,14 @@ public class Cell
         IMPASSABLE,//walls, water maybe,cliffs, holes,lava
         //add more as needed
     }
+    TypeOfTile typeOfTile;
 
-    public Cell(Vector2 pos, Vector2 wPos)
+    public Cell(Vector2 pos, Vector2 wPos, float Costp, TypeOfTile typeOftilep)
     {
         worldPosition = wPos;
         gridPosition = pos;
+        cost = Costp;
+        typeOfTile = typeOftilep;
     }
 }
 
@@ -98,13 +104,14 @@ public class Pathfinding : MonoBehaviour
                 }
                 if (cellsSearched.Contains(potentialNeighbour) || cellToSearch == null) continue;
 
-                float tempG = Mathf.Round(1 + cellToSearch.G);
+                float tempG = Mathf.Round(1 + cellToSearch.G + cellToSearch.cost);
                 if (!cellsToSearch.Contains(potentialNeighbour) || tempG < potentialNeighbour.G)
                 {
                     potentialNeighbour.G = tempG; //Later this will change based on what type of tile the neighbour is
                     potentialNeighbour.H = ManhattanDistance(potentialNeighbour.worldPosition, goalPos);
                     potentialNeighbour.F = potentialNeighbour.G + potentialNeighbour.H;
                     potentialNeighbour.bestNeighbour = cellToSearch;
+                    
 
                     if (!cellsToSearch.Contains(potentialNeighbour)) cellsToSearch.Add(potentialNeighbour);
                 }
@@ -149,16 +156,46 @@ public class Pathfinding : MonoBehaviour
             {
                 Vector2 t = new Vector2(Mathf.Round(mapStartPos.x + x), Mathf.Round(mapStartPos.y + y));
                 currentWorldPos = t;
-                //sphereRadius=0.2
+                float sphereRadius = 1f;
+                List<Collider2D> objectsOnTile = Physics2D.OverlapCircleAll(currentWorldPos, sphereRadius).ToList();
+                Cell.TypeOfTile typeOfTilep = Cell.TypeOfTile.NORMAL;
+                
+                foreach (Collider2D obj in objectsOnTile)
+                {
+                    print("type: "+obj.GetType());
+                    print(obj.gameObject);
+                    if (obj.GetComponent<TestingTileScript>() != null)
+                    {
+                        typeOfTilep = obj.GetComponent<TestingTileScript>().typeOfTile;
+                        break;
+                    }
+                }
+                float cost = 0;
+                switch (typeOfTilep)
+                {
+                    case (Cell.TypeOfTile.NORMAL):
+                        cost = 0;
+                        break;
+                    case (Cell.TypeOfTile.DIFFICULT):
+                        cost = 1;
+                        break;
+                    case (Cell.TypeOfTile.IMPASSABLE):
+                        cost = 1000;
+                        break;
+                }
+                print("cost:" + cost);
+
                 //use Physics.OverlapSphere(currentWorldPos, sphereRadius,layermask if needed) to get a list of objects here
                 //we are aiming to get the tile object specifically and get its name
                 //once we have this then we can bind the name of the tile to what the cost of traveling through it is
                 //or if it should be unpassable terrain
                 //TypeOfTile t=Globals.TILESCOST[resultFromPhysics.strippedtileName]
-                Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos);
+                Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos, cost, typeOfTilep);
                 //print(thisCell.worldPosition);
                 cells.Add(thisCell);
+
             }
+
         }
     }
 
