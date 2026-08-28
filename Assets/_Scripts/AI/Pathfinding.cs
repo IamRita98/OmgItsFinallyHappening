@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEngine.GraphicsBuffer;
@@ -37,7 +38,7 @@ public class Cell
 
 public class Pathfinding : MonoBehaviour
 {
-    
+
     public int mapSizeX;
     public int mapSizeY;
     public Vector2 mapStartPos = Vector2.zero;
@@ -111,7 +112,7 @@ public class Pathfinding : MonoBehaviour
                     potentialNeighbour.H = ManhattanDistance(potentialNeighbour.worldPosition, goalPos);
                     potentialNeighbour.F = potentialNeighbour.G + potentialNeighbour.H;
                     potentialNeighbour.bestNeighbour = cellToSearch;
-                    
+
 
                     if (!cellsToSearch.Contains(potentialNeighbour)) cellsToSearch.Add(potentialNeighbour);
                 }
@@ -149,6 +150,8 @@ public class Pathfinding : MonoBehaviour
 
     void MakeGrid()
     {
+        
+        Tilemap tilemap = (Tilemap)Tilemap.FindFirstObjectByType(typeof(Tilemap));
         Vector2 currentWorldPos = mapStartPos;
         for (int x = 0; x <= mapSizeX; x++)
         {
@@ -159,17 +162,22 @@ public class Pathfinding : MonoBehaviour
                 float sphereRadius = 1f;
                 List<Collider2D> objectsOnTile = Physics2D.OverlapCircleAll(currentWorldPos, sphereRadius).ToList();
                 Cell.TypeOfTile typeOfTilep = Cell.TypeOfTile.NORMAL;
+                TestingTileScript thisTile = tilemap.GetTile<TestingTileScript>(Vector3Int.FloorToInt(currentWorldPos));
+                typeOfTilep = thisTile.typeOfTile;
                 
-                foreach (Collider2D obj in objectsOnTile)
-                {
-                    print("type: "+obj.GetType());
-                    print(obj.gameObject);
-                    if (obj.GetComponent<TestingTileScript>() != null)
-                    {
-                        typeOfTilep = obj.GetComponent<TestingTileScript>().typeOfTile;
-                        break;
-                    }
-                }
+                //typeOfTilep = thisTile.GetTyp
+                //typeOftilep = thisTile.GetComponent<TestingTileScript()>;
+
+                /*                foreach (Collider2D obj in objectsOnTile)
+                                {
+                                    print("type: "+obj.GetType());
+                                    print(obj.gameObject);
+                                    if (obj.GetComponent<TestingTileScript>() != null)
+                                    {
+                                        typeOfTilep = obj.GetComponent<TestingTileScript>().typeOfTile;
+                                        break;
+                                    }*/
+
                 float cost = 0;
                 switch (typeOfTilep)
                 {
@@ -190,14 +198,16 @@ public class Pathfinding : MonoBehaviour
                 //once we have this then we can bind the name of the tile to what the cost of traveling through it is
                 //or if it should be unpassable terrain
                 //TypeOfTile t=Globals.TILESCOST[resultFromPhysics.strippedtileName]
+                
                 Cell thisCell = new Cell(new Vector2(x, y), currentWorldPos, cost, typeOfTilep);
                 //print(thisCell.worldPosition);
                 cells.Add(thisCell);
-
+                
             }
-
         }
+
     }
+
 
     public float ManhattanDistance(Vector2 currentPos, Vector2 goalPos)
     {
