@@ -595,7 +595,7 @@ GameObject:
   - component: {fileID: 623522234}
   m_Layer: 7
   m_Name: Tilemap
-  m_TagString: Untagged
+  m_TagString: Tilemap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3392,6 +3392,14 @@ PrefabInstance:
       propertyPath: lerpTime
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 417566236353257230, guid: 3467e97a4cc2f5147a38b3b18f9f1b20, type: 3}
+      propertyPath: mapSizeX
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 417566236353257230, guid: 3467e97a4cc2f5147a38b3b18f9f1b20, type: 3}
+      propertyPath: mapSizeY
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 737932884982231659, guid: 3467e97a4cc2f5147a38b3b18f9f1b20, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -3520,7 +3528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1213460455010675530, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1213460455010675530, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3570,6 +3578,14 @@ PrefabInstance:
       propertyPath: target2
       value: 
       objectReference: {fileID: 1448542300}
+    - target: {fileID: 7672945407815930200, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
+      propertyPath: mapSizeX
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7672945407815930200, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
+      propertyPath: mapSizeY
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
