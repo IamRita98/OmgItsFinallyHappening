@@ -11,5 +11,5 @@ public class TestingTileScript : TileBase
     tileData.sprite = sprite;
   }
 
-  public Cell.TypeOfTile typeOfTile;
+  //public TileBehaviour.TypeOfTile typeOfTile;
 }
