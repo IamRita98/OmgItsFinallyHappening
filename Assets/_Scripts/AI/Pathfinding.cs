@@ -18,16 +18,10 @@ public class Cell
     TileType tileType;
     public float cost = 0; 
 
-    public enum TypeOfTile
-    {
-        NORMAL=1,//grass, roads, floors,
-        DIFFICULT=2,//mud,forest,mountains,ice, quicksand, sand
-        IMPASSABLE,//walls, water maybe,cliffs, holes,lava
-        //add more as needed
-    }
-    TypeOfTile typeOfTile;
+    
+    TileBehaviour.TypeOfTile typeOfTile;
 
-    public Cell(Vector2 pos, Vector2 wPos, float Costp, TypeOfTile typeOftilep)
+    public Cell(Vector2 pos, Vector2 wPos, float Costp, TileBehaviour.TypeOfTile typeOftilep)
     {
         worldPosition = wPos;
         gridPosition = pos;
@@ -151,7 +145,6 @@ public class Pathfinding : MonoBehaviour
     void MakeGrid()
     {
         
-        Tilemap tilemap = (Tilemap)Tilemap.FindFirstObjectByType(typeof(Tilemap));
         Vector2 currentWorldPos = mapStartPos;
         for (int x = 0; x <= mapSizeX; x++)
         {
@@ -159,35 +152,18 @@ public class Pathfinding : MonoBehaviour
             {
                 Vector2 t = new Vector2(Mathf.Round(mapStartPos.x + x), Mathf.Round(mapStartPos.y + y));
                 currentWorldPos = t;
-                float sphereRadius = 1f;
-                List<Collider2D> objectsOnTile = Physics2D.OverlapCircleAll(currentWorldPos, sphereRadius).ToList();
-                Cell.TypeOfTile typeOfTilep = Cell.TypeOfTile.NORMAL;
-                TestingTileScript thisTile = tilemap.GetTile<TestingTileScript>(Vector3Int.FloorToInt(currentWorldPos));
-                typeOfTilep = thisTile.typeOfTile;
-                
-                //typeOfTilep = thisTile.GetTyp
-                //typeOftilep = thisTile.GetComponent<TestingTileScript()>;
-
-                /*                foreach (Collider2D obj in objectsOnTile)
-                                {
-                                    print("type: "+obj.GetType());
-                                    print(obj.gameObject);
-                                    if (obj.GetComponent<TestingTileScript>() != null)
-                                    {
-                                        typeOfTilep = obj.GetComponent<TestingTileScript>().typeOfTile;
-                                        break;
-                                    }*/
+                TileBehaviour.TypeOfTile typeOfTilep = TileBehaviour.TypeOfTile.NORMAL;
 
                 float cost = 0;
                 switch (typeOfTilep)
                 {
-                    case (Cell.TypeOfTile.NORMAL):
+                    case (TileBehaviour.TypeOfTile.NORMAL):
                         cost = 0;
                         break;
-                    case (Cell.TypeOfTile.DIFFICULT):
+                    case (TileBehaviour.TypeOfTile.DIFFICULT):
                         cost = 1;
                         break;
-                    case (Cell.TypeOfTile.IMPASSABLE):
+                    case (TileBehaviour.TypeOfTile.IMPASSABLE):
                         cost = 1000;
                         break;
                 }
