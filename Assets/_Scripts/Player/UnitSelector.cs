@@ -307,6 +307,7 @@ public class UnitSelector : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Tilemap")) return;
         GOHovered = collision.gameObject;
     }
      

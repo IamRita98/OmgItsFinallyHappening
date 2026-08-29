@@ -146,6 +146,7 @@ public class Pathfinding : MonoBehaviour
     {
         
         Vector2 currentWorldPos = mapStartPos;
+        float sphereRadius = 2.0f;
         for (int x = 0; x <= mapSizeX; x++)
         {
             for (int y = 0; y <= mapSizeY; y++)
@@ -153,7 +154,16 @@ public class Pathfinding : MonoBehaviour
                 Vector2 t = new Vector2(Mathf.Round(mapStartPos.x + x), Mathf.Round(mapStartPos.y + y));
                 currentWorldPos = t;
                 TileBehaviour.TypeOfTile typeOfTilep = TileBehaviour.TypeOfTile.NORMAL;
-
+                //Collider[] GOs=Physics.OverlapSphere(currentWorldPos, sphereRadius,0,QueryTriggerInteraction.Collide);
+                RaycastHit2D hit=Physics2D.Raycast(currentWorldPos, Vector2.up, sphereRadius);
+                //Physics.Raycast(new Ray(new Vector3(currentWorldPos.x,currentWorldPos.y,-1f), Vector3.forward), out RaycastHit hit, sphereRadius,7,QueryTriggerInteraction.Collide);
+                if(hit.collider!=null && hit.collider.gameObject.layer==LayerMask.NameToLayer("Tilemap"))
+                {
+                    hit.collider.gameObject.TryGetComponent(out TileBehaviour tileB);
+                    if(tileB!=null)typeOfTilep = tileB.difficulty;
+                    Debug.Log($"Successfully detected a tile: {hit.collider.gameObject.name}");
+                }
+                
                 float cost = 0;
                 switch (typeOfTilep)
                 {
@@ -167,7 +177,7 @@ public class Pathfinding : MonoBehaviour
                         cost = 1000;
                         break;
                 }
-                print("cost:" + cost);
+                Debug.Log("cost:" + cost);
 
                 //use Physics.OverlapSphere(currentWorldPos, sphereRadius,layermask if needed) to get a list of objects here
                 //we are aiming to get the tile object specifically and get its name
