@@ -1371,7 +1371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 419433244}
   - component: {fileID: 419433245}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GOGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1554,7 +1554,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6903568342438399953, guid: c77fa9488c98eea4d933ca3ca4454914, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.99999976
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6903568342438399953, guid: c77fa9488c98eea4d933ca3ca4454914, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4785,7 +4785,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6903568342438399953, guid: c77fa9488c98eea4d933ca3ca4454914, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.99999976
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6903568342438399953, guid: c77fa9488c98eea4d933ca3ca4454914, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5468,6 +5468,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 419433244}
     m_Modifications:
+    - target: {fileID: -6926530907294366016, guid: 7c526f7e5eff55a4d85bedabfc60a209, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6903568342438399953, guid: 7c526f7e5eff55a4d85bedabfc60a209, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2
@@ -6606,6 +6610,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 419433244}
     m_Modifications:
+    - target: {fileID: -6926530907294366016, guid: 7c526f7e5eff55a4d85bedabfc60a209, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6903568342438399953, guid: 7c526f7e5eff55a4d85bedabfc60a209, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -9704,7 +9712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1213460455010675530, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1213460455010675530, guid: 27371fcd5f678354bb60d20e44edde00, type: 3}
       propertyPath: m_LocalPosition.y
